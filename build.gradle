@@ -1,0 +1,82 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.9'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.hellsfood'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+ext {
+    set('springCloudVersion',"2021.0.5")
+    set('qurydslVer',"5.0.0")
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // spring web 환경 기본 설정
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // MySQL 연결
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // 테스트 환경
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // querydsl
+    implementation "com.querydsl:querydsl-jpa"
+    implementation "com.querydsl:querydsl-core"
+    implementation "com.querydsl:querydsl-collections"
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
+
+    // java.lang.NoClassDefFoundError (javax.annotation.Generated) 대응 코드
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+
+    // java.lang.NoClassDefFoundError (javax.annotation.Entity) 대응 코드
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    // Swagger 2.9.2 버전
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+
+    // Spring Starter Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // jwt 0.11.5
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+
+
+    // 자동 새로고침 활성화
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // eureka
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:3.1.4'
+}
+
+dependencyManagement{
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
