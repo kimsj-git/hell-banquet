@@ -54,14 +54,7 @@ public class JwtTokenService {
 		return false;
 	}
 
-	public boolean validateRequest(String userId, String accessToken){
-		String extractedId=jwtTokenProvider.getUserIdFromAccessToken(accessToken);
-		System.out.println("[validateRequest@JwtTokenService]Id: " + userId + ", extractedId: " + extractedId);
-		return extractedId.equals(userId);
-	}
-
 	public String getUserIdFromAccessToken(String accessToken){
 		return jwtTokenProvider.getUserIdFromAccessToken(accessToken);
 	}
-
 }

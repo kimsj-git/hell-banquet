@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.hellsfood.api.tokens.dto.JwtTokenDto;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +66,11 @@ public class JwtTokenProvider {
 
 	// Jwt 토큰에서 회원 ID 추출
 	public String getUserIdFromAccessToken(String token) {
-		return Jwts.parser().setSigningKey(uniqueKey).parseClaimsJws(token).getBody().getSubject();
+		try {
+			return Jwts.parser().setSigningKey(uniqueKey).parseClaimsJws(token).getBody().getSubject();
+		}catch (ExpiredJwtException e){
+			return null;
+		}
 	}
 
 }

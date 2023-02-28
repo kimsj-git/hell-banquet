@@ -2,6 +2,7 @@ package com.hellsfood.api.auth.service;
 
 import java.util.Set;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -58,5 +59,13 @@ public class AuthenticationService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 		return userRepository.findByUserId(userId)
 			.orElse(null);
+	}
+
+	public ResponseEntity validateRequest(String requestId, String accessToken) {
+		String extractedId= jwtService.getUserIdFromAccessToken(accessToken);
+		if(extractedId==null){
+			return ResponseEntity.badRequest().body("만료된 Access Token입니다.");
+		}
+		return ResponseEntity.ok(extractedId.equals(requestId));
 	}
 }

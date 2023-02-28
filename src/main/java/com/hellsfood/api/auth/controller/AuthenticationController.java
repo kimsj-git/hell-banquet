@@ -51,8 +51,8 @@ public class AuthenticationController {
 		}
 	}
 
-	@PostMapping("/logout")
 	@ApiOperation(value = "로그아웃", notes = "Http 헤더로부터 refreshToken을 추출하여 DB에서 삭제 한다.")
+	@PostMapping("/logout")
 	public ResponseEntity logout(HttpServletRequest request) {
 		String refreshToken = request.getHeader("refreshToken");
 		if (refreshToken != null) {
@@ -63,6 +63,12 @@ public class AuthenticationController {
 			}
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("비정상적인 로그아웃 요청입니다.");
+	}
+
+	@ApiOperation(value = "요청 검증", notes = "헤더에 있는 Access Token과 서비스 요청 주체의 일치 여부를 반환한다.")
+	@PostMapping("/validate")
+	public ResponseEntity validateRequest(@RequestBody @ApiParam(value = "서비스 요청 사용자 ID", required = true) String requestId, HttpServletRequest request){
+		return authService.validateRequest(requestId, request.getHeader("Authorization"));
 	}
 
 }
