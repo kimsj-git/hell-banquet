@@ -1,4 +1,4 @@
-package com.hellsfood.api.users.data;
+package com.hellsfood.api.roles.data;
 
 import java.util.List;
 
@@ -8,7 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+
+import com.hellsfood.api.users.data.User;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ public class Role {
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable=false, unique=true)
+	@Column(length = 32, nullable=false, unique=true)
 	private String roleName;
 
 	@ManyToMany(mappedBy="roles")
