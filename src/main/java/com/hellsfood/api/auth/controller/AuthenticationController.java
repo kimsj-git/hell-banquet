@@ -70,5 +70,4 @@ public class AuthenticationController {
 	public ResponseEntity validateRequest(@RequestBody @ApiParam(value = "서비스 요청 사용자 ID", required = true) String requestId, HttpServletRequest request){
 		return authService.validateRequest(requestId, request.getHeader("Authorization"));
 	}
-
 }
