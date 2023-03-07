@@ -15,6 +15,8 @@ import org.hibernate.annotations.SQLDelete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.function.board.domain.BaseTimeEntity;
 import com.function.board.domain.board.Board;
+import com.function.board.dto.comment.CommentSaveRequestDto;
+import com.function.board.dto.comment.CommentUpdateRequestDto;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -45,14 +47,14 @@ public class Comment extends BaseTimeEntity {
 	private String content;
 
 	@Builder
-	public Comment(Board board, String content, String writer) {
+	public Comment(Board board, CommentSaveRequestDto requestDto) {
 		this.board = board;
-		this.content = content;
-		this.writer = writer;
+		this.content = requestDto.getContent();
+		this.writer = requestDto.getWriter();
 	}
 
-	public void update(String content) {
-		this.content = content;
+	public void update(CommentUpdateRequestDto requestDto) {
+		this.content = requestDto.getContent();
 	}
 
 }
