@@ -11,6 +11,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import com.function.board.domain.BaseTimeEntity;
+import com.function.board.dto.BoardUpdateRequestDto;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -49,8 +50,8 @@ public class Board extends BaseTimeEntity {
 		this.dislikeCount = 0;
 	}
 
-	public void update(String content) {
-		this.content = content;
+	public void update(BoardUpdateRequestDto requestDto) {
+		this.content = requestDto.getContent();
 	}
 
 }
