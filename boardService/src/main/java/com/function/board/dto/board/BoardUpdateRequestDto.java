@@ -1,4 +1,4 @@
-package com.function.board.dto;
+package com.function.board.dto.board;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

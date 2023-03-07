@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.function.board.dto.BoardListResponseDto;
-import com.function.board.dto.BoardSaveRequestDto;
-import com.function.board.dto.BoardUpdateRequestDto;
+import com.function.board.dto.board.BoardListResponseDto;
+import com.function.board.dto.board.BoardSaveRequestDto;
+import com.function.board.dto.board.BoardUpdateRequestDto;
 import com.function.board.service.BoardService;
 
 import io.swagger.annotations.ApiOperation;

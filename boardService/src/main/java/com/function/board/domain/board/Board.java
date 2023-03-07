@@ -11,7 +11,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import com.function.board.domain.BaseTimeEntity;
-import com.function.board.dto.BoardUpdateRequestDto;
+import com.function.board.dto.board.BoardUpdateRequestDto;
 
 import lombok.AccessLevel;
 import lombok.Builder;

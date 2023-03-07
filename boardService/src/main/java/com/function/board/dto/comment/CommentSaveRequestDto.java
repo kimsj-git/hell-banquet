@@ -1,6 +1,6 @@
-package com.function.board.dto;
+package com.function.board.dto.comment;
 
-import com.function.board.domain.board.Board;
+import com.function.board.domain.comment.Comment;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,19 +8,19 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class BoardSaveRequestDto {
+public class CommentSaveRequestDto {
 
 	private String content;
 	private String writer;
 
 	@Builder
-	public BoardSaveRequestDto(String content, String writer) {
+	public CommentSaveRequestDto(String content, String writer) {
 		this.content = content;
 		this.writer = writer;
 	}
 
-	public Board toEntity() {
-		return Board.builder()
+	public Comment toEntity() {
+		return Comment.builder()
 			.content(content)
 			.writer(writer)
 			.build();
