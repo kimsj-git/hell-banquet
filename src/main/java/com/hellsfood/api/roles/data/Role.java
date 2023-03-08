@@ -22,13 +22,13 @@ import lombok.Setter;
 public class Role {
 
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(length = 32, nullable=false, unique=true)
+	@Column(length = 32, nullable = false, unique = true)
 	private String roleName;
 
-	@ManyToMany(mappedBy="roles")
+	@ManyToMany(mappedBy = "roles")
 	private List<User> users;
 
 	public Role(String roleName) {

@@ -64,6 +64,41 @@ public class UserService {
 		}
 	}
 
+	public boolean idCheck(String userId) {
+		return userRepository.existsByUserId(userId);
+	}
+
+	public boolean emailCheck(String email) {
+		return userRepository.existsByEmail(email);
+	}
+
+	public boolean nameCheck(String name) {
+		return userRepository.existsByName(name);
+	}
+
+	@Transactional
+	public String updatePassword(String userId, String newPassword, boolean needValidation, String accessToken) {
+		if (needValidation) {
+			String extractedId = getUserIdFromAccessToken(accessToken);
+			System.out.println("[updatePassword@MemberService]  AccessToken에서 추출한 userId: " + userId);
+			System.out.println(newPassword);
+			if (!userId.equals(extractedId)) {
+				return null;
+			}
+		}
+		User user = getActiveUser(userId);
+		String encodedPassword = passwordEncoder.encode(newPassword);
+		user.setPassword(encodedPassword);
+		userRepository.save(user);
+		return user.getUserId();
+	}
+
+	@Transactional
+	public String getTempPassword(String userId) {
+		String tempPassword = makeTempPassword();
+		return updatePassword(userId, tempPassword, false, null).equals(userId) ? tempPassword : null;
+	}
+
 	private User getActiveUserWithValidationCheck(String userId, String accessToken) {
 		return getUserIdFromAccessToken(accessToken).equals(userId) ? getActiveUser(userId) : null;
 	}
@@ -83,7 +118,7 @@ public class UserService {
 		try {
 			userId = Jwts.parser().setSigningKey(uniqueKey).parseClaimsJws(token).getBody().getSubject();
 		} catch (Exception e) {
-			System.out.println("AccessToken에서 회원 ID 추출 중 오류가 발생했습니다.\n"+e.getMessage());
+			System.out.println("AccessToken에서 회원 ID 추출 중 오류가 발생했습니다.\n" + e.getMessage());
 		}
 		return userId;
 	}
@@ -92,4 +127,28 @@ public class UserService {
 		return getActiveUser(id);
 	}
 
+	private String makeTempPassword() {
+		char[] charSet = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+			'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a',
+			'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+			'w', 'x', 'y', 'z'};
+		StringBuilder tempPassword = new StringBuilder();
+
+		for (int i = 0; i < 8; i++) {
+			int idx = (int)(charSet.length * Math.random());
+			tempPassword.append(charSet[idx]);
+		}
+		return tempPassword.toString();
+	}
+
+	public boolean existUserByIdAndEmail(String userId, String email) {
+		return userRepository.existsByUserIdAndEmail(userId, email);
+	}
+
+	public boolean existActiveUserByIdAndEmail(String userId, String email) {
+		if (existUserByIdAndEmail(userId, email)) {
+			return getActiveUser(userId) != null;
+		}
+		return false;
+	}
 }

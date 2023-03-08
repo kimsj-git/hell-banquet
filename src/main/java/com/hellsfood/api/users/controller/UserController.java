@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hellsfood.api.mail.dto.MailDto;
+import com.hellsfood.api.mail.service.MailService;
 import com.hellsfood.api.users.data.User;
+import com.hellsfood.api.users.dto.PasswordChangeRequestDto;
 import com.hellsfood.api.users.dto.RegisterRequestDto;
+import com.hellsfood.api.users.dto.TempPasswordRequestDto;
 import com.hellsfood.api.users.dto.UpdateRequestDto;
 import com.hellsfood.api.users.service.UserService;
 
@@ -28,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/useri")
 public class UserController {
 	private final UserService userService;
+	private final MailService mailService;
 
 	@PostMapping("/register")
 	@ApiOperation(value = "회원 가입", notes = "입력받은 회원정보를 바탕으로 회원을 DB에 등록한다.")
@@ -71,6 +76,39 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한이 없는 사용자입니다.");
 		} else {
 			return ResponseEntity.ok(changedId);
+		}
+	}
+
+	@PutMapping("/pw")
+	@ApiOperation(value = "비밀번호 변경", notes = "Request Header의 AccessToken으로부터 사용자 ID를 추출하여 해당 사용자의 비밀번호를 변경한다.")
+	public ResponseEntity changePassword(
+		@RequestBody @ApiParam(value = "새로운 비밀번호", required = true) PasswordChangeRequestDto requestDto,
+		HttpServletRequest request) {
+		String accessToken = request.getHeader("Authorization").substring(7);
+		String updatedId = userService.updatePassword(requestDto.getUserId(), requestDto.getNewPassword(), true,
+			accessToken);
+		if (updatedId == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰 정보와 요청 정보가 일치하지 않습니다.");
+		} else {
+			return ResponseEntity.ok(updatedId + "님의 비밀번호가 정상적으로 수정되었습니다.");
+		}
+	}
+
+	@PostMapping("/pw")
+	@ApiOperation(value = "임시 비밀번호 발급", notes = "비밀번호를 재설정하려는 ID와 이메일을 받아 회원 본인인지 확인하고, 맞다면 8자 구성의 임시 비밀번호를 반환한다.")
+	public ResponseEntity getTempPassword(
+		@RequestBody @ApiParam(value = "임시 비밀번호 발급 요청 정보", required = true) TempPasswordRequestDto requestDto) {
+		String userId = requestDto.getUserId();
+		String userEmail = requestDto.getEmail();
+
+		boolean isValidInformation = userService.existActiveUserByIdAndEmail(userId, userEmail);
+
+		if (isValidInformation) {
+			MailDto mailDto = mailService.createMailAndMakeTempPassword(userId, userEmail);
+			mailService.sendMail(mailDto);
+			return ResponseEntity.ok("등록된 메일 주소로 임시 비밀번호를 보내드렸습니다.");
+		} else {
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body("입력한 정보에 해당하는 사용자가 없습니다.");
 		}
 	}
 }
