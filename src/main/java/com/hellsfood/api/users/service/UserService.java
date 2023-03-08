@@ -39,8 +39,8 @@ public class UserService {
 	}
 
 	@Transactional
-	public String updateInfo(String userId, UpdateRequestDto requestDto, String accessToken) {
-		User user = getActiveMemberWithValidationCheck(userId, accessToken);
+	public String updateUser(String userId, UpdateRequestDto requestDto, String accessToken) {
+		User user = getActiveUserWithValidationCheck(userId, accessToken);
 		if (user == null) {
 			return null;
 		}
@@ -53,11 +53,22 @@ public class UserService {
 		return userId;
 	}
 
-	private User getActiveMemberWithValidationCheck(String userId, String accessToken) {
-		return getUserIdFromAccessToken(accessToken).equals(userId) ? getActiveMember(userId) : null;
+	@Transactional
+	public String deleteUser(String id, String accessToken) {
+		User user = getActiveUserWithValidationCheck(id, accessToken);
+		if (user != null) {
+			user.setDelFlag(LocalDateTime.now());
+			return id;
+		} else {
+			return null;
+		}
 	}
 
-	public User getActiveMember(String userId) {
+	private User getActiveUserWithValidationCheck(String userId, String accessToken) {
+		return getUserIdFromAccessToken(accessToken).equals(userId) ? getActiveUser(userId) : null;
+	}
+
+	public User getActiveUser(String userId) {
 		User user = userRepository.findByUserId(userId)
 			.orElseThrow(() -> new IllegalArgumentException(userId + " 사용자를 찾을 수 없습니다."));
 		if (user.getDelFlag() != null) {
@@ -71,17 +82,8 @@ public class UserService {
 		return Jwts.parser().setSigningKey(uniqueKey).parseClaimsJws(token).getBody().getSubject();
 	}
 
-	public User findByUserId(String id) {
-		return getActiveMember(id);
+	public User getUser(String id) {
+		return getActiveUser(id);
 	}
 
-	public String deleteUser(String id, String accessToken) {
-		User user = getActiveMemberWithValidationCheck(id, accessToken);
-		if (user != null) {
-			user.setDelFlag(LocalDateTime.now());
-			return id;
-		} else {
-			return null;
-		}
-	}
 }
