@@ -63,6 +63,8 @@ public class User implements UserDetails {
 	private List<Role> roles = new ArrayList<>();
 	@CreationTimestamp
 	private LocalDateTime regTime;
+	@Column(length = 16)
+	private String groupId;
 	@Column
 	private LocalDateTime delFlag;
 
