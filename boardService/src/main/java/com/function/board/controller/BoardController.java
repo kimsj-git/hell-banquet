@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.function.board.dto.board.BoardListResponseDto;
@@ -36,9 +37,16 @@ public class BoardController {
 	}
 
 	@ApiOperation(value = "게시글 목록 조회")
-	@GetMapping()
+	@GetMapping("/list")
 	public ResponseEntity<List<BoardListResponseDto>> list() {
 		return ResponseEntity.ok(boardService.findAll());
+	}
+
+	@ApiOperation(value = "게시글 페이징")
+	@GetMapping()
+	public ResponseEntity<List<BoardListResponseDto>> paging(@RequestParam Long lastBoardId, @RequestParam int size) {
+		List<BoardListResponseDto> responses = boardService.fetchBoardPagesBy(lastBoardId, size);
+		return new ResponseEntity<>(responses, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "{board_id}에 해당하는 게시글 조회")
