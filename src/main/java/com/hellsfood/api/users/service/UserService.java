@@ -79,7 +79,13 @@ public class UserService {
 	}
 
 	public String getUserIdFromAccessToken(String token) {
-		return Jwts.parser().setSigningKey(uniqueKey).parseClaimsJws(token).getBody().getSubject();
+		String userId = null;
+		try {
+			userId = Jwts.parser().setSigningKey(uniqueKey).parseClaimsJws(token).getBody().getSubject();
+		} catch (Exception e) {
+			System.out.println("AccessToken에서 회원 ID 추출 중 오류가 발생했습니다.\n"+e.getMessage());
+		}
+		return userId;
 	}
 
 	public User getUser(String id) {
