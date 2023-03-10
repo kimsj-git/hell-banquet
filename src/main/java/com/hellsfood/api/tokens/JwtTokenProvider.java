@@ -2,14 +2,14 @@ package com.hellsfood.api.tokens;
 
 import java.util.Base64;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import com.hellsfood.api.roles.data.Role;
 import com.hellsfood.api.tokens.dto.JwtTokenDto;
 
 import io.jsonwebtoken.Claims;
@@ -37,7 +37,7 @@ public class JwtTokenProvider {
 
 	// 유저 정보를 토대로 AccessToken, RefreshToken을 생성하는 메서드
 
-	public JwtTokenDto createToken(String userId, Set<GrantedAuthority> roles){
+	public JwtTokenDto createToken(String userId, List<Role> roles){
 		Claims claims= Jwts.claims().setSubject(userId);
 		claims.put("roles",roles);
 

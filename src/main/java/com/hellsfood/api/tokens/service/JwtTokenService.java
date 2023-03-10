@@ -1,12 +1,12 @@
 package com.hellsfood.api.tokens.service;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import com.hellsfood.api.roles.data.Role;
 import com.hellsfood.api.tokens.JwtTokenProvider;
 import com.hellsfood.api.tokens.data.RefreshToken;
 import com.hellsfood.api.tokens.data.RefreshTokenRepository;
@@ -23,7 +23,7 @@ public class JwtTokenService {
 	private final RefreshTokenRepository refreshTokenRepository;
 
 	@Transactional
-	public JwtTokenDto login(String userId, Set<GrantedAuthority> roles) {
+	public JwtTokenDto login(String userId, List<Role> roles) {
 		JwtTokenDto jwtTokenDto = jwtTokenProvider.createToken(userId, roles);
 		log.info("[login@JwtTokenService] JwtTokenDto: " + jwtTokenDto);
 		if (refreshTokenRepository.existsByRefreshToken(userId)) {
