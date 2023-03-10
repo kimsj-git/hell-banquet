@@ -1,16 +1,21 @@
 package com.function.board.domain.board;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import com.function.board.domain.BaseTimeEntity;
+import com.function.board.domain.evaluation.Evaluation;
 import com.function.board.dto.board.BoardUpdateRequestDto;
 
 import lombok.AccessLevel;
@@ -37,18 +42,19 @@ public class Board extends BaseTimeEntity {
 	@Column(nullable = false)
 	private String writer;
 
-	@Column(name = "like_count")
-	private int likeCount;
+	// @Column(name = "like_count")
+	// private int likeCount;
+	//
+	// @Column(name = "dislike_count")
+	// private int dislikeCount;
 
-	@Column(name = "dislike_count")
-	private int dislikeCount;
+	@OneToMany(mappedBy = "board")
+	private List<Evaluation> likes = new ArrayList<>();
 
 	@Builder
 	public Board(String content, String writer) {
 		this.content = content;
 		this.writer = writer;
-		this.likeCount = 0;
-		this.dislikeCount = 0;
 	}
 
 	public void update(BoardUpdateRequestDto requestDto) {

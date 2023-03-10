@@ -13,8 +13,6 @@ public class BoardListResponseDto {
 	private final Long id;
 	private final String content;
 	private final String writer;
-	private final int likeCount;
-	private final int dislikeCount;
 	private final LocalDateTime createdAt;
 
 	@Builder
@@ -22,8 +20,6 @@ public class BoardListResponseDto {
 		this.id = entity.getId();
 		this.content = entity.getContent();
 		this.writer = entity.getWriter();
-		this.likeCount = entity.getLikeCount();
-		this.dislikeCount = entity.getDislikeCount();
 		this.createdAt = entity.getCreatedAt();
 	}
 

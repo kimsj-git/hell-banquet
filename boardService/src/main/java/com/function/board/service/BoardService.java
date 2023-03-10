@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.function.board.domain.board.Board;
 import com.function.board.domain.board.BoardRepository;
+import com.function.board.domain.evaluation.Evaluation;
+import com.function.board.domain.evaluation.EvaluationRepository;
 import com.function.board.dto.board.BoardListResponseDto;
 import com.function.board.dto.board.BoardSaveRequestDto;
 import com.function.board.dto.board.BoardUpdateRequestDto;
@@ -21,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardService {
 
 	private final BoardRepository boardRepository;
+	private final EvaluationRepository likeRepository;
 
 	@Transactional
 	public Long save(BoardSaveRequestDto requestDto) {
@@ -68,4 +71,7 @@ public class BoardService {
 		return boardRepository.findByIdLessThanOrderByIdDesc(lastBoardId, pageable);
 	}
 
+	public Evaluation getLikesByBoard(Board board) {
+		return likeRepository.findFirstByBoardId(board.getId());
+	}
 }
