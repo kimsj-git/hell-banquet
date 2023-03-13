@@ -1,7 +1,5 @@
 package com.function.board.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,42 +20,35 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/comments")
 @RequiredArgsConstructor
 public class CommentController {
 
 	private final CommentService commentService;
 
 	@ApiOperation(value = "댓글 생성")
-	@PostMapping("/{board_id}")
-	public ResponseEntity<Long> save(@PathVariable("board_id") Long boardId, @RequestBody CommentSaveRequestDto requestDto) {
-		commentService.save(boardId, requestDto);
+	@PostMapping()
+	public ResponseEntity<Long> save(@RequestBody CommentSaveRequestDto requestDto) {
+		commentService.save(requestDto);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
-	@ApiOperation(value = "{board_id}에 해당하는 댓글 목록 조회")
-	@GetMapping("/list/{board_id}")
-	public ResponseEntity<List<CommentListResponseDto>> findAllByBoardId(@PathVariable("board_id") Long boardId) {
-		return ResponseEntity.ok(commentService.findAll(boardId));
+	@ApiOperation(value = "{id}에 해당하는 댓글 단건 조회")
+	@GetMapping("/{id}")
+	public ResponseEntity<CommentListResponseDto> findById(@PathVariable("id") Long id) {
+		return ResponseEntity.ok(commentService.findById(id));
 	}
 
-	@ApiOperation(value = "{comment_id}에 해당하는 댓글 단건 조회")
-	@GetMapping("/{comment_id}")
-	public ResponseEntity<CommentListResponseDto> findById(@PathVariable("comment_id") Long commentId) {
-		return ResponseEntity.ok(commentService.findById(commentId));
+	@ApiOperation(value = "{id}에 해당하는 댓글 수정")
+	@PutMapping("/{id}")
+	public ResponseEntity<Long> update(@PathVariable Long id, @RequestBody CommentUpdateRequestDto requestDto) {
+		return ResponseEntity.ok(commentService.update(id, requestDto));
 	}
 
-	@ApiOperation(value = "댓글 수정")
-	@PutMapping("/{comment_id}")
-	public ResponseEntity<Long> update(@PathVariable("comment_id") Long commentId,
-		@RequestBody CommentUpdateRequestDto requestDto) {
-		return ResponseEntity.ok(commentService.update(commentId, requestDto));
-	}
-
-	@ApiOperation(value = "댓글 삭제")
-	@DeleteMapping("/{comment_id}")
-	public void delete(@PathVariable("comment_id") Long commentId) {
-		commentService.delete(commentId);
+	@ApiOperation(value = "{id}에 해당하는 댓글 삭제")
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable Long id) {
+		commentService.delete(id);
 	}
 
 }

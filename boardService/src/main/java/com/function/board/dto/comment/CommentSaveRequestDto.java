@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentSaveRequestDto {
 
+	private Long boardId;
 	private String content;
 	private String writer;
 

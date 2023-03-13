@@ -23,15 +23,15 @@ public class CommentService {
 	private final BoardRepository boardRepository;
 
 	@Transactional
-	public Long save(Long boardId, CommentSaveRequestDto requestDto) {
-		var board = boardRepository.findById(boardId)
+	public Long save(CommentSaveRequestDto requestDto) {
+		var board = boardRepository.findById(requestDto.getBoardId())
 			.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
 
 		return commentRepository.save(new Comment(board, requestDto)).getId();
 	}
 
 	@Transactional(readOnly = true)
-	public List<CommentListResponseDto> findAll(Long boardId) {
+	public List<CommentListResponseDto> findByBoardId(Long boardId) {
 		return commentRepository.findByBoardId(boardId).stream()
 			.map(CommentListResponseDto::new)
 			.collect(Collectors.toList());

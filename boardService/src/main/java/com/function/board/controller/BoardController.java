@@ -17,17 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 import com.function.board.dto.board.BoardListResponseDto;
 import com.function.board.dto.board.BoardSaveRequestDto;
 import com.function.board.dto.board.BoardUpdateRequestDto;
+import com.function.board.dto.comment.CommentListResponseDto;
 import com.function.board.service.BoardService;
+import com.function.board.service.CommentService;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/board")
+@RequestMapping("/boards")
 @RequiredArgsConstructor
 public class BoardController {
 
 	private final BoardService boardService;
+	private final CommentService commentService;
 
 	@ApiOperation(value = "게시글 생성")
 	@PostMapping()
@@ -45,26 +48,34 @@ public class BoardController {
 	@ApiOperation(value = "게시글 페이징")
 	@GetMapping()
 	public ResponseEntity<List<BoardListResponseDto>> paging(@RequestParam Long lastBoardId, @RequestParam int size) {
-		List<BoardListResponseDto> responses = boardService.fetchBoardPagesBy(lastBoardId, size);
-		return new ResponseEntity<>(responses, HttpStatus.OK);
+		List<BoardListResponseDto> boards = boardService.fetchBoardPagesBy(lastBoardId, size);
+		return new ResponseEntity<>(boards, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "{board_id}에 해당하는 게시글 조회")
+	@ApiOperation(value = "{id}에 해당하는 게시글 조회")
 	@GetMapping("/{id}")
-	public ResponseEntity<BoardListResponseDto> findById(@PathVariable("id") Long boardId) {
-		return ResponseEntity.ok(boardService.findById(boardId));
+	public ResponseEntity<BoardListResponseDto> findById(@PathVariable Long id) {
+		return ResponseEntity.ok(boardService.findById(id));
 	}
 
 	@ApiOperation(value = "게시글 수정")
 	@PutMapping("/{id}")
-	public ResponseEntity<Long> update(@PathVariable("id") Long boardId, @RequestBody BoardUpdateRequestDto requestDto) {
-		return ResponseEntity.ok(boardService.update(boardId, requestDto));
+	public ResponseEntity<Long> update(@PathVariable Long id, @RequestBody BoardUpdateRequestDto requestDto) {
+		return ResponseEntity.ok(boardService.update(id, requestDto));
 	}
 
 	@ApiOperation(value = "게시글 삭제")
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable("id") Long boardId) {
-		boardService.delete(boardId);
+	public void delete(@PathVariable Long id) {
+		boardService.delete(id);
 	}
+
+	@ApiOperation(value = "{id}에 해당하는 댓글 목록 조회")
+	@GetMapping("/{id}/comments")
+	public ResponseEntity<List<CommentListResponseDto>> getCommentList(@PathVariable Long id) {
+		List<CommentListResponseDto> comments = commentService.findByBoardId(id);
+		return new ResponseEntity<>(comments, HttpStatus.OK);
+	}
+
 
 }
