@@ -34,11 +34,11 @@ public class AuthenticationService implements UserDetailsService {
 
 		// Step 1. 로그인 ID/비밀번호 기반으로 Authentication 객체 생성
 		// 이 때, 인증 여부를 확인하는 authenticated 값을 false로 한다.
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(id, password);
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(id, password);
 
 		// Step 2. 실제 검증 (사용자 비밀번호 체크 등)이 이루어지는 부분
 		// authenticate 매서드가 실행될 때 loadUserByUsername 메서드가 실행
-		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authToken);
 
 		// Step 3. 인증된 정보를 기반으로 JwtToken 생성
 		User userDetails = (User)authentication.getPrincipal();
@@ -53,6 +53,10 @@ public class AuthenticationService implements UserDetailsService {
 
 	public boolean logout(String refreshToken) {
 		return jwtService.logout(refreshToken);
+	}
+
+	public String findUserIdByEmail(String email) {
+		return userRepository.findUserIdByEmail(email).orElse(null);
 	}
 
 	@Override

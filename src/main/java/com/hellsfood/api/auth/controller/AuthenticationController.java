@@ -39,16 +39,21 @@ public class AuthenticationController {
 	public ResponseEntity login(@RequestBody @ApiParam(value = "로그인 요청 정보", required = true) LoginRequestDto requestDto,
 		HttpServletResponse response) {
 		String userId = requestDto.getUserId();
-		String password = requestDto.getPassword();
-
-		JwtTokenDto jwtToken = authService.login(userId, password);
-		if (jwtToken != null) {
-			response.setHeader("Authorization", "Bearer " + jwtToken.getAccessToken());
-			response.setHeader("refreshToken", "Bearer " + jwtToken.getRefreshToken());
-			return ResponseEntity.ok(userId + "님, 환영합니다.");
-		} else {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("아이디 또는 비밀번호를 다시 확인하세요.");
+		if (userId.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+			userId = authService.findUserIdByEmail(userId);
+			System.out.println("[이메일 형식 ID 검출] 변환된 userID: " + userId);
 		}
+		if (userId != null) {
+			String password = requestDto.getPassword();
+
+			JwtTokenDto jwtToken = authService.login(userId, password);
+			if (jwtToken != null) {
+				response.setHeader("Authorization", "Bearer " + jwtToken.getAccessToken());
+				response.setHeader("refreshToken", "Bearer " + jwtToken.getRefreshToken());
+				return ResponseEntity.ok(userId + "님, 환영합니다.");
+			}
+		}
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("아이디 또는 비밀번호를 다시 확인하세요.");
 	}
 
 	@ApiOperation(value = "로그아웃", notes = "Http 헤더로부터 refreshToken을 추출하여 DB에서 삭제 한다.")
@@ -67,7 +72,8 @@ public class AuthenticationController {
 
 	@ApiOperation(value = "요청 검증", notes = "헤더에 있는 Access Token과 서비스 요청 주체의 일치 여부를 반환한다.")
 	@PostMapping("/validate")
-	public ResponseEntity validateRequest(@RequestBody @ApiParam(value = "서비스 요청 사용자 ID", required = true) String requestId, HttpServletRequest request){
+	public ResponseEntity validateRequest(
+		@RequestBody @ApiParam(value = "서비스 요청 사용자 ID", required = true) String requestId, HttpServletRequest request) {
 		return authService.validateRequest(requestId, request.getHeader("Authorization"));
 	}
 }
