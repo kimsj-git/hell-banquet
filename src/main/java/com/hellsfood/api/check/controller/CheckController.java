@@ -24,21 +24,21 @@ public class CheckController {
 	@ApiOperation(value = "ID 중복 체크", notes = "입력받은 회원정보를 바탕으로 회원을 DB에 등록한다.")
 	public ResponseEntity canUseId(
 		@PathVariable @ApiParam(value = "중복검사 할 ID", required = true) String id) {
-		return ResponseEntity.ok(userRepository.existsByUserId(id));
+		return ResponseEntity.ok(!id.startsWith("guser") && !userRepository.existsByUserId(id));
 	}
 
 	@GetMapping("/email/{email}")
 	@ApiOperation(value = "이메일 중복 체크", notes = "입력받은 회원정보를 바탕으로 회원을 DB에 등록한다.")
 	public ResponseEntity canUseEmail(
 		@PathVariable @ApiParam(value = "중복검사 할 이메일", required = true) String email) {
-		return ResponseEntity.ok(userRepository.existsByEmail(email));
+		return ResponseEntity.ok(!userRepository.existsByEmail(email));
 	}
 
 	@GetMapping("/name/{name}")
 	@ApiOperation(value = "닉네임 중복 체크", notes = "입력받은 회원정보를 바탕으로 회원을 DB에 등록한다.")
 	public ResponseEntity canUseName(
 		@PathVariable @ApiParam(value = "중복검사 할 닉네임", required = true) String name) {
-		return ResponseEntity.ok(userRepository.existsByName(name));
+		return ResponseEntity.ok(!name.startsWith("guser") && !userRepository.existsByName(name));
 	}
 
 }

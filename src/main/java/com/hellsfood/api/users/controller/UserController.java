@@ -1,7 +1,15 @@
 package com.hellsfood.api.users.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,12 +19,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hellsfood.api.mail.dto.MailDto;
 import com.hellsfood.api.mail.service.MailService;
 import com.hellsfood.api.users.data.User;
+import com.hellsfood.api.users.dto.ExcelizedUserRegisterRequestDto;
 import com.hellsfood.api.users.dto.PasswordChangeRequestDto;
-import com.hellsfood.api.users.dto.RegisterRequestDto;
+import com.hellsfood.api.users.dto.UserRegisterRequestDto;
 import com.hellsfood.api.users.dto.TempPasswordRequestDto;
 import com.hellsfood.api.users.dto.UpdateRequestDto;
 import com.hellsfood.api.users.service.UserService;
@@ -37,8 +47,12 @@ public class UserController {
 	@PostMapping("/register")
 	@ApiOperation(value = "회원 가입", notes = "입력받은 회원정보를 바탕으로 회원을 DB에 등록한다.")
 	public ResponseEntity registerUser(
-		@RequestBody @ApiParam(value = "회원가입 정보", required = true) RegisterRequestDto requestDto) {
-		return ResponseEntity.ok(userService.registerUser(requestDto));
+		@RequestBody @ApiParam(value = "회원가입 정보", required = true) UserRegisterRequestDto requestDto) {
+		Long result = userService.registerUser(requestDto);
+		if (result == -1L) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("아이디나 닉네임은 'user'로 시작할 수 없습니다.");
+		}
+		return ResponseEntity.ok(requestDto.getUserId() + "님, 가입을 환영합니다.");
 	}
 
 	@PutMapping("/info/{id}")

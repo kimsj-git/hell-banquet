@@ -1,10 +1,17 @@
 package com.hellsfood.api.users.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
 import javax.transaction.Transactional;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,7 +19,7 @@ import org.springframework.stereotype.Service;
 import com.hellsfood.api.roles.data.RoleRepository;
 import com.hellsfood.api.users.data.User;
 import com.hellsfood.api.users.data.UserRepository;
-import com.hellsfood.api.users.dto.RegisterRequestDto;
+import com.hellsfood.api.users.dto.UserRegisterRequestDto;
 import com.hellsfood.api.users.dto.UpdateRequestDto;
 
 import io.jsonwebtoken.Jwts;
@@ -30,11 +37,14 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
-	public Long registerUser(RegisterRequestDto requestDto) {
+	public Long registerUser(UserRegisterRequestDto requestDto) {
+		if (requestDto.getUserId().startsWith("guser") || requestDto.getName().startsWith("guser")) {
+			return -1L;
+		}
 		requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
 		User tmpUser = requestDto.toEntity();
 		tmpUser.setRoles(Collections.singletonList(
-			roleRepository.findByRoleName("User").orElseThrow(() -> new RuntimeException("권한 설정 중 오류가 발생하였습니다."))));
+			roleRepository.findByRoleName("user").orElseThrow(() -> new RuntimeException("권한 설정 중 오류가 발생하였습니다."))));
 		return userRepository.save(tmpUser).getId();
 	}
 
@@ -80,8 +90,7 @@ public class UserService {
 	public String updatePassword(String userId, String newPassword, boolean needValidation, String accessToken) {
 		if (needValidation) {
 			String extractedId = getUserIdFromAccessToken(accessToken);
-			System.out.println("[updatePassword@MemberService]  AccessToken에서 추출한 userId: " + userId);
-			System.out.println(newPassword);
+			System.out.println("[updatePassword@UserService] AccessToken에서 추출한 userId: " + extractedId);
 			if (!userId.equals(extractedId)) {
 				return null;
 			}
@@ -89,7 +98,7 @@ public class UserService {
 		User user = getActiveUser(userId);
 		String encodedPassword = passwordEncoder.encode(newPassword);
 		user.setPassword(encodedPassword);
-		userRepository.save(user);
+		System.out.println(userRepository.save(user));
 		return user.getUserId();
 	}
 
@@ -104,8 +113,7 @@ public class UserService {
 	}
 
 	public User getActiveUser(String userId) {
-		User user = userRepository.findByUserId(userId)
-			.orElseThrow(() -> new IllegalArgumentException(userId + " 사용자를 찾을 수 없습니다."));
+		User user = getUser(userId);
 		if (user.getDelFlag() != null) {
 			throw new IllegalArgumentException(userId + " 사용자는 탈퇴한 사용자입니다.");
 		} else {
@@ -116,7 +124,7 @@ public class UserService {
 	public String getUserIdFromAccessToken(String token) {
 		String userId = null;
 		try {
-			userId = Jwts.parser().setSigningKey(uniqueKey).parseClaimsJws(token).getBody().getSubject();
+			userId = Jwts.parser().setSigningKey(uniqueKey.getBytes()).parseClaimsJws(token).getBody().getSubject();
 		} catch (Exception e) {
 			System.out.println("AccessToken에서 회원 ID 추출 중 오류가 발생했습니다.\n" + e.getMessage());
 		}
@@ -124,7 +132,9 @@ public class UserService {
 	}
 
 	public User getUser(String id) {
-		return getActiveUser(id);
+		User user = userRepository.findByUserId(id)
+			.orElseThrow(() -> new IllegalArgumentException(id + " 사용자를 찾을 수 없습니다."));
+		return user;
 	}
 
 	private String makeTempPassword() {
@@ -141,8 +151,9 @@ public class UserService {
 		return tempPassword.toString();
 	}
 
-	public boolean existUserByIdAndEmail(String userId, String email) {
-		return userRepository.existsByUserIdAndEmail(userId, email);
+	public String findActiveUserByEmail(String email) {
+		return userRepository.findActiveUserIdByEmail(email).orElse(null);
+
 	}
 
 	@Transactional
