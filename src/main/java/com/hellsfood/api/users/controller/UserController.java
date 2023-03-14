@@ -112,13 +112,13 @@ public class UserController {
 	@ApiOperation(value = "임시 비밀번호 발급", notes = "비밀번호를 재설정하려는 ID와 이메일을 받아 회원 본인인지 확인하고, 맞다면 8자 구성의 임시 비밀번호를 반환한다.")
 	public ResponseEntity getTempPassword(
 		@RequestBody @ApiParam(value = "임시 비밀번호 발급 요청 정보", required = true) TempPasswordRequestDto requestDto) {
-		String userId = requestDto.getUserId();
 		String userEmail = requestDto.getEmail();
 
-		boolean isValidInformation = userService.existActiveUserByIdAndEmail(userId, userEmail);
+		String userId = userService.findActiveUserByEmail(userEmail);
 
-		if (isValidInformation) {
-			MailDto mailDto = mailService.createMailAndMakeTempPassword(userId, userEmail);
+		if (userId != null) {
+			String tempPassword = userService.getTempPassword(userId);
+			MailDto mailDto = mailService.createMailAndMakeTempPassword(userId, userEmail, tempPassword);
 			mailService.sendMail(mailDto);
 			return ResponseEntity.ok("등록된 메일 주소로 임시 비밀번호를 보내드렸습니다.");
 		} else {

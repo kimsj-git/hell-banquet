@@ -74,18 +74,6 @@ public class UserService {
 		}
 	}
 
-	public boolean idCheck(String userId) {
-		return userRepository.existsByUserId(userId);
-	}
-
-	public boolean emailCheck(String email) {
-		return userRepository.existsByEmail(email);
-	}
-
-	public boolean nameCheck(String name) {
-		return userRepository.existsByName(name);
-	}
-
 	@Transactional
 	public String updatePassword(String userId, String newPassword, boolean needValidation, String accessToken) {
 		if (needValidation) {
