@@ -111,4 +111,36 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body("입력한 정보에 해당하는 사용자가 없습니다.");
 		}
 	}
+
+	@PostMapping("/register/all")
+	@ApiOperation(value = "대량 회원가입 처리", notes = "엑셀 파일로 저장된 회원 정보를 기반으로 순차적으로 회원 가입을 진행한다.")
+	public ResponseEntity registerUsers(
+		@RequestParam("file") @ApiParam(value = "임시 비밀번호 발급 요청 정보", required = true) MultipartFile file) {
+		List<ExcelizedUserRegisterRequestDto> excelUserList = new ArrayList<>();
+
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+
+		if (!extension.contains("xls")) {
+			return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("지원되는 엑셀 파일 확장자가 아닙니다.");
+		}
+
+		Workbook workbook = null;
+
+		try {
+			if (extension.equals("xlsx")) {
+				workbook = new XSSFWorkbook(file.getInputStream());
+			} else if (extension.equals("xls")) {
+				workbook = new HSSFWorkbook(file.getInputStream());
+			}
+		} catch (IOException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("엑셀 파일을 읽는 중 오류가 발생하였습니다.");
+		}
+		Workbook result = userService.registerUsers(workbook);
+		if (result != null) {
+			return ResponseEntity.ok("단체 회원 가입을 완료했습니다.");
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("가입 처리중 오류가 발생했습니다.");
+		}
+	}
+
 }
