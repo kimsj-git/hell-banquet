@@ -12,12 +12,14 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,7 +66,7 @@ public class UserController {
 		String accessToken = request.getHeader("Authorization").substring(7);
 		String updatedUserId = userService.updateUser(id, requestDto, accessToken);
 		if (updatedUserId == null) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(id + " 사용자의 수정 권한이 없는 사용자입니다.");
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한이 없는 사용자입니다.");
 		}
 		return ResponseEntity.ok(updatedUserId);
 	}
@@ -80,7 +82,7 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/delete/{id}")
+	@DeleteMapping("/info/{id}")
 	@ApiOperation(value = "회원 탈퇴", notes = "{id}의 사용자 정보에 탈퇴일(del_flag)을 기록한다.")
 	public ResponseEntity deleteUser(@PathVariable @ApiParam(value = "탈퇴할 회원 ID", required = true) String id,
 		HttpServletRequest request) {
@@ -102,7 +104,7 @@ public class UserController {
 		String updatedId = userService.updatePassword(requestDto.getUserId(), requestDto.getNewPassword(), true,
 			accessToken);
 		if (updatedId == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰 정보와 요청 정보가 일치하지 않습니다.");
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("토큰 정보와 요청 정보가 일치하지 않습니다.");
 		} else {
 			return ResponseEntity.ok(updatedId + "님의 비밀번호가 정상적으로 수정되었습니다.");
 		}
