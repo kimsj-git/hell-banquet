@@ -10,9 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.function.board.domain.board.Board;
 import com.function.board.domain.board.BoardRepository;
-import com.function.board.domain.evaluation.Evaluation;
-import com.function.board.domain.evaluation.EvaluationRepository;
+import com.function.board.domain.comment.Comment;
+import com.function.board.domain.comment.CommentRepository;
 import com.function.board.dto.board.BoardListResponseDto;
+import com.function.board.dto.board.BoardResponseDto;
 import com.function.board.dto.board.BoardSaveRequestDto;
 import com.function.board.dto.board.BoardUpdateRequestDto;
 
@@ -23,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardService {
 
 	private final BoardRepository boardRepository;
-	private final EvaluationRepository likeRepository;
+	private final CommentRepository commentRepository;
 
 	@Transactional
 	public Long save(BoardSaveRequestDto requestDto) {
@@ -38,10 +39,11 @@ public class BoardService {
 	}
 
 	@Transactional(readOnly = true)
-	public BoardListResponseDto findById(Long boardId) {
+	public BoardResponseDto findById(Long boardId) {
 		Board board = boardRepository.findById(boardId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
-		return new BoardListResponseDto(board);
+		List<Comment> comments = commentRepository.findByBoardId(boardId);
+		return new BoardResponseDto(board, comments);
 	}
 
 	@Transactional
@@ -71,7 +73,4 @@ public class BoardService {
 		return boardRepository.findByIdLessThanOrderByIdDesc(lastBoardId, pageable);
 	}
 
-	public Evaluation getLikesByBoard(Board board) {
-		return likeRepository.findFirstByBoardId(board.getId());
-	}
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.function.board.dto.board.BoardListResponseDto;
+import com.function.board.dto.board.BoardResponseDto;
 import com.function.board.dto.board.BoardSaveRequestDto;
 import com.function.board.dto.board.BoardUpdateRequestDto;
 import com.function.board.dto.comment.CommentListResponseDto;
@@ -54,7 +55,7 @@ public class BoardController {
 
 	@ApiOperation(value = "{id}에 해당하는 게시글 조회")
 	@GetMapping("/{id}")
-	public ResponseEntity<BoardListResponseDto> findById(@PathVariable Long id) {
+	public ResponseEntity<BoardResponseDto> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(boardService.findById(id));
 	}
 
