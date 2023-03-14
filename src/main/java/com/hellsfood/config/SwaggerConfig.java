@@ -31,20 +31,20 @@ public class SwaggerConfig {
 	//  Swagger-UI 2.x 확인
 	//	http://localhost:8080/swagger-ui.html
 
-	private String version = "0.0.1-SNAPSHOT";
-	private String title = "HellsFood 회원 관리 백엔드 API 테스트";
+	private final String VERSION = "0.0.1-SNAPSHOT";
+	private final String TITLE = "HellsFood 회원 관리 백엔드 API 테스트";
 
 	private ApiInfo apiInfo() {
 		String descript = "HellsFood 회원 관리 백엔드 API 테스트 환경<br/>";
 		// CoCo 로고 들어가면 여기에 넣기
 		// descript += "<img src=\"http://localhost:9999/vue/static/assets/img/ssafy_logo.png\">";
 		return new ApiInfoBuilder()
-			.title(title)
+			.title(TITLE)
 			.description(descript)
 			.contact(new Contact("HellsFood", "https://edu.ssafy.com", "ssafy@ssafy.com"))
 			.license("SSAFY License")
 			.licenseUrl("ssafy@ssafy.com")
-			.version(version)
+			.version(VERSION)
 			.build();
 	}
 
