@@ -16,4 +16,8 @@ public class RoleService {
 		return roleRepository.findByRoleName(roleName)
 			.orElseThrow(() -> new IllegalArgumentException("해당 권한을 찾을 수 없습니다."));
 	}
+
+	public Long registerRole(String roleName){
+		return roleRepository.save(new Role(roleName)).getId();
+	}
 }

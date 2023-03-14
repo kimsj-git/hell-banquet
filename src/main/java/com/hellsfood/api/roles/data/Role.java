@@ -9,16 +9,22 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import org.hibernate.annotations.DynamicInsert;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hellsfood.api.users.data.User;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@DynamicInsert
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Role {
 
 	@Id
@@ -29,6 +35,7 @@ public class Role {
 	private String roleName;
 
 	@ManyToMany(mappedBy = "roles")
+	@JsonIgnore
 	private List<User> users;
 
 	public Role(String roleName) {
