@@ -8,11 +8,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class ExcelizedUserRegisterResultDto {
+	private int requestNo;
+	private String email;
 	private String userId;
 	private String name;
 	private String errorInfo;
+	private String result;
+
+	public ExcelizedUserRegisterResultDto(int requestNo) {
+		this.requestNo = requestNo;
+	}
 }

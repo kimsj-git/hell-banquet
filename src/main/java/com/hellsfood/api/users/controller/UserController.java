@@ -1,10 +1,10 @@
 package com.hellsfood.api.users.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.hellsfood.api.mail.dto.MailDto;
 import com.hellsfood.api.mail.service.MailService;
 import com.hellsfood.api.users.data.User;
-import com.hellsfood.api.users.dto.ExcelizedUserRegisterRequestDto;
+import com.hellsfood.api.users.dto.ExcelizedUserRegisterResultDto;
 import com.hellsfood.api.users.dto.PasswordChangeRequestDto;
 import com.hellsfood.api.users.dto.UserRegisterRequestDto;
 import com.hellsfood.api.users.dto.TempPasswordRequestDto;
@@ -129,10 +129,10 @@ public class UserController {
 	}
 
 	@PostMapping("/register/all")
-	@ApiOperation(value = "대량 회원가입 처리", notes = "엑셀 파일로 저장된 회원 정보를 기반으로 순차적으로 회원 가입을 진행한다.")
+	@ApiOperation(value = "일괄 회원가입 처리", notes = "엑셀 파일로 저장된 회원 정보를 기반으로 순차적으로 회원 가입을 진행한다.")
 	public ResponseEntity registerUsers(
-		@RequestParam("file") @ApiParam(value = "임시 비밀번호 발급 요청 정보", required = true) MultipartFile file) {
-		List<ExcelizedUserRegisterRequestDto> excelUserList = new ArrayList<>();
+		@RequestParam("file") @ApiParam(value = "일괄 회원가입 요청 정보 xlsx 파일", required = true) MultipartFile file,
+		HttpServletResponse response) {
 
 		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 
@@ -151,12 +151,23 @@ public class UserController {
 		} catch (IOException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("엑셀 파일을 읽는 중 오류가 발생하였습니다.");
 		}
-		Workbook result = userService.registerUsers(workbook);
-		if (result != null) {
-			return ResponseEntity.ok("단체 회원 가입을 완료했습니다.");
+		List<ExcelizedUserRegisterResultDto> resultList = userService.registerUsers(workbook);
+		if (resultList != null) {
+			return ResponseEntity.ok(resultList);
 		} else {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("가입 처리중 오류가 발생했습니다.");
 		}
 	}
 
+	@PostMapping("/convert")
+	@ApiOperation(value = "일괄 회원가입 결과 리스트를 xlsx 파일 변환", notes = "웹 페이지상에 보여지고 있는 일괄 회원가입 결과 리스트를 엑셀파일(xlsx)로 변환해준다.")
+	public ResponseEntity listToExcel(
+		@RequestBody @ApiParam(value = "변환 요청 정보", required = true) List<ExcelizedUserRegisterResultDto> list,
+		HttpServletResponse response) {
+		if (userService.listToExcel(list, response)) {
+			return ResponseEntity.ok("리스트 변환에 성공하였습니다.");
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리스트 변환 중 오류가 발생했습니다.");
+		}
+	}
 }

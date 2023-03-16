@@ -1,17 +1,19 @@
 package com.hellsfood.api.users.service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import com.hellsfood.api.roles.data.RoleRepository;
 import com.hellsfood.api.users.data.User;
 import com.hellsfood.api.users.data.UserRepository;
+import com.hellsfood.api.users.dto.ExcelizedUserRegisterResultDto;
 import com.hellsfood.api.users.dto.UserRegisterRequestDto;
 import com.hellsfood.api.users.dto.UpdateRequestDto;
 
@@ -141,19 +144,100 @@ public class UserService {
 
 	public String findActiveUserByEmail(String email) {
 		return userRepository.findActiveUserIdByEmail(email).orElse(null);
-
 	}
 
 	@Transactional
-	public Workbook registerUsers(Workbook requestWorkbook) {
+	public List<ExcelizedUserRegisterResultDto> registerUsers(Workbook requestWorkbook) {
 		Sheet requestSheet = requestWorkbook.getSheetAt(0);
+		List<ExcelizedUserRegisterResultDto> resultList = new ArrayList<>();
 
-		Workbook resultWorkbook = new XSSFWorkbook();
+		for (int i = 1; i < requestSheet.getPhysicalNumberOfRows(); i++) {
+			Row requestRow = requestSheet.getRow(i);
+			ExcelizedUserRegisterResultDto resultDto = new ExcelizedUserRegisterResultDto(i);
+
+			StringBuilder errorInfo = new StringBuilder();
+
+			resultDto.setEmail(requestRow.getCell(1).getStringCellValue());
+			if (resultDto.getEmail() == null || !resultDto.getEmail()
+				.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+				errorInfo.append("이메일 형식에 오류가 있습니다.");
+				resultDto.setResult("실패");
+			} else if (userRepository.existsByEmail(resultDto.getEmail())) {
+				errorInfo.append("이미 가입된 이메일입니다.");
+				resultDto.setResult("실패");
+			} else if (resultDto.getEmail().length() > 100) {
+				errorInfo.append("이메일 글자수 제한 초과입니다.");
+				resultDto.setResult("실패");
+			} else {
+				try {
+					resultDto.setUserId(requestRow.getCell(0).getStringCellValue());
+				} catch (NullPointerException e) {
+				}
+				try {
+					resultDto.setName(requestRow.getCell(2).getStringCellValue());
+				} catch (NullPointerException e) {
+				}
+				String generatedValue = "guser" + (userRepository.getLastUID() + 1);
+				if (resultDto.getUserId() != null && userRepository.existsByUserId(resultDto.getUserId())) {
+					resultDto.setUserId(generatedValue);
+					errorInfo.append("이미 가입된 아이디입니다. 아이디가 임의로 생성되었습니다.");
+					resultDto.setResult("조건 변경");
+				} else if (resultDto.getUserId() == null) {
+					resultDto.setUserId(generatedValue);
+					errorInfo.append("아이디가 임의로 생성되었습니다.");
+					resultDto.setResult("조건 변경");
+				} else if (resultDto.getUserId().length() > 16) {
+					resultDto.setUserId(generatedValue);
+					errorInfo.append("아이디의 길이 범위 오류입니다. 임의의 아이디로 가입되었습니다.");
+					resultDto.setResult("조건 변경");
+				}
+				if (resultDto.getName() != null && userRepository.existsByName(resultDto.getName())) {
+					resultDto.setName(generatedValue);
+					if (errorInfo.length() > 0) {
+						errorInfo.append(" | ");
+					}
+					errorInfo.append("중복된 닉네임입니다. 임의로 생성된 닉네임으로 설정되었습니다.");
+					resultDto.setResult("조건 변경");
+				} else if (resultDto.getName() == null) {
+					resultDto.setName(generatedValue);
+					if (errorInfo.length() > 0) {
+						errorInfo.append(" | ");
+					}
+					errorInfo.append("임의로 생성된 닉네임으로 설정되었습니다.");
+					resultDto.setResult("조건 변경");
+				} else if (resultDto.getName().length() > 16) {
+					resultDto.setName(generatedValue);
+					errorInfo.append("닉네임의 길이 범위 오류입니다. 임의의 닉네임으로 가입되었습니다.");
+					resultDto.setResult("조건 변경");
+				}
+
+				// TODO: 추후 대량 회원가입 요청한 매니저 아이디 넣어주는거도 고려해보기
+				userRepository.save(User.builder()
+					.userId(resultDto.getUserId())
+					.password(passwordEncoder.encode(resultDto.getUserId()))
+					.name(resultDto.getName())
+					.email(resultDto.getEmail())
+					.roles(Collections.singletonList(
+						roleRepository.findByRoleName("user")
+							.orElseThrow(() -> new RuntimeException("권한 설정 중 오류가 발생하였습니다."))))
+					.build());
+			}
+			resultDto.setErrorInfo(errorInfo.toString());
+			if (resultDto.getResult() == null) {
+				resultDto.setResult("성공");
+			}
+			resultList.add(resultDto);
+		}
+		return resultList;
+	}
+
+	public boolean listToExcel(List<ExcelizedUserRegisterResultDto> list, HttpServletResponse response) {
+		Workbook resultWorkbook = new SXSSFWorkbook();
 		Sheet resultSheet = resultWorkbook.createSheet("가입 결과");
-		resultSheet.setColumnWidth(1, 2200);
-		resultSheet.setColumnWidth(2, 500);
-		resultSheet.setColumnWidth(3, 500);
-		resultSheet.setColumnWidth(4, 4000);
+		resultSheet.setColumnWidth(1, 7500);
+		resultSheet.setColumnWidth(2, 4400);
+		resultSheet.setColumnWidth(3, 7500);
+		resultSheet.setColumnWidth(5, 20000);
 		Row header = resultSheet.createRow(0);
 		Cell headerCell = header.createCell(0);
 		headerCell.setCellValue("요청 번호");
@@ -164,85 +248,41 @@ public class UserService {
 		headerCell = header.createCell(3);
 		headerCell.setCellValue("사용자명");
 		headerCell = header.createCell(4);
+		headerCell.setCellValue("가입 결과");
+		headerCell = header.createCell(5);
 		headerCell.setCellValue("비고");
 
-		for (int i = 1; i < requestSheet.getPhysicalNumberOfRows(); i++) {
-			Row requestRow = requestSheet.getRow(i);
-			Row resultRow = resultSheet.createRow(i);
-			String userId;
-			String userName;
+		for (int i = 0; i < list.size(); i++) {
+			Row resultRow = resultSheet.createRow(i + 1);
 
-			StringBuilder errorInfo = new StringBuilder();
-
-			String email = requestRow.getCell(1).getStringCellValue();
-			if (email == null || !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-				errorInfo.append("이메일 형식 오류");
-			} else if (userRepository.existsByEmail(email)) {
-				errorInfo.append("이미 가입된 이메일입니다.");
-			} else {
-				try {
-					userId = requestRow.getCell(0).getStringCellValue();
-				} catch (NullPointerException e) {
-					userId = null;
-				}
-				try {
-					userName = requestRow.getCell(2).getStringCellValue();
-				} catch (NullPointerException e) {
-					userName = null;
-				}
-				String generatedValue = "guser" + (userRepository.getLastUID() + 1);
-				if (userId != null && userRepository.existsByUserId(userId)) {
-					userId = generatedValue;
-					errorInfo.append("이미 가입된 아이디입니다. 아이디가 임의로 생성되었습니다. | ");
-				} else if (userId == null) {
-					userId = generatedValue;
-					errorInfo.append("아이디가 임의로 생성되었습니다. | ");
-				}
-				if (userName != null && userRepository.existsByName(userName)) {
-					userName = generatedValue;
-					errorInfo.append("중복된 닉네임입니다. 임의로 생성된 닉네임으로 설정되었습니다.");
-				} else if (userName == null) {
-					userName = generatedValue;
-					errorInfo.append("임의로 생성된 닉네임으로 설정되었습니다.");
-				}
-
-				userRepository.save(User.builder()
-					.userId(userId)
-					.password(passwordEncoder.encode(userId))
-					.name(userName)
-					.email(email)
-					.roles(Collections.singletonList(
-						roleRepository.findByRoleName("user")
-							.orElseThrow(() -> new RuntimeException("권한 설정 중 오류가 발생하였습니다."))))
-					.build());
-
-				Cell currentCell = resultRow.createCell(0);
-				currentCell.setCellValue(i);
-				currentCell = resultRow.createCell(1);
-				currentCell.setCellValue(email);
-				currentCell = resultRow.createCell(2);
-				currentCell.setCellValue(userId);
-				currentCell = resultRow.createCell(3);
-				currentCell.setCellValue(userName);
-				currentCell = resultRow.createCell(4);
-				currentCell.setCellValue(errorInfo.toString());
-			}
+			Cell cell = resultRow.createCell(0);
+			cell.setCellValue(i + 1);
+			cell = resultRow.createCell(1);
+			cell.setCellValue(list.get(i).getEmail());
+			cell = resultRow.createCell(2);
+			cell.setCellValue(list.get(i).getUserId());
+			cell = resultRow.createCell(3);
+			cell.setCellValue(list.get(i).getName());
+			cell = resultRow.createCell(4);
+			cell.setCellValue(list.get(i).getResult());
+			cell = resultRow.createCell(5);
+			cell.setCellValue(list.get(i).getErrorInfo());
 		}
-		File currDir = new File(".");
-		String path = currDir.getAbsolutePath();
-		String fileLocation = path.substring(0, path.length() - 1) + "result.xlsx";
-
+		response.setContentType("application/vnd.ms-excel");
+		response.setHeader("Content-Disposition", "attachment;filename=result.xlsx");
 		// file 손상 오류 https://developer-davii.tistory.com/49
+
 		try {
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			resultWorkbook.write(outputStream);
-			requestWorkbook.close();
+			resultWorkbook.write(response.getOutputStream());
 			resultWorkbook.close();
-			outputStream.close();
-			return resultWorkbook;
-		} catch (Exception e) {
+			response.getOutputStream().close();
+			return true;
+		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException("결과 파일 작성 중 오류가 발생했습니다. (IOException)");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		return false;
 	}
 }
