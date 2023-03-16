@@ -44,7 +44,7 @@ public class ManagerService {
 		requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
 		User tmpUser = requestDto.toEntity();
 		tmpUser.setRoles(Collections.singletonList(
-			roleRepository.findByRoleName("user").orElseThrow(() -> new RuntimeException("권한 설정 중 오류가 발생하였습니다."))));
+			roleRepository.findByRoleName("manager").orElseThrow(() -> new RuntimeException("권한 설정 중 오류가 발생하였습니다."))));
 		return userRepository.save(tmpUser).getId();
 	}
 
