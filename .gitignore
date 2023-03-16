@@ -36,5 +36,9 @@ out/
 ### VS Code ###
 .vscode/
 
+### Properties ###
 application.yml
+
+### Log Files ###
 *.log
+*.gz
