@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Api(tags = "중복 체크 API")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/check")
+@RequestMapping("/checks")
 public class CheckController {
 	private final UserRepository userRepository;
 

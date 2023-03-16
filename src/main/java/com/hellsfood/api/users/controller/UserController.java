@@ -41,7 +41,7 @@ import lombok.RequiredArgsConstructor;
 @Api(tags = "회원 관리 API")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/useri")
+@RequestMapping("/users")
 public class UserController {
 	private final UserService userService;
 	private final MailService mailService;
