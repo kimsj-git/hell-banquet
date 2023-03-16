@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "board")
-@SQLDelete(sql = "UPDATE second_project.board SET is_deleted = true WHERE board_id=?")
+@SQLDelete(sql = "UPDATE board SET is_deleted = true WHERE board_id=?")
 @Where(clause = "is_deleted = false")
 public class Board extends BaseTimeEntity {
 

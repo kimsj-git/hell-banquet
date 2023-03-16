@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "comment")
-@SQLDelete(sql = "UPDATE second_project.comment SET is_deleted = true WHERE comment_id=?")
+@SQLDelete(sql = "UPDATE comment SET is_deleted = true WHERE comment_id=?")
 public class Comment extends BaseTimeEntity {
 
 	@Id

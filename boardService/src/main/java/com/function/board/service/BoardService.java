@@ -70,7 +70,7 @@ public class BoardService {
 
 	public Page<Board> fetchPages(Long lastBoardId, int size) {
 		PageRequest pageable = PageRequest.of(0, size);
-		return boardRepository.findByIdLessThanOrderByIdDesc(lastBoardId, pageable);
+		return boardRepository.findByIdLessThanOrderByCreatedAtDesc(lastBoardId, pageable);
 	}
 
 }
