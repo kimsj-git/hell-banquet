@@ -18,6 +18,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -61,6 +63,7 @@ public class User implements UserDetails {
 	private Collection<GrantedAuthority> authorities;
 
 	@ManyToMany(fetch = FetchType.EAGER)
+	@OnDelete(action= OnDeleteAction.CASCADE)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
 		inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	@JsonIgnore
