@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import Error404Page from "./Error404Page"
 import LandingPage from "./LandingPage";
+import LoginPage from "./LoginPage"
 
 const routes = [
     {
@@ -11,6 +12,10 @@ const routes = [
     {
         path: "/",
         element: <LandingPage/>,
+    },
+    {  
+        path: "/login",
+        element: <LoginPage/>,
     },
 ]
 
