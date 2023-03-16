@@ -6,7 +6,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import com.hellsfood.api.mail.dto.MailDto;
-import com.hellsfood.api.users.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
