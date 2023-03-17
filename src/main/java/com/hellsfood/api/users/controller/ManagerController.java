@@ -48,8 +48,7 @@ public class ManagerController {
 	@PostMapping("/register/all")
 	@ApiOperation(value = "일괄 회원가입 처리", notes = "엑셀 파일로 저장된 회원 정보를 기반으로 순차적으로 회원 가입을 진행한다.")
 	public ResponseEntity registerUsers(
-		@RequestParam("file") @ApiParam(value = "일괄 회원가입 요청 정보 xlsx 파일", required = true) MultipartFile file,
-		HttpServletResponse response) {
+		@RequestParam("file") @ApiParam(value = "일괄 회원가입 요청 정보 xlsx 파일", required = true) MultipartFile file) {
 
 		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 

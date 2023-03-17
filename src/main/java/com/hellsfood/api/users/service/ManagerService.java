@@ -13,7 +13,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +28,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ManagerService {
 
-	@Value("${jwt.secret}")
-	private String uniqueKey;
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
 
