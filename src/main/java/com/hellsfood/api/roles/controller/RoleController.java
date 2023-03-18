@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Api(tags = "권한 API")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/role")
+@RequestMapping("/roles")
 public class RoleController {
 
 	private final RoleService roleService;
