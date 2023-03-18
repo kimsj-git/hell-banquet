@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
 
-	Optional<RefreshToken> findByRefreshToken(String RefreshToken);
+	Optional<String> findUserIdByRefreshToken(String RefreshToken);
 
 	boolean existsByUserId(String userId);
 
