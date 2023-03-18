@@ -1,4 +1,4 @@
-package com.hellsfood.api.roles.data;
+package com.hellsfood.api.auth.data;
 
 import java.util.List;
 
@@ -9,7 +9,6 @@ import javax.persistence.ManyToMany;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hellsfood.api.auth.data.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,8 +32,4 @@ public class Role {
 	@JsonIgnore
 	@ToString.Exclude
 	private List<User> users;
-
-	public Role(String roleName) {
-		this.roleName = roleName;
-	}
 }

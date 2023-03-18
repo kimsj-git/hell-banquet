@@ -6,7 +6,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.hellsfood.api.roles.data.Role;
+import com.hellsfood.api.auth.data.Role;
 import com.hellsfood.api.tokens.JwtTokenProvider;
 import com.hellsfood.api.tokens.data.RefreshToken;
 import com.hellsfood.api.tokens.data.RefreshTokenRepository;
