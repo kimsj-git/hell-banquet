@@ -16,7 +16,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.hellsfood.api.roles.data.RoleRepository;
+import com.hellsfood.api.users.data.RoleRepository;
 import com.hellsfood.api.users.data.User;
 import com.hellsfood.api.users.data.UserRepository;
 import com.hellsfood.api.users.dto.ExcelizedUserRegisterResultDto;

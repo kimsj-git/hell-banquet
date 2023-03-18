@@ -3,13 +3,15 @@ package com.hellsfood.api.users.service;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.hellsfood.api.roles.data.RoleRepository;
+import com.hellsfood.api.users.data.Role;
+import com.hellsfood.api.users.data.RoleRepository;
 import com.hellsfood.api.users.data.User;
 import com.hellsfood.api.users.data.UserRepository;
 import com.hellsfood.api.users.dto.UserRegisterRequestDto;
@@ -28,6 +30,16 @@ public class UserService {
 	private final RoleRepository roleRepository;
 
 	private final PasswordEncoder passwordEncoder;
+
+	@PostConstruct
+	protected void init() {
+		String[] defaultRoles = new String[] {"admin", "manager", "user"};
+		for (String role : defaultRoles) {
+			if (!roleRepository.existsByRoleName(role)) {
+				roleRepository.save(new Role(role));
+			}
+		}
+	}
 
 	@Transactional
 	public Long registerUser(UserRegisterRequestDto requestDto) {

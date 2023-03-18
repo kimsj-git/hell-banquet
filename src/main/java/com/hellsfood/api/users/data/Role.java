@@ -1,4 +1,4 @@
-package com.hellsfood.api.roles.data;
+package com.hellsfood.api.users.data;
 
 import java.util.List;
 
