@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Document(collection = "purchaseList")
+@Document(collection = "visitList")
 @Getter
 @Setter
 @Builder

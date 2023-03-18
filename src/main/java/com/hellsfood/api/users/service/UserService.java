@@ -1,6 +1,7 @@
 package com.hellsfood.api.users.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.annotation.PostConstruct;
@@ -161,6 +162,7 @@ public class UserService {
 		if (!visitRepository.existsById(requestId)) {
 			visitRepository.save(VisitList.builder()
 				.userId(requestId)
+				.visitList(new ArrayList<>())
 				.build());
 		}
 
