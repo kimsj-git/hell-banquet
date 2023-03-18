@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,9 +72,40 @@ public class AuthenticationController {
 	}
 
 	@ApiOperation(value = "요청 검증", notes = "헤더에 있는 Access Token과 서비스 요청 주체의 일치 여부를 반환한다.")
-	@PostMapping("/validate")
-	public ResponseEntity validateRequest(
-		@RequestBody @ApiParam(value = "서비스 요청 사용자 ID", required = true) String requestId, HttpServletRequest request) {
-		return authService.validateRequest(requestId, request.getHeader("Authorization"));
+	@PostMapping("/validate/{type}")
+	public ResponseEntity validate(
+		@PathVariable @ApiParam(value = "검증 종류. 0: ID, 1: 권한", required = true) int type,
+		@RequestBody @ApiParam(value = "대조할 정보. ID: 요청한 사용자 ID, 권한: 필요한 권한 이름", required = true) String target,
+		HttpServletRequest request,
+		HttpServletResponse response) {
+		int responseCode = 0;
+		String accessToken;
+		String refreshToken;
+		try {
+			accessToken = request.getHeader("Authorization").substring(7);
+			refreshToken = request.getHeader("refreshToken").substring(7);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰 정보가 유효하지 않습니다.");
+		}
+
+		switch (type) {
+			case 1:
+				responseCode = authService.validateRequiredRole(target, accessToken, refreshToken, response);
+				break;
+			default:
+				responseCode = authService.validateRequiredId(target, accessToken, refreshToken, response);
+
+		}
+
+		switch (responseCode) {
+			case 1:
+				return ResponseEntity.ok(false);
+			case -1:
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("만료된 로그인 세션입니다.");
+			case -2:
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("유효하지 않은 토큰입니다.");
+			default:
+				return ResponseEntity.ok(true);
+		}
 	}
 }

@@ -56,7 +56,25 @@ public class JwtTokenService {
 		return false;
 	}
 
-	public String getUserIdFromAccessToken(String accessToken){
+	public String getUserIdFromAccessToken(String accessToken) {
 		return jwtTokenProvider.getUserIdFromAccessToken(accessToken);
 	}
+
+	public List<Role> getRolesFromAccessToken(String accessToken) {
+		return jwtTokenProvider.getRolesFromAccessToken(accessToken);
+	}
+
+	public Optional<String> getUserIdFromRefreshToken(String refreshToken) {
+		return refreshTokenRepository.findUserIdByRefreshToken(refreshToken);
+	}
+
+	public String regenerateAccessToken(String userId, List<Role> roles) {
+		return jwtTokenProvider.createAccessToken(userId, roles, new Date());
+
+	}
+
+	public boolean isTokenNotExpired(String token) {
+		return jwtTokenProvider.isTokenNotExpired(token);
+	}
+
 }
