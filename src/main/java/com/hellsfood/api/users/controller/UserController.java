@@ -116,4 +116,28 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body("입력한 정보에 해당하는 사용자가 없습니다.");
 		}
 	}
+
+	/**
+	 *
+	 * 추후 명세서에 정리하기 위한 API 동작 원리 정리.
+	 *
+	 * 방문 기록 리스트
+	 * - Post 방식으로 방문 기록 내역 조회 요청
+	 * - 아이디 정보는 accessToken으로부터 조회
+	 * - 방문 기록이 없다면 방문한 리스트에 추가하고 false 반환
+	 * - 방문 기록이 있다면 true 반환
+	 */
+	@PostMapping("/visited")
+	@ApiOperation(value = "최초 방문 여부 확인", notes = "방문 내역이 있는 리스트를 조회하여 최조로 방문한 곳인지 여부를 검사한다.")
+	public ResponseEntity isVisitedPage(
+		@RequestBody @ApiParam(value = "처음으로 방문한 곳인지 검사할 웹페이지 path", required = true) String path,
+		HttpServletRequest request) {
+		String accessToken = request.getHeader("Authorization").substring(7);
+		int resultCode = userService.isVisitedPage(path, accessToken);
+		if (resultCode < 0) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰 검증 중 오류가 발생했습니다.");
+		} else {
+			return ResponseEntity.ok(resultCode == 1 ? true : false);
+		}
+	}
 }

@@ -14,6 +14,8 @@ import com.hellsfood.api.users.data.Role;
 import com.hellsfood.api.users.data.RoleRepository;
 import com.hellsfood.api.users.data.User;
 import com.hellsfood.api.users.data.UserRepository;
+import com.hellsfood.api.users.data.VisitList;
+import com.hellsfood.api.users.data.VisitListRepository;
 import com.hellsfood.api.users.dto.UserRegisterRequestDto;
 import com.hellsfood.api.users.dto.UpdateRequestDto;
 
@@ -28,6 +30,7 @@ public class UserService {
 	private String uniqueKey;
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
+	private final VisitListRepository visitRepository;
 
 	private final PasswordEncoder passwordEncoder;
 
@@ -148,5 +151,27 @@ public class UserService {
 		return userRepository.findActiveUserIdByEmail(email).orElse(null);
 	}
 
+	@Transactional
+	public int isVisitedPage(String path, String accessToken) {
+		String requestId = getUserIdFromAccessToken(accessToken);
+		if (requestId == null) {
+			return -1;
+		}
+
+		if (!visitRepository.existsById(requestId)) {
+			visitRepository.save(VisitList.builder()
+				.userId(requestId)
+				.build());
+		}
+
+		VisitList visitList = visitRepository.findById(requestId)
+			.orElseThrow(() -> new RuntimeException("방문 기록 리스트를 불러오는 중 오류가 발생했습니다."));
+
+		if (!visitList.getVisitList().contains(path)) {
+			visitList.getVisitList().add(path);
+			return 0;
+		}
+		return 1;
+	}
 
 }
