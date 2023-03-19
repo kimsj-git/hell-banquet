@@ -1,4 +1,4 @@
-import Footer from './Footer'
+import StickyFooter from './StickyFooter'
 
 
-export { Footer }
+export { StickyFooter }
