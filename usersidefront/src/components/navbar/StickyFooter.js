@@ -41,6 +41,8 @@ const StickyFooterNav = styled.footer`
     width: 80%;
     height: 80px;
     padding: 0px 10% 0px 10%;
+    border-radius: 15px 15px 0 0;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
     background : #F2CCCC;
 `
 
