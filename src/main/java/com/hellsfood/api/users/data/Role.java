@@ -12,7 +12,6 @@ import javax.persistence.ManyToMany;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hellsfood.api.users.data.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
