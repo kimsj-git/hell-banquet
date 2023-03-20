@@ -171,6 +171,7 @@ public class UserService {
 
 		if (!visitList.getVisitList().contains(path)) {
 			visitList.getVisitList().add(path);
+			visitRepository.save(visitList);
 			return 0;
 		}
 		return 1;
