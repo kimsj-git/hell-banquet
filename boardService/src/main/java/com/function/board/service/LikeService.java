@@ -17,6 +17,18 @@ public class LikeService {
 
 	private final LikeRepository likeRepository;
 
+	public boolean findLike(Long boardId, String userId) {
+		Optional<Like> optionalLike = likeRepository.findByBoardId(boardId);
+
+		if (optionalLike.isPresent()) {
+			Like like = optionalLike.get();
+			return like.findLike(userId);
+			// return false;
+		} else {
+			return false;
+		}
+	}
+
 	public void addLike(Long boardId, String userId) {
 		Optional<Like> optionalLike = likeRepository.findByBoardId(boardId);
 

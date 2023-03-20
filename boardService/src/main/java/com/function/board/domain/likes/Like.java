@@ -52,6 +52,10 @@ public class Like {
 		}
 	}
 
+	public boolean findLike(String userId) {
+		return this.likeUsers.containsKey(userId);
+	}
+
 	public void updateLikeCount() {
 		this.likeCount = this.likeUsers.size();
 	}
