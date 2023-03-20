@@ -31,8 +31,8 @@ function StickyFooter() {
 
 
 const StickyFooterNav = styled.footer`
-    position: absolute;
-    bottom: 0;
+    position: fixed;
+    bottom: 0px;
 
     display: flex;
     justify-content: space-between;

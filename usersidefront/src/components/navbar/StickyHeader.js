@@ -14,7 +14,7 @@ function StickyHeader() {
 }
 
 
-const StickyHeaderNav = styled.footer`
+const StickyHeaderNav = styled.header`
     position: sticky;
     top: 0;
 

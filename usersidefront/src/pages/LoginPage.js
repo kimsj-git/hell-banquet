@@ -5,20 +5,29 @@ import styled from "styled-components"
 
 function LoginPage() {
 
-    const logInOptions = {
-        signUp: {name: "회원가입", url: "/signup"},
-        idFind: {name: "아이디 찾기"},
-        passwordFind: {name: "비밀번호 찾기"},
-    }
+    const logInOptions = [
+        {name: "회원가입", url: "/signup"},
+        {name: "비밀번호 찾기", url: "/find-password"},
+    ]
+
 
     return(
         <Login>
             <LogoSection />
             <LoginForm />
-            <LinkDecoNone to={logInOptions.signUp.url}>{logInOptions.signUp.name}</LinkDecoNone>
+            {logInOptions.map(item => {
+                return (
+                    <div key={item.name}>
+                        <br />
+                        <LinkDecoNone  to={item.url}>
+                            {item.name}
+                        </LinkDecoNone>
+                    </div>
+                )
+            })}
+            {/* {toLogInOption(logInOptions.signUp)}
             <hr />
-            <span>아이디 찾기 | 비밀번호 찾기</span>
-
+            {toLogInOption(logInOptions.passwordFind)} */}
         </Login>
     )
 }
