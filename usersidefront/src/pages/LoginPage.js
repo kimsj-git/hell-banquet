@@ -25,9 +25,6 @@ function LoginPage() {
                     </div>
                 )
             })}
-            {/* {toLogInOption(logInOptions.signUp)}
-            <hr />
-            {toLogInOption(logInOptions.passwordFind)} */}
         </Login>
     )
 }

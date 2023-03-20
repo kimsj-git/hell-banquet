@@ -1,9 +1,5 @@
-import { LinkDecoNone } from "../common"
-
-import styled from "styled-components"
-import { Card, Grid, Icon } from "@mui/material"
-import { ThumbDown, ThumbUp, Comment } from "@mui/icons-material"
 import angryJenkins from "../../assets/images/angryJenkins.png"
+import BoardListItem from "./BoardListItem"
 
 function BoardList() {
 
@@ -24,33 +20,12 @@ function BoardList() {
     return (
             articles.map((article, index) => {
                 return (
-                    <Card style={{margin: "10px 0px 10px 0px", height: 160}} key={index} >
-                        <LinkDecoNone to={`${index}`}>
-                            <Grid container>
-                                <Grid item xs={4}>
-                                    <JanvanFace src={article.src} alt={article?.id} />
-                                </Grid>
-                                <Grid item xs={8}>
-                                    <div>
-                                        {article.content}
-                                    </div>
-                                    <Icon component={ThumbUp} />
-                                    <Icon component={ThumbDown} />
-                                    <Icon component={Comment} />
-                                </Grid>
-                            </Grid>
-                        </LinkDecoNone>
-                    </Card>
+                    <BoardListItem article={article} index={index} key={index} />
                 )
             })
     )
 }
 
-const JanvanFace = styled.img`
-    width: 140px;
-    height: 140px;
 
-    margin-left: 0px 10px 0px 10px;
-`
 
 export default BoardList

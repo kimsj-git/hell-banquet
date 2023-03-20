@@ -1,3 +1,4 @@
 import BoardList from "./BoardList";
+import BoardListItem from "./BoardListItem";
 
-export { BoardList, };
+export { BoardList, BoardListItem };

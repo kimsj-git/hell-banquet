@@ -1,13 +1,13 @@
+import { useNavigate } from "react-router-dom"
+
 import styled from "styled-components"
-import { Link } from "react-router-dom"
 import NotFoundImage  from "../assets/images/404.png"
 
 function Error404Page() {
+    const navigate = useNavigate()
 
     return (
-        <Link to={'/'}>
-            <The404Img src={NotFoundImage}/>
-        </Link >
+        <The404Img onClick={() => navigate(-1)} src={NotFoundImage}/>
     )
 }
 

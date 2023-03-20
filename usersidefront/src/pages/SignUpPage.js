@@ -1,5 +1,4 @@
 import { SignUpForm } from "../components/signup"
-import { LinkDecoNone } from "../components/common"
 
 import styled from "styled-components"
 
