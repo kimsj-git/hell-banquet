@@ -11,7 +11,7 @@ function BoardListItem(params) {
     // article과 관련된 모든 정보가 넘어옴
     const { article, index } = params
     // 일단은 잠시 사용할 좋아요 관련 변수
-    const [ isLiked, setIsLiked ] = useState(undefined)
+    // const [ isLiked, setIsLiked ] = useState(undefined)
     const [ numLiked, setNumLiked ] = useState({like: 0, hate: 0, comments: 0})
 
     const onLikeClickHandler = (event) => {
@@ -50,7 +50,7 @@ function BoardListItem(params) {
 
 const ArticleCard = styled(Card)`
     margin: 10px 0px 10px 0px; 
-    height: 160;
+    height: 160px;
 `
 
 const JanvanFace = styled.img`
