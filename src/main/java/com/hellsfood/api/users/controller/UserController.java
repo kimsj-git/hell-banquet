@@ -41,9 +41,20 @@ public class UserController {
 		@RequestBody @ApiParam(value = "회원가입 정보", required = true) UserRegisterRequestDto requestDto) {
 		Long result = userService.registerUser(requestDto);
 		if (result == -1L) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("아이디나 닉네임은 'user'로 시작할 수 없습니다.");
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("아이디나 닉네임은 'guser'로 시작할 수 없습니다.");
 		}
 		return ResponseEntity.ok(requestDto.getUserId() + "님, 가입을 환영합니다.");
+	}
+
+	@GetMapping("/info/{id}")
+	@ApiOperation(value = "정보 조회", notes = "{id}에 해당하는 사용자 정보를 DB에서 가져온다.")
+	public ResponseEntity getUser(@PathVariable @ApiParam(value = "회원정보를 조회할 사용자의 {id}", required = true) String id) {
+		User user = userService.getUser(id);
+		if (user.getDelFlag() != null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("탈퇴한 사용자입니다.");
+		} else {
+			return ResponseEntity.ok(user);
+		}
 	}
 
 	@PutMapping("/info/{id}")
@@ -58,17 +69,6 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한이 없는 사용자입니다.");
 		}
 		return ResponseEntity.ok(updatedUserId);
-	}
-
-	@GetMapping("/info/{id}")
-	@ApiOperation(value = "정보 조회", notes = "{id}에 해당하는 사용자 정보를 DB에서 가져온다.")
-	public ResponseEntity getUser(@PathVariable @ApiParam(value = "회원정보를 조회할 사용자의 {id}", required = true) String id) {
-		User user = userService.getUser(id);
-		if (user.getDelFlag() != null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("탈퇴한 사용자입니다.");
-		} else {
-			return ResponseEntity.ok(user);
-		}
 	}
 
 	@DeleteMapping("/info/{id}")
