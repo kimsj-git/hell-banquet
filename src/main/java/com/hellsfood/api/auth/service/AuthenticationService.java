@@ -67,64 +67,23 @@ public class AuthenticationService implements UserDetailsService {
 			.orElse(null);
 	}
 
-	public int validateRequiredId(String requestId, String accessToken, String refreshToken,
-		HttpServletResponse response) {
-		String extractedId = null;
-		try {
-			extractedId = tokenService.getUserIdFromAccessToken(accessToken);
-		} catch (ExpiredJwtException e) {
-			accessToken = regenerateAccessToken(refreshToken, response);
-			if (accessToken.equals("")) {
-				return -1;
-			}
-			extractedId = tokenService.getUserIdFromAccessToken(accessToken);
-		}
-		if (extractedId == null) {
-			return -2;
-		}
+	public int validateRequiredId(String requestId, String accessToken) {
+		String extractedId = tokenService.getUserIdFromAccessToken(accessToken);
 		System.out.println("JWT 토큰상 ID:" + extractedId + ", 요청 ID: " + requestId);
 		return requestId.equals(extractedId) ? 0 : 1;
 	}
 
-	public int validateRequiredRole(String requiredRole, String accessToken, String refreshToken,
-		HttpServletResponse response) {
-		List<Role> roles = null;
-		try {
-			roles = tokenService.getRolesFromAccessToken(accessToken);
-		} catch (ExpiredJwtException e) {
-			accessToken = regenerateAccessToken(refreshToken, response);
-			if (accessToken.equals("")) {
-				return -1;
-			}
-			roles = tokenService.getRolesFromAccessToken(accessToken);
-		}
-		List<Role> grantedRole = userRepository.findRolesByUserId(tokenService.getUserIdFromAccessToken(accessToken))
+	public int validateRequiredRole(String requiredRole, String accessToken) {
+		System.out.println("불러온 정보 : " + roleRepository.findRolesByUsers_UserId(tokenService.getUserIdFromAccessToken(accessToken))
+			.orElse(null));
+		List<Role> grantedRole = roleRepository.findRolesByUsers_UserId(tokenService.getUserIdFromAccessToken(accessToken))
 			.orElseThrow(() -> new RuntimeException("토큰 정보가 유효하지 않습니다."));
-		if (!grantedRole.containsAll(roles))
-			throw new RuntimeException("권한 정보가 일치하지 않습니다.");
-		for (Role r : roles) {
+		for (Role r : grantedRole) {
 			System.out.println("필요 권한: " + requiredRole + ", 현재 탐색중인 권한: " + r.getRoleName());
 			if (r.getRoleName().equals(requiredRole)) {
 				return 0;
 			}
 		}
 		return 1;
-	}
-
-	private String regenerateAccessToken(String refreshToken, HttpServletResponse response) {
-		if (!tokenService.isTokenNotExpired(refreshToken)) {
-			return "";
-		}
-		String tokenOwner = tokenService.getUserIdFromRefreshToken(refreshToken).orElse(null);
-		if (tokenOwner == null) {
-			return null;
-		}
-		List<Role> roles = userRepository.findRolesByUserId(tokenOwner)
-			.orElseThrow(() -> new RuntimeException("토큰 재발급 대상 사용자의 권한 정보 호출 중 오류가 발생했습니다."));
-
-		String accessToken = tokenService.regenerateAccessToken(tokenOwner, roles);
-		response.setHeader("Authentication", "Bearer " + accessToken);
-		response.setHeader("refreshToken", "Bearer " + refreshToken);
-		return accessToken;
 	}
 }

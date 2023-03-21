@@ -83,7 +83,6 @@ public class AuthenticationController {
 		String refreshToken;
 		try {
 			accessToken = request.getHeader("Authorization").substring(7);
-			refreshToken = request.getHeader("refreshToken").substring(7);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("토큰 정보가 유효하지 않습니다.");
 		}

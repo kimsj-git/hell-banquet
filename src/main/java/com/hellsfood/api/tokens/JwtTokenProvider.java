@@ -9,18 +9,12 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hellsfood.api.auth.data.Role;
 import com.hellsfood.api.tokens.dto.JwtTokenDto;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -77,36 +71,4 @@ public class JwtTokenProvider {
 	public String getUserIdFromAccessToken(String token) {
 		return Jwts.parser().setSigningKey(uniqueKey).parseClaimsJws(token).getBody().getSubject();
 	}
-
-	public List<Role> getRolesFromAccessToken(String token) {
-		try {
-			Jws<Claims> jws = Jwts.parser().setSigningKey(uniqueKey).parseClaimsJws(token);
-			System.out.println(jws.getBody().get("roles").getClass());
-			// JWT 토큰에서 권한 추출시 발생하는 Type Casting 문제 (Role이 아니라 LinkedHashMap이 나옴) 해결 방법
-			// https://storiaquotidiana.tistory.com/48
-			// https://www.baeldung.com/jackson-linkedhashmap-cannot-be-cast -> 3번 항목 방식으로 해결함.
-			ObjectMapper mapper=new ObjectMapper();
-			List<Role> roles= mapper.convertValue(jws.getBody().get("roles"), new TypeReference<List<Role>>() {});
-			return roles;
-		} catch (ExpiredJwtException e) {
-			return null;
-		}
-	}
-
-	public boolean isTokenNotExpired(String token) {
-		try {
-			Jws<Claims> claims = Jwts.parser().setSigningKey(uniqueKey).parseClaimsJws(token);
-			return !claims.getBody().getExpiration().before(new Date());
-		} catch (SecurityException | MalformedJwtException e) {
-			log.info("유효하지 않은 Token !! -> " + token);
-		} catch (ExpiredJwtException e) {
-			log.info("만료된 Token !! -> " + token);
-		} catch (UnsupportedJwtException e) {
-			log.info("지원하지 않는 형식의 Token !! -> " + token);
-		} catch (IllegalArgumentException e) {
-			log.info("Token이 빈 문자열을 반환하였습니다 !! -> " + token);
-		}
-		return false;
-	}
-
 }
