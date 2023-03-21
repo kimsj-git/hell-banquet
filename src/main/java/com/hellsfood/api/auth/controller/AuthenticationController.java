@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,15 +71,13 @@ public class AuthenticationController {
 	}
 
 	@ApiOperation(value = "요청 검증", notes = "헤더에 있는 Access Token과 서비스 요청 주체의 일치 여부를 반환한다.")
-	@PostMapping("/validate/{type}")
+	@GetMapping("/validate")
 	public ResponseEntity validate(
-		@PathVariable @ApiParam(value = "검증 종류. 0: ID, 1: 권한", required = true) int type,
-		@RequestBody @ApiParam(value = "대조할 정보. ID: 요청한 사용자 ID, 권한: 필요한 권한 이름", required = true) String target,
-		HttpServletRequest request,
-		HttpServletResponse response) {
+		@ApiParam(value = "검증 종류. 0: ID, 1: 권한", required = true) String type,
+		@ApiParam(value = "대조할 정보. ID: 요청한 사용자 ID, 권한: 필요한 권한 이름", required = true) String target,
+		HttpServletRequest request) {
 		int responseCode = 0;
 		String accessToken;
-		String refreshToken;
 		try {
 			accessToken = request.getHeader("Authorization").substring(7);
 		} catch (Exception e) {
@@ -88,11 +85,12 @@ public class AuthenticationController {
 		}
 
 		switch (type) {
-			case 1:
-				responseCode = authService.validateRequiredRole(target, accessToken, refreshToken, response);
+			case "role":
+			case "1":
+				responseCode = authService.validateRequiredRole(target, accessToken);
 				break;
 			default:
-				responseCode = authService.validateRequiredId(target, accessToken, refreshToken, response);
+				responseCode = authService.validateRequiredId(target, accessToken);
 
 		}
 

@@ -2,8 +2,6 @@ package com.hellsfood.api.auth.service;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -13,12 +11,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.hellsfood.api.auth.data.Role;
+import com.hellsfood.api.auth.data.RoleRepository;
 import com.hellsfood.api.auth.data.User;
 import com.hellsfood.api.auth.data.UserRepository;
 import com.hellsfood.api.tokens.dto.JwtTokenDto;
 import com.hellsfood.api.tokens.service.JwtTokenService;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -26,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticationService implements UserDetailsService {
 
 	private final UserRepository userRepository;
+
+	private final RoleRepository roleRepository;
 
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
