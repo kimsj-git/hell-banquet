@@ -2,7 +2,6 @@ package com.hellsfood.apigateway.tokens;
 
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -12,13 +11,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hellsfood.apigateway.tokens.data.RefreshToken;
 import com.hellsfood.apigateway.tokens.data.RefreshTokenRepository;
 import com.hellsfood.apigateway.tokens.dto.JwtTokenDto;
-import com.hellsfood.apigateway.users.data.Role;
-import com.hellsfood.apigateway.users.data.UserRepository;
+import com.hellsfood.apigateway.users.data.RoleRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -40,7 +36,7 @@ public class JwtTokenProvider {
 
 	private final int ACCESS_TOKEN_VALID_TIME = 1000 * 60 * 60 * 12; // AccessToken 유효시간 : 12시간 -> QA 테스트시 30초
 
-	private final UserRepository userRepository;
+	private final RoleRepository roleRepository;
 
 	private final RefreshTokenRepository refreshTokenRepository;
 
@@ -65,7 +61,7 @@ public class JwtTokenProvider {
 	// 유저 정보를 토대로 AccessToken, RefreshToken을 생성하는 메서드
 	public String reCreateToken(String userId) {
 		Claims claims = Jwts.claims().setSubject(userId);
-		claims.put("roles", userRepository.getRolesByUserId(userId));
+		claims.put("roles", roleRepository.findRolesByUsers_UserId(userId));
 		Date now = new Date();
 
 		return Jwts.builder()
@@ -76,30 +72,10 @@ public class JwtTokenProvider {
 			.compact();
 	}
 
-	// Jwt 토큰에서 회원 ID 추출
-	public String getUserIdFromAccessToken(String token) {
-		return Jwts.parser().setSigningKey(UNIQUE_KEY).parseClaimsJws(token).getBody().getSubject();
-	}
-
 	public String getUserIdFromRefreshToken(String refreshToken) {
 		Optional<RefreshToken> refreshTokenDto = refreshTokenRepository.findByRefreshToken(refreshToken);
 
 		return refreshTokenDto.map(RefreshToken::getUserId).orElse(null);
-	}
-
-	public List<Role> getRolesFromAccessToken(String token) {
-		try {
-			Jws<Claims> jws = Jwts.parser().setSigningKey(UNIQUE_KEY).parseClaimsJws(token);
-			System.out.println(jws.getBody().get("roles").getClass());
-			// JWT 토큰에서 권한 추출시 발생하는 Type Casting 문제 (Role이 아니라 LinkedHashMap이 나옴) 해결 방법
-			// https://storiaquotidiana.tistory.com/48
-			// https://www.baeldung.com/jackson-linkedhashmap-cannot-be-cast -> 3번 항목 방식으로 해결함.
-			ObjectMapper mapper=new ObjectMapper();
-			List<Role> roles= mapper.convertValue(jws.getBody().get("roles"), new TypeReference<List<Role>>() {});
-			return roles;
-		} catch (ExpiredJwtException e) {
-			return null;
-		}
 	}
 
 	public boolean isTokenNotExpired(String token) {
@@ -117,5 +93,4 @@ public class JwtTokenProvider {
 		}
 		return false;
 	}
-
 }

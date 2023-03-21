@@ -1,7 +1,5 @@
 package com.hellsfood.apigateway.filters;
 
-import java.util.List;
-
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
@@ -12,7 +10,6 @@ import org.springframework.web.server.ServerWebExchange;
 
 import com.hellsfood.apigateway.tokens.JwtTokenProvider;
 import com.hellsfood.apigateway.tokens.dto.JwtTokenDto;
-import com.hellsfood.apigateway.users.data.Role;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
