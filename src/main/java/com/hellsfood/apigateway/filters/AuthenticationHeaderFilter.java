@@ -12,17 +12,20 @@ import com.hellsfood.apigateway.tokens.JwtTokenProvider;
 import com.hellsfood.apigateway.tokens.dto.JwtTokenDto;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class AuthenticationHeaderFilter extends AbstractGatewayFilterFactory<AuthenticationHeaderFilter.Config> {
 
 	private final JwtTokenProvider jwtTokenProvider;
+
+	public AuthenticationHeaderFilter(JwtTokenProvider jwtTokenProvider) {
+		super(Config.class);
+		this.jwtTokenProvider = jwtTokenProvider;
+	}
 
 	@Override
 	public GatewayFilter apply(Config config) {
