@@ -1,6 +1,7 @@
 package com.function.board.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -71,6 +72,12 @@ public class BoardService {
 	public Page<Board> fetchPages(Long lastBoardId, int size) {
 		PageRequest pageable = PageRequest.of(0, size);
 		return boardRepository.findByIdLessThanOrderByCreatedAtDesc(lastBoardId, pageable);
+	}
+
+	@Transactional(readOnly = true)
+	public Long fetchLatestBoardId() {
+		Optional<Board> latestBoard = boardRepository.findTopByOrderByIdDesc();
+		return latestBoard.map(Board::getId).orElse(null);
 	}
 
 }
