@@ -28,7 +28,7 @@ public class JwtTokenService {
 	public JwtTokenDto login(String userId, List<Role> roles) {
 		JwtTokenDto jwtTokenDto = jwtTokenProvider.createToken(userId, roles);
 		log.info("[login@JwtTokenService] JwtTokenDto: " + jwtTokenDto);
-		if (refreshTokenRepository.existsByRefreshToken(userId)) {
+		if (refreshTokenRepository.existsByUserId(userId)) {
 			log.info(userId + "의 비정상 로그아웃 토큰값을 삭제합니다.");
 			refreshTokenRepository.deleteByUserId(userId);
 		}
