@@ -8,6 +8,8 @@ import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -177,4 +179,15 @@ public class UserService {
 		return 1;
 	}
 
+	public boolean canUseInputInfo(String userId, String email, String name){
+		if (!userId.equals("")) {
+			return !userId.startsWith("guser") && !userRepository.existsByUserId(userId);
+		} else if (!email.equals("")) {
+			return !userRepository.existsByEmail(email);
+		} else if (!name.equals("")) {
+			return !name.startsWith("guser") && !userRepository.existsByName(name);
+		} else {
+			return false;
+		}
+	}
 }

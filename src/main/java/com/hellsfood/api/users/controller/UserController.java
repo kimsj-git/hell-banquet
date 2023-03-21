@@ -117,6 +117,15 @@ public class UserController {
 		}
 	}
 
+	@GetMapping("/check")
+	@ApiOperation(value = "중복 검사", notes = "입력받은 가입 희망 회원 정보를 사용할 수 있는지 검사한다. 한 번에 한 종류만 검사가 가능하다.")
+	public ResponseEntity canUseInputInfo(
+		@PathVariable @ApiParam(value = "중복검사 할 ID", defaultValue = "") String id,
+		@PathVariable @ApiParam(value = "중복검사 할 이메일", defaultValue = "") String email,
+		@PathVariable @ApiParam(value = "중복검사 할 닉네임", defaultValue = "") String name) {
+		return ResponseEntity.ok(userService.canUseInputInfo(id, email, name));
+	}
+
 	/**
 	 *
 	 * 추후 명세서에 정리하기 위한 API 동작 원리 정리.
