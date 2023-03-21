@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 
-@Api(tags = "회원 관리 API")
+@Api(tags = "매니저용 회원관리 API")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/managers")
