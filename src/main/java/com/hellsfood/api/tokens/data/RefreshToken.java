@@ -30,6 +30,6 @@ public class RefreshToken {
 	@Column(nullable = false)
 	private String refreshToken;
 
-	@Column(nullable = false, unique=true)
+	@Column(nullable = false)
 	private String userId;
 }
