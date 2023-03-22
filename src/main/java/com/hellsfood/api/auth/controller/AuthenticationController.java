@@ -49,21 +49,6 @@ public class AuthenticationController {
 
 			JwtTokenDto jwtToken = authService.login(userId, password);
 			if (jwtToken != null) {
-				if (request.getCookies() != null) {
-					Cookie[] cookies = request.getCookies();
-					int count = 0;
-					for (int i = 0; i < cookies.length; i++) {
-						if (cookies[i].getName().startsWith("a802-")) {
-							cookies[i] = new Cookie(cookies[i].getName() + "-expired", null);
-							cookies[i].setMaxAge(0);
-							cookies[i].setPath("/");
-							count++;
-							if (count == 2) {
-								break;
-							}
-						}
-					}
-				}
 				Cookie cookie = new Cookie("a802-at", "Bearer-" + jwtToken.getAccessToken());
 				cookie.setMaxAge(60 * 60 * 13); // 단위: 초 (jwtProvider는 단위: ms)
 				// cookie.setSecure(true); //-> https 요청에만 사용 가능하게 하는거라 나중에 설정할것.
@@ -88,16 +73,19 @@ public class AuthenticationController {
 	public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
 		String refreshToken = null;
 		for (Cookie cookie : request.getCookies()) {
-			if (cookie.getName().equals("a802-at")) {
-				refreshToken = cookie.getValue();
+			if (cookie.getName().equals("a802-rt")) {
+				refreshToken = cookie.getValue().substring(7);
+				System.out.println(refreshToken);
 				break;
 			}
 		}
 		if (refreshToken != null) {
 			Cookie cookie = new Cookie("a802-at", null);
 			cookie.setMaxAge(0);
+			cookie.setPath("/");
 			response.addCookie(cookie);
 			cookie = new Cookie("a802-rt", null);
+			cookie.setPath("/");
 			cookie.setMaxAge(0);
 			response.addCookie(cookie);
 			if (authService.logout(refreshToken)) {
