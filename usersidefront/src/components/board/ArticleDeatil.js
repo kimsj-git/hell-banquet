@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from "react"
+import styled from "styled-components"
 
 import { getBoardList } from "../../api/board"
 
@@ -72,7 +73,7 @@ function ArticleDetail() {
     }, [articles, boardInfo]);
 
     return (
-        <div style={{background: '#FFF3DF'}}>
+        <DetailBox >
             <BoardListItem article={articles[0]} />
             <div ref={articleListRef}  style={{ marginTop: "100px", marginBottom: "70px" }}>
                 {articles.map((article, index) => {
@@ -81,10 +82,12 @@ function ArticleDetail() {
                     )
                 })}
             </div>
-        </div>
+        </DetailBox>
     )
 }
 
-
+const DetailBox = styled.div`
+    background: #FFF3DF;
+`
 
 export default ArticleDetail

@@ -1,25 +1,42 @@
 import { LogedPageTemplate } from "../components/common"
 
 import styled from "styled-components"
+import { Button } from "@mui/material"
+import { Container } from "@mui/system"
+import { ProfileUserInfo } from "../components/user"
 
 function UserPage() {
     return (
         <>
-            <LogedPageTemplate />
+        <LogedPageTemplate />
+        <Container sx={styleForContainer} >
             <JanvanSection />
-            <UserInfoSection />
+            <UserInfoSection to='/'>
+                <ProfileUserInfo />
+            </UserInfoSection>
             <StatisticsSection /> 
+            <Button variant="contained" color="error" style={{zIndex: -1, marginBottom: 100, width: '30%'}}>
+                로그아웃
+            </Button>
+        </Container>
         </>
     )
 }
 
+const styleForContainer = {
+    display: 'flex', 
+    flexDirection: 'column', 
+    justifyContent: 'center', 
+    alignItems:'center',
+}
+
 const styleForSection = `
-    width: calc(100% - 40px);
+    width: 100%;
     height: 200px;
     background: #E5E5E5;
 
-    padding-top: 15px;
-    margin: 25px 20px 25px 20px;
+    margin: 15px 0px 15px 0px;
+    border-radius: 30px;
 
     display: flex;
     justify-content: space-between;
@@ -27,11 +44,11 @@ const styleForSection = `
 
 const JanvanSection = styled.section`
     ${styleForSection}
-    border-radius: 30px;
 `
 const UserInfoSection = styled.section`
     ${styleForSection}
     height: 240px;
+    background: #D0BCFF;
 
 `
 const StatisticsSection = styled.section`

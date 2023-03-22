@@ -8,12 +8,17 @@ import PasswordFind from "./PasswordFindPage"
 import BoardPage from "./BoardPage";
 import BoardDetailPage from "./BoardDetailPage";
 import UserPage from "./UserPage";
+import LoadingPage from "./LoadingPage";
 
 const routes = [
     // error pages
     {
         path: "*",
         element: <Error404Page/>,
+    },
+    {
+        path: "/loading",
+        element: <LoadingPage/>,
     },
     // member pages
     {

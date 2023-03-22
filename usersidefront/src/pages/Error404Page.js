@@ -7,13 +7,20 @@ function Error404Page() {
     const navigate = useNavigate()
 
     return (
-        <The404Img onClick={() => navigate(-1)} src={NotFoundImage}/>
+        <Container404 >
+            <The404Img onClick={() => navigate(-1)} src={NotFoundImage} />
+        </Container404>
     )
 }
 
+const Container404 = styled.div`
+    display: flex;
+    align-items: center;
+    height: 100vh;
+`
+
 const The404Img = styled.img`
     width: 100%;
-    height: 100%;
 `
 
 export default Error404Page
