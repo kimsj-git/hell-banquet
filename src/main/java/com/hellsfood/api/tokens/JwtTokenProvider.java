@@ -26,8 +26,8 @@ public class JwtTokenProvider {
 	@Value("${jwt.secret}")
 	private String uniqueKey;
 
-	private final int ACCESS_TOKEN_VALID_TIME = 1000 * 60 * 60 * 12; // AccessToken 유효시간 : 12시간 -> QA 테스트시 30초
-	private final int REFRESH_TOKEN_VALID_TIME = 1000 * 60 * 60 * 24 * 14; // RefreshToken 유효시간 : 2주 -> QA 테스트시 5분
+	private final int ACCESS_TOKEN_VALID_TIME = 1000 * 60 * 60 * 12; // 단위: ms. AccessToken 유효시간 : 12시간 -> QA 테스트시 30초
+	private final int REFRESH_TOKEN_VALID_TIME = 1000 * 60 * 60 * 24 * 14; // 단위: ms. RefreshToken 유효시간 : 2주 -> QA 테스트시 5분
 
 	@PostConstruct
 	protected void init() {
