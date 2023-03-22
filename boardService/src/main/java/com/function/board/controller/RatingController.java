@@ -3,7 +3,7 @@ package com.function.board.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,14 +20,14 @@ public class RatingController {
 
 	private final RatingService ratingService;
 
-	@PostMapping("/like")
+	@PutMapping("/like")
 	public ResponseEntity<Rating> likeToBoard(@PathVariable Long boardId,
 		@RequestBody String userId) {
 		Rating rating = ratingService.reactToBoard(boardId, userId, true);
 		return ResponseEntity.ok(rating);
 	}
 
-	@PostMapping("/dislike")
+	@PutMapping("/dislike")
 	public ResponseEntity<Rating> dislikeToBoard(@PathVariable Long boardId,
 		@RequestBody String userId) {
 		Rating rating = ratingService.reactToBoard(boardId, userId, false);
