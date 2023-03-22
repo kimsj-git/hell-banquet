@@ -71,20 +71,20 @@ public class BoardService {
 		for (Board board : boards) {
 			Optional<Rating> optionalRating = ratingRepository.findById(board.getId());
 
+			int likeCount = 0;
+			int dislikeCount = 0;
+			int reaction = 0;
+
 			if (optionalRating.isPresent()) {
 				Rating rating = optionalRating.get();
-				int likeCount = rating.getLikeCount();
-				int dislikeCount = rating.getDislikeCount();
-				int isEvaluated = 0;
+				likeCount = rating.getLikeCount();
+				dislikeCount = rating.getDislikeCount();
 
 				if (rating.getUsers().containsKey(userId)) {
-					// Boolean isLiked =
-					isEvaluated = rating.getUsers().get(userId) ? 1 : 2;
+					reaction = rating.getUsers().get(userId) ? 1 : 2;
 				}
-				boardList.add(new BoardListResponseDto(board, likeCount, dislikeCount, isEvaluated));
-			} else {
-				boardList.add(new BoardListResponseDto(board, 0, 0, 0));
 			}
+			boardList.add(new BoardListResponseDto(board, likeCount, dislikeCount, reaction));
 		}
 		return boardList;
 	}

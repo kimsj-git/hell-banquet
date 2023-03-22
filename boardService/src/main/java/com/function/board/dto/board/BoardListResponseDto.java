@@ -16,10 +16,9 @@ public class BoardListResponseDto {
 	private final int commentCount;
 	private final int likeCount;
 	private final int dislikeCount;
-	private final int isEvaluated;    // 0: 평가 X , 1: 좋아요 , 2: 싫어요
-	//좋아요 개수 + 싫어요 개수 + 유저가 해당 게시글을 평가했는지 여부를 같이 넣어서 전달하기
+	private final int evaluationStatus;    // 좋아요/싫어요 평가 여부 (0: 평가 X , 1: 좋아요 , 2: 싫어요)
 
-	public BoardListResponseDto(Board entity, int likeCount, int dislikeCount, int isEvaluated) {
+	public BoardListResponseDto(Board entity, int likeCount, int dislikeCount, int evaluationStatus) {
 		this.id = entity.getId();
 		this.content = entity.getContent();
 		this.writer = entity.getWriter();
@@ -27,7 +26,7 @@ public class BoardListResponseDto {
 		this.commentCount = entity.getComments().size();
 		this.likeCount = likeCount;
 		this.dislikeCount = dislikeCount;
-		this.isEvaluated = isEvaluated;
+		this.evaluationStatus = evaluationStatus;
 	}
 
 }

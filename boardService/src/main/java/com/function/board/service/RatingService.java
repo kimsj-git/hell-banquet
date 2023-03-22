@@ -5,7 +5,6 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.function.board.domain.board.Board;
 import com.function.board.domain.board.BoardRepository;
 import com.function.board.domain.rating.Rating;
 import com.function.board.domain.rating.RatingRepository;
@@ -27,7 +26,7 @@ public class RatingService {
 
 	@Transactional
 	public Rating reactToBoard(Long boardId, String userId, boolean newStatus) {
-		Board board = boardRepository.findById(boardId)
+		boardRepository.findById(boardId)
 			.orElseThrow(() -> new NoSuchElementException("해당 게시글이 없습니다."));
 
 		Rating rating = ratingRepository.findById(boardId)
