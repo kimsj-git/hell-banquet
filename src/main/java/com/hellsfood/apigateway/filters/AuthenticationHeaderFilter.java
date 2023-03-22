@@ -46,25 +46,23 @@ public class AuthenticationHeaderFilter extends AbstractGatewayFilterFactory<Aut
 
 				if (jwtTokenProvider.isTokenNotExpired(refreshToken)) { // 만약 refreshToken의 유효시간이 아직 남았다면
 					if (!jwtTokenProvider.isTokenNotExpired(accessToken)) { // 만약 AccessToken의 유효시간이 만료되었다면
-						log.info("유효한 로그인 세션이나, AccessToken이 만료되었습니다. AccessToken을 재발급합니다.");
+						log.info("유효한 로그인 세션이나, AccessToken이 만료되었습니다. 리다이렉팅 전, 토큰을 재발급합니다.");
 						// 재발급 후, 컨텍스트에 다시 넣기
 						// Refresh Token으로 사용자 ID 가져오기
 						String userId = jwtTokenProvider.getUserIdFromRefreshToken(refreshToken);
 						// 토큰 발급
 						accessToken = jwtTokenProvider.reCreateToken(userId);
 						// 헤더에 토큰 정보(AccessToken, refreshToken) 추가
-						response.getHeaders().add("Authorization", "Bearer " + accessToken);
-						response.getHeaders().add("refreshToken", "Bearer " + refreshToken);
+						response.getHeaders().add("Set-Cookie", "a802-at=Bearer-" + accessToken + "; Path=/; HttpOnly");
 
 						ServerHttpRequest newRequest = exchange.getRequest()
 							.mutate()
-							.header("Authorization", "Bearer " + accessToken)
-							.header("refreshToken", "Bearer " + refreshToken)
+							.header("Authorization", "Bearer-" + accessToken)
 							.build();
 
 						newExchange = exchange.mutate().request(newRequest).build();
 					} else {
-						log.info("AccessToken의 유효시간이 아직 남아있습니다.");
+						log.info("Access Token의 유효시간이 아직 남아있습니다.");
 					}
 				} else {
 					log.info("로그인 세션 유효시간이 만료되었습니다. 백엔드 접근 요청을 거부합니다.");

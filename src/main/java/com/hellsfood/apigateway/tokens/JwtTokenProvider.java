@@ -7,7 +7,6 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
@@ -40,19 +39,18 @@ public class JwtTokenProvider {
 
 	private final RefreshTokenRepository refreshTokenRepository;
 
-
 	@PostConstruct
 	protected void init() {
 		UNIQUE_KEY = Base64.getEncoder().encodeToString(UNIQUE_KEY.getBytes());
 	}
 
 	public JwtTokenDto resolveToken(ServerHttpRequest request) {
-		JwtTokenDto tokenDto = new JwtTokenDto();
-		HttpHeaders requestHeader = request.getHeaders();
-		tokenDto.setAccessToken(requestHeader.get("Authorization").get(0).substring(7));
-		tokenDto.setRefreshToken(requestHeader.get("refreshToken").get(0).substring(7));
+		JwtTokenDto tokenDto=JwtTokenDto.builder()
+			.accessToken(request.getHeaders().get("Authorization").get(0).substring(7))
+			.refreshToken(request.getCookies().get("a802-rt").get(0).getValue().substring(7))
+			.build();
 		if (!refreshTokenRepository.existsByRefreshToken(tokenDto.getRefreshToken())) {
-			tokenDto = null;
+			return null;
 		}
 		System.out.println("[resolveToken@JwtTokenProvider]" + tokenDto);
 		return tokenDto;
