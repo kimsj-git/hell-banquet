@@ -6,7 +6,7 @@ function StickyHeader() {
 
     return (
         <StickyHeaderNav>
-            <LinkDecoNone to="" style={{textDecoration: "none", color: "black"}}>
+            <LinkDecoNone to="/" style={{textDecoration: "none", color: "black"}}>
                 <span style={{fontSize: 24, fontWeight: 1000}}>지옥 뷔페</span>
             </LinkDecoNone>
         </StickyHeaderNav>

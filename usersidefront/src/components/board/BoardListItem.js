@@ -12,7 +12,7 @@ function BoardListItem(params) {
     const { article, index } = params
     // 일단은 잠시 사용할 좋아요 관련 변수
     // const [ isLiked, setIsLiked ] = useState(undefined)
-    const [ numLiked, setNumLiked ] = useState({like: 0, hate: 0, comments: 0})
+    const [ numLiked,  ] = useState({like: 0, hate: 0, comments: 0})
 
     const onLikeClickHandler = (event) => {
         console.log(event.target)
@@ -28,7 +28,7 @@ function BoardListItem(params) {
 
     return (
         <ArticleCard  >
-            <LinkDecoNone to={`${index}`}>
+            <LinkDecoNone to={`/board/${index}`}>
                 <Grid container>
                     <Grid item xs={4}>
                         <JanvanFace src={article.src} alt={article?.id} />

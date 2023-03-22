@@ -5,7 +5,7 @@ import { getBoardList } from "../../api/board"
 import BoardListItem from "./BoardListItem"
 
 
-function BoardList() {
+function ArticleDetail() {
     const [ boardInfo, setBoardInfo ] = useState({lastBoardId: 20, size: 10})
     const lorem = "Lorem ipsuetur adipiscing elit. Vestibulum porta odio eros, eget dignissim felis egestas vitae. Mauris sit amet est nec eros accumsan eleifend. Etia".slice(0, 100)
 
@@ -72,17 +72,19 @@ function BoardList() {
     }, [articles, boardInfo]);
 
     return (
-        <div ref={articleListRef} style={{background: '#FFF3DF'}} >
-            {articles.map((article, index) => {
-                return (
-                    <BoardListItem article={article} index={index} key={index} />
-                )
-            })}
+        <div style={{background: '#FFF3DF'}}>
+            <BoardListItem article={articles[0]} />
+            <div ref={articleListRef}  style={{ marginTop: "100px", marginBottom: "70px" }}>
+                {articles.map((article, index) => {
+                    return (
+                        <BoardListItem article={article} index={index} key={index} />
+                    )
+                })}
+            </div>
         </div>
-
     )
 }
 
 
 
-export default BoardList
+export default ArticleDetail

@@ -22,13 +22,6 @@ function LoginForm () {
         return acc;
       }, {});
 
-    const onClickHandler = (e) => {
-        e.preventDefault()
-        // 제대로된 request로 바꿔야 함
-        axios_test()
-        console.log(inputID, inputPassword, temp_user_info)
-    }
-
     const onTypingHandler = (e) => {
         for (const key in textFieldOption) {
             const option = textFieldOption[key];
@@ -38,6 +31,13 @@ function LoginForm () {
             }
         }
     };
+
+    const onClickHandler = (e) => {
+        e.preventDefault()
+        // 제대로된 request로 바꿔야 함
+        axios_test()
+        console.log(inputID, inputPassword, temp_user_info)
+    }
 
     async function axios_test() {
         await login(

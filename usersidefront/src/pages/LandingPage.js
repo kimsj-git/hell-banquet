@@ -6,9 +6,9 @@ function LandingPage() {
     */
    
     return(
-        <div>
+        <>
             <LogedPageTemplate />
-        </div>
+        </>
     )
 }
 

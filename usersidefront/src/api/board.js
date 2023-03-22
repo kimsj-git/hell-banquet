@@ -9,5 +9,15 @@ async function getBoardList(parameters, success, fail) {
     return res
 }
 
+async function putArticle(body, success, fail) {
+    await api.post(`/boards`, JSON.stringify(body)).then(success).catch(fail);
+}
 
-export { getBoardList }
+async function getCommentList(parameters, success, fail) {
+    const { boardId } = parameters
+    const res = await api.get(`/boards/${boardId}/comments`, {params : {boardId: boardId, }}).then(success).catch(fail);
+    return res
+}
+
+
+export { getBoardList, putArticle, getCommentList }

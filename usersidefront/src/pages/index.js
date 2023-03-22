@@ -6,6 +6,8 @@ import LoginPage from "./LoginPage"
 import SignUpPage from "./SignUpPage"
 import PasswordFind from "./PasswordFindPage"
 import BoardPage from "./BoardPage";
+import BoardDetailPage from "./BoardDetailPage";
+import UserPage from "./UserPage";
 
 const routes = [
     // error pages
@@ -31,8 +33,17 @@ const routes = [
         element: <PasswordFind />
     },
     {
+        path: "/useri/:string",
+        element: <UserPage />
+    },
+    // board page
+    {
         path: "/board",
         element: <BoardPage />
+    },
+    {
+        path: "/board/:int",
+        element: <BoardDetailPage />
     }
 ]
 
