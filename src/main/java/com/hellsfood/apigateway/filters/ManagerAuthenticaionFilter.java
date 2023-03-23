@@ -1,5 +1,7 @@
 package com.hellsfood.apigateway.filters;
 
+import java.util.List;
+
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,8 @@ import org.springframework.web.server.ServerWebExchange;
 
 import com.hellsfood.apigateway.tokens.JwtTokenProvider;
 import com.hellsfood.apigateway.tokens.dto.JwtTokenDto;
+import com.hellsfood.apigateway.users.data.Role;
+import com.hellsfood.apigateway.users.data.RoleRepository;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,13 +22,16 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
-public class AuthenticationHeaderFilter extends AbstractGatewayFilterFactory<AuthenticationHeaderFilter.Config> {
+public class ManagerAuthenticaionFilter extends AbstractGatewayFilterFactory<ManagerAuthenticaionFilter.Config> {
+	private final RoleRepository roleRepository;
 
 	private final JwtTokenProvider jwtTokenProvider;
 
-	public AuthenticationHeaderFilter(JwtTokenProvider jwtTokenProvider) {
+	public ManagerAuthenticaionFilter(JwtTokenProvider jwtTokenProvider,
+		RoleRepository roleRepository) {
 		super(Config.class);
 		this.jwtTokenProvider = jwtTokenProvider;
+		this.roleRepository = roleRepository;
 	}
 
 	@Override
@@ -68,10 +75,15 @@ public class AuthenticationHeaderFilter extends AbstractGatewayFilterFactory<Aut
 					log.info("로그인 세션 유효시간이 만료되었습니다. 백엔드 접근 요청을 거부합니다.");
 					return handleUnAuthorized(exchange);
 				}
-				return chain.filter(newExchange);
-			} else {
-				return handleUnAuthorized(exchange);
+				String userId = jwtTokenProvider.getUserIdFromRefreshToken(refreshToken);
+				List<Role> userRole = roleRepository.findRolesByUsers_UserId(userId)
+					.orElseThrow(() -> new RuntimeException("권한 정보 호출 중 오류가 발생했습니다."));
+				if (userRole.contains(roleRepository.findByRoleName("manager")
+					.orElseThrow(() -> new RuntimeException("권한 정보 호출 중 오류가 발생했습니다.")))) {
+					return chain.filter(newExchange);
+				}
 			}
+			return handleUnAuthorized(exchange);
 		});
 
 	}
