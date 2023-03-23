@@ -374,3 +374,10 @@ $RECYCLE.BIN/
 .idea/misc.xml
 .idea/modules.xml
 .idea/vcs.xml
+
+game/.idea/game.iml
+game/.idea/inspectionProfiles/profiles_settings.xml
+game/.idea/misc.xml
+game/.idea/modules.xml
+game/.idea/vcs.xml
+game/.idea/workspace.xml
