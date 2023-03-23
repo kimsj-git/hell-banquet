@@ -9,8 +9,8 @@ function FormWithGrid(params) {
                         return(
                             <Grid item xs={12} key={item.id}>
                                 <TextField onChange={params.onTypingHandler}
-                                    helperText={params?.helperText} error={params?.error}
-                                    id={item.id} autoFocus={item.focus} label={item.label} type={item.type} fullWidth 
+                                    helperText={params?.helperText} error={params?.error} disabled={params?.disabled}
+                                    id={item.id} autoFocus={item.focus} label={item?.label} type={item.type} fullWidth 
                                 />
                             </Grid>
                         )

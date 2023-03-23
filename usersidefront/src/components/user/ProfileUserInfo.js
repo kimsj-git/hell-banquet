@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material"
+import { Button, Typography } from "@mui/material"
 import styled from "styled-components"
 import { LinkDecoNone } from "../common"
 
@@ -12,14 +12,16 @@ function ProfileUserInfo() {
 
     return (
         <UserInfoBox>
-            <LinkDecoNone to={'/'} style={{alignSelf: 'end'}} >정보 수정하기</LinkDecoNone>
             {Object.keys(tempUserInfo).map((key) => {
                 return (
-                    <Typography fontSize={20} >
+                    <Typography fontSize={20} key={key} >
                         {key} | {tempUserInfo[key]}
                     </Typography>
                 )
             })}
+            <LinkDecoNone to={'/user/ssafy/update'} style={{alignSelf: 'end'}} >
+                <Button variant="contained">정보 수정하기</Button>
+            </LinkDecoNone>
         </UserInfoBox>
     )
 }

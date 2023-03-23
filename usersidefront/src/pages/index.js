@@ -9,6 +9,7 @@ import BoardPage from "./BoardPage";
 import BoardDetailPage from "./BoardDetailPage";
 import UserPage from "./UserPage";
 import LoadingPage from "./LoadingPage";
+import UserInfoChange from "./UserInfoChange";
 
 const routes = [
     // error pages
@@ -38,8 +39,12 @@ const routes = [
         element: <PasswordFind />
     },
     {
-        path: "/useri/:string",
+        path: "/user/:string",
         element: <UserPage />
+    },
+    {
+        path: "/user/:string/update",
+        element: <UserInfoChange />
     },
     // board page
     {
