@@ -19,6 +19,7 @@ import com.hellsfood.api.users.data.VisitList;
 import com.hellsfood.api.users.data.VisitListRepository;
 import com.hellsfood.api.users.dto.UserRegisterRequestDto;
 import com.hellsfood.api.users.dto.UpdateRequestDto;
+import com.hellsfood.token.JwtTokenProvider;
 
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class UserService {
 
-	@Value("${jwt.secret}")
-	private String uniqueKey;
+	private final JwtTokenProvider jwtTokenProvider;
+
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
 	private final VisitListRepository visitRepository;
@@ -119,13 +120,7 @@ public class UserService {
 	}
 
 	public String getUserIdFromAccessToken(String token) {
-		String userId = null;
-		try {
-			userId = Jwts.parser().setSigningKey(uniqueKey.getBytes()).parseClaimsJws(token).getBody().getSubject();
-		} catch (Exception e) {
-			System.out.println("AccessToken에서 회원 ID 추출 중 오류가 발생했습니다.\n" + e.getMessage());
-		}
-		return userId;
+		return jwtTokenProvider.getUserIdfromAccessToken(token);
 	}
 
 	public User getUser(String id) {

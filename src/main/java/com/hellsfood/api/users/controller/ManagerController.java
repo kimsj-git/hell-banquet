@@ -3,6 +3,7 @@ package com.hellsfood.api.users.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hellsfood.api.users.dto.ExcelizedUserRegisterResultDto;
-import com.hellsfood.api.users.dto.UserRegisterRequestDto;
 import com.hellsfood.api.users.service.ManagerService;
 
 import io.swagger.annotations.Api;
@@ -37,7 +37,8 @@ public class ManagerController {
 	@PostMapping("/register/all")
 	@ApiOperation(value = "일괄 회원가입 처리", notes = "엑셀 파일로 저장된 회원 정보를 기반으로 순차적으로 회원 가입을 진행한다.")
 	public ResponseEntity registerUsers(
-		@RequestParam("file") @ApiParam(value = "일괄 회원가입 요청 정보 xlsx 파일", required = true) MultipartFile file) {
+		@RequestParam("file") @ApiParam(value = "일괄 회원가입 요청 정보 xlsx 파일", required = true) MultipartFile file,
+		HttpServletRequest request) {
 
 		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 
@@ -56,7 +57,7 @@ public class ManagerController {
 		} catch (IOException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("엑셀 파일을 읽는 중 오류가 발생하였습니다.");
 		}
-		List<ExcelizedUserRegisterResultDto> resultList = managerService.registerUsers(workbook);
+		List<ExcelizedUserRegisterResultDto> resultList = managerService.registerUsers(workbook, request.getHeader("Authorization").substring(7));
 		if (resultList != null) {
 			return ResponseEntity.ok(resultList);
 		} else {

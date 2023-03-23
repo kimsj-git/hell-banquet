@@ -21,6 +21,7 @@ import com.hellsfood.api.users.data.User;
 import com.hellsfood.api.users.data.UserRepository;
 import com.hellsfood.api.users.dto.ExcelizedUserRegisterResultDto;
 import com.hellsfood.api.users.dto.UserRegisterRequestDto;
+import com.hellsfood.token.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ManagerService {
 
+	private final JwtTokenProvider jwtTokenProvider;
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
 
@@ -46,7 +48,7 @@ public class ManagerService {
 	}
 
 	@Transactional
-	public List<ExcelizedUserRegisterResultDto> registerUsers(Workbook requestWorkbook) {
+	public List<ExcelizedUserRegisterResultDto> registerUsers(Workbook requestWorkbook, String accessToken) {
 		Sheet requestSheet = requestWorkbook.getSheetAt(0);
 		List<ExcelizedUserRegisterResultDto> resultList = new ArrayList<>();
 
@@ -119,6 +121,7 @@ public class ManagerService {
 					.roles(Collections.singletonList(
 						roleRepository.findByRoleName("user")
 							.orElseThrow(() -> new RuntimeException("권한 설정 중 오류가 발생하였습니다."))))
+					.groupId(jwtTokenProvider.getUserIdfromAccessToken(accessToken))
 					.build());
 			}
 			resultDto.setErrorInfo(errorInfo.toString());
