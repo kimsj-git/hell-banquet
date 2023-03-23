@@ -1,0 +1,6 @@
+aws:
+  s3:
+    accessKey: AKIA35EAQDQAUEALITXG
+    secretKey: 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
+    region: ap-northeast-2
+    bucketName: leftover-bucket
