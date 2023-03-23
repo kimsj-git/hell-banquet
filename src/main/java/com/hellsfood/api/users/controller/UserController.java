@@ -36,10 +36,21 @@ public class UserController {
 	private final MailService mailService;
 
 	@PostMapping("/register")
-	@ApiOperation(value = "회원 가입", notes = "입력받은 회원정보를 바탕으로 회원을 DB에 등록한다.")
+	@ApiOperation(value = "일반 회원 가입", notes = "입력 받은 회원 가입 요청 정보로 일반 회원 계정을 등록한다.")
 	public ResponseEntity registerUser(
 		@RequestBody @ApiParam(value = "회원가입 정보", required = true) UserRegisterRequestDto requestDto) {
-		Long result = userService.registerUser(requestDto);
+		Long result = userService.registerUser(requestDto, "user");
+		if (result == -1L) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("아이디나 닉네임은 'guser'로 시작할 수 없습니다.");
+		}
+		return ResponseEntity.ok(requestDto.getUserId() + "님, 가입을 환영합니다.");
+	}
+
+	@PostMapping("/register/manager")
+	@ApiOperation(value = "영양사(매니저)회원 가입", notes = "입력 받은 영양사 회원 가입 요청 정보로 영양사 계정을 등록한다.")
+	public ResponseEntity registerManager(
+		@RequestBody @ApiParam(value = "회원가입 정보", required = true) UserRegisterRequestDto requestDto) {
+		Long result = userService.registerUser(requestDto, "manager");
 		if (result == -1L) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("아이디나 닉네임은 'guser'로 시작할 수 없습니다.");
 		}

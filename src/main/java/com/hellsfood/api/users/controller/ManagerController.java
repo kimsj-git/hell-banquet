@@ -34,17 +34,6 @@ import lombok.RequiredArgsConstructor;
 public class ManagerController {
 	private final ManagerService managerService;
 
-	@PostMapping("/register")
-	@ApiOperation(value = "회원 가입", notes = "입력받은 회원정보를 바탕으로 회원을 DB에 등록한다.")
-	public ResponseEntity registerManager(
-		@RequestBody @ApiParam(value = "회원가입 정보", required = true) UserRegisterRequestDto requestDto) {
-		Long result = managerService.registerManager(requestDto);
-		if (result == -1L) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body("아이디나 닉네임은 'user'로 시작할 수 없습니다.");
-		}
-		return ResponseEntity.ok(requestDto.getUserId() + "님, 가입을 환영합니다.");
-	}
-
 	@PostMapping("/register/all")
 	@ApiOperation(value = "일괄 회원가입 처리", notes = "엑셀 파일로 저장된 회원 정보를 기반으로 순차적으로 회원 가입을 진행한다.")
 	public ResponseEntity registerUsers(

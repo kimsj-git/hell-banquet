@@ -46,14 +46,14 @@ public class UserService {
 	}
 
 	@Transactional
-	public Long registerUser(UserRegisterRequestDto requestDto) {
+	public Long registerUser(UserRegisterRequestDto requestDto, String role) {
 		if (requestDto.getUserId().startsWith("guser") || requestDto.getName().startsWith("guser")) {
 			return -1L;
 		}
 		requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
 		User tmpUser = requestDto.toEntity();
 		tmpUser.setRoles(Collections.singletonList(
-			roleRepository.findByRoleName("user").orElseThrow(() -> new RuntimeException("권한 설정 중 오류가 발생하였습니다."))));
+			roleRepository.findByRoleName(role).orElseThrow(() -> new RuntimeException("권한 설정 중 오류가 발생하였습니다."))));
 		return userRepository.save(tmpUser).getId();
 	}
 
