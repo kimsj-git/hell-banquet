@@ -112,7 +112,15 @@ public class ManagerService {
 					resultDto.setResult("조건 변경");
 				}
 
-				// TODO: 추후 대량 회원가입 요청한 매니저 아이디 넣어주는거도 고려해보기
+				// APIgateway를 통해 정상적인 경로로 매니저가 일괄 가입 시키는 경우,
+				// 그 매니저의 ID가 자동으로 등록될 수 있도록 설정해주는 코드.
+				// 개발간 디버깅때는 swagger나 postman으로 직접 테스트 하는 경우도 있을 거 같아,
+				// 디버깅 편의를 위해 accessToken이 null인 경우도 허용하기 위해 넣은 코드.
+				String managerId=null;
+				if(accessToken!=null){
+					managerId = jwtTokenProvider.getUserIdfromAccessToken(accessToken);
+				}
+
 				userRepository.save(User.builder()
 					.userId(resultDto.getUserId())
 					.password(passwordEncoder.encode(resultDto.getUserId()))
@@ -121,7 +129,7 @@ public class ManagerService {
 					.roles(Collections.singletonList(
 						roleRepository.findByRoleName("user")
 							.orElseThrow(() -> new RuntimeException("권한 설정 중 오류가 발생하였습니다."))))
-					.groupId(jwtTokenProvider.getUserIdfromAccessToken(accessToken))
+					.groupId(managerId)
 					.build());
 			}
 			resultDto.setErrorInfo(errorInfo.toString());

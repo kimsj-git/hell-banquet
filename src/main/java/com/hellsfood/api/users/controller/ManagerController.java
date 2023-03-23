@@ -57,7 +57,14 @@ public class ManagerController {
 		} catch (IOException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("엑셀 파일을 읽는 중 오류가 발생하였습니다.");
 		}
-		List<ExcelizedUserRegisterResultDto> resultList = managerService.registerUsers(workbook, request.getHeader("Authorization").substring(7));
+		String accessToken = null;
+		try {
+			accessToken = request.getHeader("Authorization").substring(7);
+		} catch (NullPointerException e) {
+			// accessToken을 null 상태로 둠으로써 groupID 정보가 추가되지 않도록 합니다.
+			// 따라서 이 블럭에서 처리할 코드는 없습니다.
+		}
+		List<ExcelizedUserRegisterResultDto> resultList = managerService.registerUsers(workbook, accessToken);
 		if (resultList != null) {
 			return ResponseEntity.ok(resultList);
 		} else {
