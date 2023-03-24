@@ -53,8 +53,10 @@ public class UserAuthenticationFilter extends AbstractGatewayFilterFactory<UserA
 						// 토큰 발급
 						accessToken = jwtTokenProvider.reCreateToken(userId);
 						// 헤더에 토큰 정보(AccessToken, refreshToken) 추가
-						response.getHeaders().add("Set-Cookie", "a802-at=Bearer-" + accessToken + "; Path=/; HttpOnly");
+						// response.getHeaders().add("Set-Cookie", "a802-at=Bearer-" + accessToken + "; Path=/; HttpOnly");
+						response.getHeaders().add("Authorization", "Bearer-" + accessToken);
 
+						// 원래 사용자가 보냈던 요청 헤더정보의 토큰 정보를 현재 발급받은 토큰 정보로 바꿔치기.
 						ServerHttpRequest newRequest = exchange.getRequest()
 							.mutate()
 							.header("Authorization", "Bearer-" + accessToken)
@@ -76,6 +78,7 @@ public class UserAuthenticationFilter extends AbstractGatewayFilterFactory<UserA
 
 	}
 
+	// 로그인하지 않았거나 사용자 권한이 불충분한 경우 401 Unauthorized를 반환.
 	private Mono<Void> handleUnAuthorized(ServerWebExchange exchange) {
 		ServerHttpResponse response = exchange.getResponse();
 

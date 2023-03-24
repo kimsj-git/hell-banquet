@@ -47,7 +47,9 @@ public class JwtTokenProvider {
 	public JwtTokenDto resolveToken(ServerHttpRequest request) {
 		JwtTokenDto tokenDto=JwtTokenDto.builder()
 			.accessToken(request.getHeaders().get("Authorization").get(0).substring(7))
-			.refreshToken(request.getCookies().get("a802-rt").get(0).getValue().substring(7))
+			// 나중에 Cookie를 주고받는 문제가 해결되면 아래 코드로 cookie를 가져올 수 있습니다.
+			// .refreshToken(request.getCookies().get("a802-rt").get(0).getValue().substring(7))
+			.refreshToken(request.getHeaders().get("refreshToken").get(0).substring(7))
 			.build();
 		if (!refreshTokenRepository.existsByRefreshToken(tokenDto.getRefreshToken())) {
 			return null;
