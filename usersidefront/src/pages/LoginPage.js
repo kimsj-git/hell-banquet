@@ -1,7 +1,7 @@
 import { LoginForm } from "../components/login"
-import { LinkDecoNone } from "../components/common"
 
 import styled from "styled-components"
+import { LinkDecoNone } from "../components/common"
 
 function LoginPage() {
 
@@ -13,7 +13,9 @@ function LoginPage() {
 
     return(
         <Login>
-            <LogoSection />
+            <LinkDecoNone to='/login' style={styleForLogo}>
+                <LogoSection />
+            </LinkDecoNone>
             <LoginForm />
             {logInOptions.map(item => {
                 return (
@@ -47,5 +49,12 @@ const LogoSection = styled.section`
 
     background: #B8DDFF;
 `
+
+
+const styleForLogo = {
+    width: "60%",
+    height: 130,
+    background: '#B8DDFF',
+}
 
 export default LoginPage

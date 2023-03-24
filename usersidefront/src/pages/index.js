@@ -9,7 +9,7 @@ import BoardPage from "./BoardPage";
 import BoardDetailPage from "./BoardDetailPage";
 import UserPage from "./UserPage";
 import LoadingPage from "./LoadingPage";
-import UserInfoChange from "./UserInfoChange";
+import UserInfoChangePage from "./UserInfoChangePage";
 
 const routes = [
     // error pages
@@ -44,7 +44,7 @@ const routes = [
     },
     {
         path: "/user/:string/update",
-        element: <UserInfoChange />
+        element: <UserInfoChangePage />
     },
     // board page
     {

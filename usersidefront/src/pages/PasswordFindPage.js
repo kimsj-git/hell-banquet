@@ -3,7 +3,7 @@ import { useState }  from 'react'
 import { login } from '../api/member'
 
 import styled from "styled-components"
-import { FormWithGrid, EntranceOption } from "../components/common"
+import { FormWithGrid, EntranceOption, LinkDecoNone } from "../components/common"
 
 
 function PasswordFind() {
@@ -36,7 +36,9 @@ function PasswordFind() {
 
     return(
         <Login>
-            <LogoSection />
+            <LinkDecoNone to='/login' style={styleForLogo}>
+                <LogoSection />
+            </LinkDecoNone>
             {FormWithGrid({option: textFieldOption, onClickHandler: axios_test, onTypingHandler: onTypingHandler})}
             {EntranceOption(passwordFindOptions)}
         </Login>
@@ -61,5 +63,11 @@ const LogoSection = styled.section`
 
     background: #B8DDFF;
 `
+
+const styleForLogo = {
+    width: "60%",
+    height: 130,
+    background: '#B8DDFF',
+}
 
 export default PasswordFind
