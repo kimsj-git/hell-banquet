@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
 
@@ -44,7 +45,7 @@ class LeftoverController(
     @GetMapping("/ranking")
     @ApiOperation(value = "일일 랭킹", notes = "")
     fun getDailyRanking(
-        @ApiParam(
+        @RequestParam @ApiParam(
             value = "내 랭킹 정보를 조회하고 싶은 사용자 ID. 없으면 그 사용자 ID에 대해서는 검색 안함.",
             required = false
         ) userId: String
@@ -56,8 +57,8 @@ class LeftoverController(
     @GetMapping("/analysis")
     @ApiOperation(value = "시작 날짜와 끝 날짜를 기준으로 각각의 코스에 대한 잔반 통계 정보를 반환한다.")
     fun getAnalysisByDateRange(
-        @ApiParam(value = "시작 날짜", required = true) startDate: Int,
-        @ApiParam(value = "종료 날짜", required = true) endDate: Int
+        @RequestParam @ApiParam(value = "시작 날짜", required = true) startDate: Int,
+        @RequestParam @ApiParam(value = "종료 날짜", required = true) endDate: Int
     ): ResponseEntity<*> {
         return ResponseEntity.ok(leftoverService.getAnalysisByDateRange(startDate, endDate))
     }
