@@ -22,12 +22,12 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
-public class ManagerAuthenticaionFilter extends AbstractGatewayFilterFactory<ManagerAuthenticaionFilter.Config> {
+public class ManagerAuthenticationFilter extends AbstractGatewayFilterFactory<ManagerAuthenticationFilter.Config> {
 	private final RoleRepository roleRepository;
 
 	private final JwtTokenProvider jwtTokenProvider;
 
-	public ManagerAuthenticaionFilter(JwtTokenProvider jwtTokenProvider,
+	public ManagerAuthenticationFilter(JwtTokenProvider jwtTokenProvider,
 		RoleRepository roleRepository) {
 		super(Config.class);
 		this.jwtTokenProvider = jwtTokenProvider;
