@@ -9,7 +9,7 @@ def game(frame, cap):
 
     cookie_images = []
     for i in range(8):
-        img = cv2.imread(f'./assets/cookie_{i}.png')
+        img = cv2.imread(f'./game/assets/cookie_{i}.png')
         img = imutils.resize(img, width=200, height=200)
         cookie_images.append(img)
 
@@ -23,7 +23,7 @@ def game(frame, cap):
 
     # 변수 초기화
     MOUTH_AR_THRESH = 0.80
-    shape_predictor = './data/shape_predictor_68_face_landmarks.dat'
+    shape_predictor = './game/data/shape_predictor_68_face_landmarks.dat'
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(shape_predictor)
     (mStart, mEnd) = (49, 68)

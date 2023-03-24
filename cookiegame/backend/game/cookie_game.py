@@ -108,3 +108,4 @@ while time.time() - start_time < game_duration:
 cap.release()
 cv2.destroyAllWindows()
 print(f'Final score: {score}')
+
