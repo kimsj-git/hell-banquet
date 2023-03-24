@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +39,7 @@ public class AuthenticationController {
 	@ApiOperation(value = "로그인", notes = "ID와 암호화된 PW가 DB에 있는 정보와 일치하는 경우 로그인을 승인한다.")
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody @ApiParam(value = "로그인 요청 정보", required = true) LoginRequestDto requestDto,
-		HttpServletRequest request, HttpServletResponse response) {
+		HttpServletResponse response) {
 		String userId = requestDto.getUserId();
 		if (userId.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
 			userId = authService.findUserIdByEmail(userId);
@@ -49,19 +50,23 @@ public class AuthenticationController {
 
 			JwtTokenDto jwtToken = authService.login(userId, password);
 			if (jwtToken != null) {
-				Cookie cookie = new Cookie("a802-at", "Bearer-" + jwtToken.getAccessToken());
-				cookie.setMaxAge(60 * 60 * 13); // 단위: 초 (jwtProvider는 단위: ms)
-				// cookie.setSecure(true); //-> https 요청에만 사용 가능하게 하는거라 나중에 설정할것.
-				cookie.setHttpOnly(true);
-				cookie.setPath("/");
-				response.addCookie(cookie);
+				// ResponseCookie cookie = ResponseCookie.from("a802-at", "Bearer-" + jwtToken.getAccessToken())
+				// 	.maxAge(60 * 60 * 13) // 단위: 초 (jwtProvider는 단위: ms)
+				// 	.secure(true) //-> https 요청에만 사용 가능하게 하는거라 나중에 설정할것.
+				// 	.path("/")
+				// 	.sameSite("None")
+				// 	.build();
+				// response.addHeader("Set-Cookie", cookie.toString());
 
-				cookie = new Cookie("a802-rt", "Bearer-" + jwtToken.getRefreshToken());
-				cookie.setMaxAge(60 * 60 * 24 * 14); // 단위: 초 (jwtProvider는 단위: ms)
-				// cookie.setSecure(true); //-> https 요청에만 사용 가능하게 하는거라 나중에 설정할것.
-				cookie.setHttpOnly(true);
-				cookie.setPath("/");
-				response.addCookie(cookie);
+				// cookie = ResponseCookie.from("a802-rt", "Bearer-" + jwtToken.getRefreshToken())
+				// 	.maxAge(60 * 60 * 24 * 14) // 단위: 초 (jwtProvider는 단위: ms)
+				// 	// cookie.setSecure(true); //-> https 요청에만 사용 가능하게 하는거라 나중에 설정할것.
+				// 	.secure(true)
+				// 	.path("/")
+				// 	.build();
+				// response.addHeader("Set-Cookie", cookie.toString());
+				response.addHeader("Authorization", "Bearer-"+jwtToken.getAccessToken());
+				response.addHeader("refreshToken", "Bearer-"+jwtToken.getRefreshToken());
 				return ResponseEntity.ok(userId + "님, 환영합니다.");
 			}
 		}
@@ -72,22 +77,26 @@ public class AuthenticationController {
 	@PostMapping("/logout")
 	public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
 		String refreshToken = null;
-		for (Cookie cookie : request.getCookies()) {
-			if (cookie.getName().equals("a802-rt")) {
-				refreshToken = cookie.getValue().substring(7);
-				System.out.println(refreshToken);
-				break;
-			}
+		// for (Cookie cookie : request.getCookies()) {
+		// 	if (cookie.getName().equals("a802-rt")) {
+		// 		refreshToken = cookie.getValue().substring(7);
+		// 		System.out.println(refreshToken);
+		// 		break;
+		// 	}
+		// }
+		if(request.getHeader("refreshToken")!=null) {
+			refreshToken = request.getHeader("refreshToken").substring(7);
 		}
+
 		if (refreshToken != null) {
-			Cookie cookie = new Cookie("a802-at", null);
-			cookie.setMaxAge(0);
-			cookie.setPath("/");
-			response.addCookie(cookie);
-			cookie = new Cookie("a802-rt", null);
-			cookie.setPath("/");
-			cookie.setMaxAge(0);
-			response.addCookie(cookie);
+			// Cookie cookie = new Cookie("a802-at", null);
+			// cookie.setMaxAge(0);
+			// cookie.setPath("/");
+			// response.addCookie(cookie);
+			// cookie = new Cookie("a802-rt", null);
+			// cookie.setPath("/");
+			// cookie.setMaxAge(0);
+			// response.addCookie(cookie);
 			if (authService.logout(refreshToken)) {
 				return ResponseEntity.ok("정상적으로 로그아웃되었습니다.");
 			} else {
