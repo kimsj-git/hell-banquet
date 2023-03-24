@@ -25,19 +25,41 @@ public class MenuController {
 
 	private final MenuService menuService;
 
+	@ApiOperation("모든 식단 리스트 조회")
 	@GetMapping("")
 	public List<Menu> getAllMeals() {
 		return menuService.getAllMenus();
 	}
 
-	@ApiOperation("{managerId}를 갖는 영양사가 {date}에 작성한 식단 리스트")
+	@ApiOperation(value = "{id}에 해당하는 식단 단건 조회")
+	@GetMapping("/{id}")
+	public Menu getMealById(@PathVariable Long id) {
+		return menuService.findMenuById(id);
+	}
+
+	@ApiOperation(
+		value = "조건별 식단 리스트 조회",
+		notes = "{managerId}에 해당하는 영양사가 작성한 식단 리스트를 조회한다."
+	)
+	@GetMapping("/manager/{managerId}")
+	public List<Menu> getMealByManagerId(@PathVariable String managerId) {
+		return menuService.findMenuByManagerId(managerId);
+	}
+
+	@ApiOperation(
+		value = "조건별 식단 리스트 조회",
+		notes = "{managerId}에 해당하는 영양사가 {date}에 작성한 식단 리스트를 조회한다."
+	)
 	@GetMapping("/detail/{managerId}")
 	public List<Menu> getMealByManagerIdAndDate(@PathVariable String managerId,
 		@RequestParam("date") String date) {
 		return menuService.getMenusByManagerIdAndDate(managerId, date);
 	}
 
-	@ApiOperation("{managerId}를 갖는 영양사가 {date}에 작성한 식단 리스트")
+	@ApiOperation(
+		value = "조건별 식단 리스트 조회",
+		notes = "{managerId}에 해당하는 영양사가 {date}에 작성한 식단 리스트 중 {type}에 해당하는 식단를 조회한다."
+	)
 	@GetMapping("/detail/type/{managerId}")
 	public Menu getMealByManagerIdAndDateAndType(@PathVariable String managerId,
 		@RequestParam("date") String date,
@@ -45,21 +67,13 @@ public class MenuController {
 		return menuService.getMenusByManagerIdAndDateAndType(managerId, date, type);
 	}
 
-	@GetMapping("/{id}")
-	public Menu getMealById(@PathVariable Long id) {
-		return menuService.findMenuById(id);
-	}
-
-	@GetMapping("/manager/{managerId}")
-	public List<Menu> getMealByManagerId(@PathVariable String managerId) {
-		return menuService.findMenuByManagerId(managerId);
-	}
-
+	@ApiOperation("식단 생성")
 	@PostMapping("")
 	public Menu createMeal(@RequestBody MenuSaveRequestDto menu) {
 		return menuService.save(menu);
 	}
 
+	@ApiOperation("{id}에 해당하는 식단 삭제")
 	@DeleteMapping("/{id}")
 	public void deleteMenu(@PathVariable Long id) {
 		menuService.deleteMenu(id);
