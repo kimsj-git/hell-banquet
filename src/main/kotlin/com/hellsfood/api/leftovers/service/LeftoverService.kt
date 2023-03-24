@@ -5,7 +5,6 @@ import com.hellsfood.api.leftovers.data.LeftoverRepository
 import com.hellsfood.api.leftovers.data.Ranking
 import com.hellsfood.api.leftovers.data.RankingRepository
 import com.hellsfood.api.leftovers.dto.LeftoverRegisterRequestDto
-import com.hellsfood.api.users.data.User
 import com.hellsfood.api.users.data.UserRepository
 import lombok.RequiredArgsConstructor
 import org.springframework.scheduling.annotation.Scheduled

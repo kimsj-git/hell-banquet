@@ -22,7 +22,6 @@ import java.time.LocalDate
 class LeftoverController(
     private val leftoverService: LeftoverService,
 ) {
-
     @PostMapping("/register")
     @ApiOperation(value = "식사 기록", notes = "입력받은 음식양을 DB에 저장한다.")
     fun registerLeftover(

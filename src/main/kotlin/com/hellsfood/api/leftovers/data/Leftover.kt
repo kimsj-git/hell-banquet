@@ -1,6 +1,5 @@
 package com.hellsfood.api.leftovers.data
 
-import lombok.Builder
 import org.hibernate.annotations.DynamicInsert
 import org.springframework.data.annotation.CreatedDate
 import java.time.LocalDate
@@ -8,7 +7,6 @@ import javax.persistence.*
 
 @DynamicInsert
 @Entity
-@Builder
 class Leftover {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
