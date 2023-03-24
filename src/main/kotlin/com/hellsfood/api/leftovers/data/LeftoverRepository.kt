@@ -13,4 +13,11 @@ interface LeftoverRepository : JpaRepository<Leftover, Long> {
         value = "select * from Leftover l where l.percentage>=0 and l.date=:date order by l.percentage", nativeQuery = true
     )
     fun getDailyRanking(date: LocalDate): List<Leftover>
+
+    @Query(value="select sum(l.before) as served from Leftover l where l.date=:date and l.course=:course")
+    fun getBeforeSumByDateAndCourse(date:LocalDate, course:Int): Long
+
+    @Query(value="select sum(l.after) as leftovers from Leftover l where l.date=:date and l.course=:course")
+    fun getAfterSumByDateAndCourse(date:LocalDate, course:Int): Long
+
 }

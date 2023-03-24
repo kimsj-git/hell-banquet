@@ -1,9 +1,6 @@
 package com.hellsfood.api.leftovers.service
 
-import com.hellsfood.api.leftovers.data.Leftover
-import com.hellsfood.api.leftovers.data.LeftoverRepository
-import com.hellsfood.api.leftovers.data.Ranking
-import com.hellsfood.api.leftovers.data.RankingRepository
+import com.hellsfood.api.leftovers.data.*
 import com.hellsfood.api.leftovers.dto.LeftoverRegisterRequestDto
 import com.hellsfood.api.users.data.UserRepository
 import lombok.RequiredArgsConstructor
@@ -20,25 +17,26 @@ import javax.transaction.Transactional
 class LeftoverService(
     private val leftoverRepository: LeftoverRepository,
     private val userRepository: UserRepository,
-    private val rankingRepository: RankingRepository
+    private val rankingRepository: RankingRepository,
+    private val analysisRepository: AnalysisRepository
 ) {
+
     @Transactional
     fun registerLeftover(requestDto: LeftoverRegisterRequestDto): Boolean {
-        val userId: String = requestDto.userId
-        val amount: Int = requestDto.amount
-        if (amount == -1) {
+        if (requestDto.amount == -1) {
             return false
         }
         var date = LocalDate.now()
         var leftover: Leftover
-        if (leftoverRepository.existsByUserIdAndDate(userId, date)) {
-            leftover = leftoverRepository.findByUserIdAndDate(userId, date)
-            leftover.after = amount
+        if (leftoverRepository.existsByUserIdAndDate(requestDto.userId, date)) {
+            leftover = leftoverRepository.findByUserIdAndDate(requestDto.userId, date)
+            leftover.after = requestDto.amount
             leftover.percentage = leftover.after * 1.0 / leftover.before
         } else {
             leftover = Leftover()
-            leftover.userId = userId
-            leftover.before = amount
+            leftover.userId = requestDto.userId
+            leftover.before = requestDto.amount
+            leftover.course = requestDto.courseNo
         }
         leftoverRepository.save(leftover)
         return true
@@ -57,16 +55,41 @@ class LeftoverService(
             cur.leftPercentage = l.percentage
             rankingList.add(cur)
         }
-            setRankingTable(rankingList)
+        setRankingTable(rankingList)
+
+        calculateDailyAnalysis();
     }
 
     @Transactional
-    fun resetRankingTable(){
+    fun calculateDailyAnalysis() {
+        for (i in 1..2) run {
+            val courseInfo = Analysis()
+            courseInfo.served = leftoverRepository.getBeforeSumByDateAndCourse(LocalDate.now(), i)
+            courseInfo.leftovers = leftoverRepository.getAfterSumByDateAndCourse(LocalDate.now(), i)
+            courseInfo.courseNo = i
+            analysisRepository.save(courseInfo)
+        }
+    }
+
+    fun getAnalysisByDateRange(startDate: Int, endDate: Int): List<Analysis> {
+        return analysisRepository.getCourseInfoByDateRange(parseDate(startDate), parseDate(endDate))
+    }
+
+    private fun parseDate(date: Int): LocalDate {
+        val year = date / 10000
+        val mmDd = date % 10000
+        val month = mmDd / 100
+        val date = mmDd % 100
+        return LocalDate.of(year, month, date)
+    }
+
+    @Transactional
+    fun resetRankingTable() {
         rankingRepository.deleteAll()
     }
 
     @Transactional
-    fun setRankingTable(rankingList:List<Ranking>){
+    fun setRankingTable(rankingList: List<Ranking>) {
         rankingRepository.saveAll(rankingList)
     }
 

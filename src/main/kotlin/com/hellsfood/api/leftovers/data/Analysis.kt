@@ -3,27 +3,23 @@ package com.hellsfood.api.leftovers.data
 import org.hibernate.annotations.DynamicInsert
 import org.springframework.data.annotation.CreatedDate
 import java.time.LocalDate
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
 
 @DynamicInsert
 @Entity
-class Leftover {
+class Analysis {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    @Column(length = 16)
-    lateinit var userId: String
+    var served: Long = -1
+    var leftovers: Long = -1
 
-    var before: Int = 0
-
-    var after: Int = -1
-
-    var percentage: Double = -1.0
-
-    var course: Int = -1
+    var courseNo: Int=-1
 
     @CreatedDate
     var date: LocalDate = LocalDate.now()
-
 }
