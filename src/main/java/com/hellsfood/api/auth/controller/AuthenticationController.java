@@ -65,8 +65,8 @@ public class AuthenticationController {
 				// 	.path("/")
 				// 	.build();
 				// response.addHeader("Set-Cookie", cookie.toString());
-				response.addHeader("Authorization", "Bearer-"+jwtToken.getAccessToken());
-				response.addHeader("refreshToken", "Bearer-"+jwtToken.getRefreshToken());
+				response.addHeader("Authorization", "Bearer-" + jwtToken.getAccessToken());
+				response.addHeader("refreshToken", "Bearer-" + jwtToken.getRefreshToken());
 				return ResponseEntity.ok(userId + "님, 환영합니다.");
 			}
 		}
@@ -84,7 +84,7 @@ public class AuthenticationController {
 		// 		break;
 		// 	}
 		// }
-		if(request.getHeader("refreshToken")!=null) {
+		if (request.getHeader("refreshToken") != null) {
 			refreshToken = request.getHeader("refreshToken").substring(7);
 		}
 
@@ -130,15 +130,6 @@ public class AuthenticationController {
 
 		}
 
-		switch (responseCode) {
-			case 1:
-				return ResponseEntity.ok(false);
-			case -1:
-				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("만료된 로그인 세션입니다.");
-			case -2:
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("유효하지 않은 토큰입니다.");
-			default:
-				return ResponseEntity.ok(true);
-		}
+		return ResponseEntity.ok(responseCode == 1 ? false : true);
 	}
 }

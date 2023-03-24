@@ -61,6 +61,8 @@ public class AuthenticationService implements UserDetailsService {
 		return userRepository.findUserIdByEmail(email).orElse(null);
 	}
 
+	// Spring Security 기반으로 로그인 할 때 반드시 필요한 UserDetailService 의 필수 Override 함수.
+	// 명식적으로 사용되지는 않으며, Spring Framework 내부에서 호출해서 사용하는 함수이다.
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 		return userRepository.findByUserId(userId)
