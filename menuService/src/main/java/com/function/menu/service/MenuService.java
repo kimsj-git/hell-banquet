@@ -56,11 +56,6 @@ public class MenuService {
 		return menuRepository.findById(id);
 	}
 
-	@Transactional(readOnly = true)
-	public List<Menu> findMenuByManagerId(String id) {
-		return menuRepository.findMenuByManagerId(id);
-	}
-
 	@Transactional
 	public void deleteMenu(Long id) {
 		menuRepository.deleteById(id);

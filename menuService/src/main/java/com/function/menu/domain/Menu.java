@@ -28,7 +28,7 @@ public class Menu {
 	@ApiModelProperty(example = "식단 날짜 정보")
 	private LocalDate date;
 
-	@ApiModelProperty(example = "코스 A / 코스 B")
+	@ApiModelProperty(example = "코스 A/코스 B")
 	private String type;
 
 	@ApiModelProperty(example = "식단 카테고리 (한식/일식/중식/양식/일품)")

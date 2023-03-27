@@ -9,7 +9,6 @@ public interface MenuRepository extends MongoRepository<Menu, Long> {
 
 	Menu findById(long id);
 	void deleteById(Long id);
-	List<Menu> findMenuByManagerId(String managerId);
 	List<Menu> findByManagerIdAndDate(String managerId, LocalDate date);
 	Menu findByManagerIdAndDateAndType(String managerId, LocalDate parseDate, String type);
 

@@ -20,56 +20,43 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/meals")
+@RequestMapping("/menus")
 public class MenuController {
 
 	private final MenuService menuService;
 
-	@ApiOperation("모든 식단 리스트 조회")
+	@ApiOperation("모든 식단 리스트 조회 - Read 테스트를 위한 API")
 	@GetMapping("")
-	public List<Menu> getAllMeals() {
+	public List<Menu> getAllMenus() {
 		return menuService.getAllMenus();
 	}
 
 	@ApiOperation(value = "{id}에 해당하는 식단 단건 조회")
 	@GetMapping("/{id}")
-	public Menu getMealById(@PathVariable Long id) {
+	public Menu getMenuById(@PathVariable Long id) {
 		return menuService.findMenuById(id);
 	}
 
-	@ApiOperation(
-		value = "조건별 식단 리스트 조회",
-		notes = "{managerId}에 해당하는 영양사가 작성한 식단 리스트를 조회한다."
-	)
-	@GetMapping("/manager/{managerId}")
-	public List<Menu> getMealByManagerId(@PathVariable String managerId) {
-		return menuService.findMenuByManagerId(managerId);
-	}
-
-	@ApiOperation(
-		value = "조건별 식단 리스트 조회",
-		notes = "{managerId}에 해당하는 영양사가 {date}에 작성한 식단 리스트를 조회한다."
-	)
-	@GetMapping("/detail/{managerId}")
-	public List<Menu> getMealByManagerIdAndDate(@PathVariable String managerId,
+	@ApiOperation("{managerId}에 해당하는 영양사가 {date}에 작성한 식단 리스트를 조회한다.")
+	@GetMapping("/date")
+	public List<Menu> getMenusByManagerIdAndDate(
+		@RequestParam("managerId") String managerId,
 		@RequestParam("date") String date) {
 		return menuService.getMenusByManagerIdAndDate(managerId, date);
 	}
 
-	@ApiOperation(
-		value = "조건별 식단 리스트 조회",
-		notes = "{managerId}에 해당하는 영양사가 {date}에 작성한 식단 리스트 중 {type}에 해당하는 식단를 조회한다."
-	)
-	@GetMapping("/detail/type/{managerId}")
-	public Menu getMealByManagerIdAndDateAndType(@PathVariable String managerId,
+	@ApiOperation("{managerId}에 해당하는 영양사가 {date}에 작성한 식단 리스트 중 {type}에 해당하는 식단를 조회한다.")
+	@GetMapping("/type")
+	public Menu getMenuByManagerIdAndDateAndType(
+		@RequestParam("managerId") String managerId,
 		@RequestParam("date") String date,
 		@RequestParam("type") String type) {
 		return menuService.getMenusByManagerIdAndDateAndType(managerId, date, type);
 	}
 
 	@ApiOperation("식단 생성")
-	@PostMapping("")
-	public Menu createMeal(@RequestBody MenuSaveRequestDto menu) {
+	@PostMapping()
+	public Menu createMenu(@RequestBody MenuSaveRequestDto menu) {
 		return menuService.save(menu);
 	}
 
