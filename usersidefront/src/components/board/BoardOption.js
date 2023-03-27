@@ -4,19 +4,26 @@ import BoardOptionButton from "./BoardOptionButton"
 import ArticleCreateModal from "./ArticleCreateModal";
 
 import styled from "styled-components"
-import { Create, Search, ArrowBack } from "@mui/icons-material"
+import { Create, Search, ArrowBack, MoreVert } from "@mui/icons-material"
 import BoardSearchModal from "./BoardSearchModal";
+import { Container } from "@mui/material";
 
 
 function BoardOption() {
-    // 마찬가지로 위치가 fix되어 있는 버튼을 만들어야 한다
-    // 여기서 만든 버튼과 코드를 그대로 검색에서 사용할 것
     const navigate = useNavigate()
+    const [boardOptions, setBoardOptions] = useState([
+        {id: 1, component: Search, onClick: onClickHandler, visible: false, isOpen: false, modal: <BoardSearchModal/>},
+        {id: 2, component: Create, onClick: onClickHandler, visible: false, isOpen: false, modal: <ArticleCreateModal/>},
+    ])
+    
+    const MoreButton = {id: 3, component: MoreVert, onClick: onClickHandler, visible: true, }
+    const moveBack = {id: 4, component: ArrowBack, onClick: () => navigate(-1), visible: true, }
 
     function onClickHandler(targetId) {
         setBoardOptions((prevOptions) =>
             prevOptions.map((option) =>
-                option.id === targetId ? { ...option, visible: false } : { ...option, visible: true }
+            // ({...option, visible: !option.visible})
+                option.id === targetId ? { ...option, isOpen: true, visible: !option.visible } : { ...option, isOpen: false, visible: !option.visible }
             )
         );
     };
@@ -25,16 +32,11 @@ function BoardOption() {
         setBoardOptions((prevOptions) =>
             prevOptions.map((option) => ({
                 ...option,
-                visible: true
+                isOpen: false
             }))
         );
     };
 
-    const [boardOptions, setBoardOptions] = useState([
-        {id: 2, component: ArrowBack, onClick: () => navigate(-1), visible: true, },
-        {id: 0, component: Search, onClick: onClickHandler, visible: true, modal: <BoardSearchModal/>},
-        {id: 1, component: Create, onClick: onClickHandler, visible: true, modal: <ArticleCreateModal/>},
-    ])
 
     return(
         <PositionProvider >
@@ -45,13 +47,15 @@ function BoardOption() {
                     )
                 } else {
                     return (
-                        <React.Fragment key={option.id}  >
-                            <ArticleCreateModal isOpen={!option.visible && boardOptions[0].visible} onClose={onClose} />
-                            <BoardSearchModal isOpen={!option.visible && boardOptions[1].visible} onClose={onClose} />
-                        </React.Fragment>
+                        <Container key={option.id} >
+                            <ArticleCreateModal isOpen={option?.isOpen && option?.id === 2} onClose={onClose} />
+                            <BoardSearchModal isOpen={option?.isOpen && option?.id === 1} onClose={onClose} />
+                        </Container>
                     )
                 }
             })}
+            <BoardOptionButton option={MoreButton}/>
+            <BoardOptionButton option={moveBack} />
         </PositionProvider>
     )
 } 

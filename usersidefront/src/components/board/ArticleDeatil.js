@@ -78,15 +78,7 @@ function ArticleDetail() {
 
     return (
         <DetailBox >
-            <BoardListItem article={dummy}>
-                <div>
-                    {
-                        localStorage.getItem('userId') === location.state?.author
-                        ?'true'
-                        :'false'
-                    }
-                </div>
-            </BoardListItem>
+            <BoardListItem article={dummy} />
             <div ref={articleListRef} style={{textAlign: 'center', paddingTop: '100px',paddingBottom:'100px'}}>
                     {articles.length === 0
                         ?'아직 댓글이 없어요'
