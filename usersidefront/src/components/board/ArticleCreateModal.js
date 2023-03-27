@@ -27,9 +27,8 @@ function ArticleCreateModal(params) {
 
     async function createArticle(event) {
         event.preventDefault()
-        console.log("hello")
         await putArticle(
-            {author: 'ssafy', content: content},
+            {author: localStorage.userId, content: content},
             (data) => console.log(data),
             (err) => console.log(err)
         )

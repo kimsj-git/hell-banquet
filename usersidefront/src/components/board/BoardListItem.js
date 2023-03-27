@@ -10,7 +10,6 @@ function BoardListItem(params) {
     const { likeCount, dislikeCount, commentCount } = article
 
     const onLikeClickHandler = (event) => {
-        console.log(event)
         event.preventDefault()
     }
 
@@ -20,10 +19,12 @@ function BoardListItem(params) {
         {id: "comments", iconName: Comment, num: commentCount, }
     ]
 
+    const makeItCenter = {display: 'flex', alignItems: 'center'}
+
     return (
         <LinkDecoNone to={`/board/${article.id}`} state={article} >
-            <ArticleCard style={{display: 'flex', alignItems: 'center'}}>
-                <Grid container style={{display: 'flex', alignItems: 'center'}}>
+            <ArticleCard style={makeItCenter}>
+                <Grid container style={makeItCenter}>
                     <Grid item xs={4}>
                         <JanvanFace src={article.src} alt={article?.id} />
                     </Grid>

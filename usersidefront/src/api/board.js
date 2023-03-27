@@ -3,9 +3,8 @@ import http from "./https.js";
 const api = http;
 
 
-async function getBoardList(parameters, success, fail) {
-    const { lastBoardId, size, userId } = parameters
-    const res = await api.get(`/boards`, {params: {lastBoardId: lastBoardId, size: size, userId: userId}}).then(success).catch(fail);
+async function getBoardList(params, success, fail) {
+    const res = await api.get(`/boards`, {params: params}).then(success).catch(fail);
     return res
 }
 

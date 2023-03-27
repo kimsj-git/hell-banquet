@@ -20,7 +20,7 @@ function ArticleOption(params) {
     
     useEffect(() => {
         onOptionClick()
-
+        
         return (
             console.log(num)
         )

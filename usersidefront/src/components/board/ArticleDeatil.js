@@ -11,6 +11,7 @@ function ArticleDetail() {
     const lorem = "Lorem ipsuetur adipiscing elit. Vestibulum porta odio eros, eget dignissim felis egestas vitae. Mauris sit amet est nec eros accumsan eleifend. Etia".slice(0, 100)
     const location = useLocation()
 
+    const dummy = {content: lorem, src: undefined}
 
     const [articles, setArticles] = useState(
         [{content: lorem, src: undefined, id: -1},
@@ -28,24 +29,24 @@ function ArticleDetail() {
     const articleListRef = useRef(null);
 
     
-    useEffect(() => {
-        const getMoreComment = async () => {
-            const data = await getCommentList(
-                location.state.id,
-                (data) => {
-                    return data.data
-                },
-                (err) => console.log(err)
-            )
-            if (articles[0]?.id === -1) {
-                setArticles(data)
-            } 
-            // else {
-            //     (articles.push(...data))
-            // }
-        } 
+    // useEffect(() => {
+    //     const getMoreComment = async () => {
+    //         const data = await getCommentList(
+    //             location.state.id,
+    //             (data) => {
+    //                 return data.data
+    //             },
+    //             (err) => console.log(err)
+    //         )
+    //         if (articles[0]?.id === -1) {
+    //             setArticles(data)
+    //         } 
+    //         // else {
+    //         //     (articles.push(...data))
+    //         // }
+    //     } 
         
-        getMoreComment()
+    //     getMoreComment()
         // console.log(articles)
         // console.log(boardInfo)
 
@@ -73,25 +74,24 @@ function ArticleDetail() {
         // observer.observe(articleListRef.current.lastChild);
 
         // return () => observer.disconnect();
-    }, [articles, location]);
+    // }, [articles, location]);
 
     return (
         <DetailBox >
-            <BoardListItem article={location.state} />
-            <div ref={articleListRef}  style={{ marginTop: "100px", marginBottom: "100px" }}>
-                {
-                    articles.length === 0 
-                    ?
-                    <>
-                        <div style={{textAlign: 'center', paddingBottom:'100px'}} >아직 댓글이 없어요</div>
-                    </>
-                    :
-                    articles.map((article, index) => {
-                        return (
-                            <BoardListItem article={article} index={index} key={index} />
-                        )
-                    })
-                }
+            <BoardListItem article={dummy}>
+                <div>
+                    {
+                        localStorage.getItem('userId') === location.state?.author
+                        ?'true'
+                        :'false'
+                    }
+                </div>
+            </BoardListItem>
+            <div ref={articleListRef} style={{textAlign: 'center', paddingTop: '100px',paddingBottom:'100px'}}>
+                    {articles.length === 0
+                        ?'아직 댓글이 없어요'
+                        :articles.map((article, index) => {return (<BoardListItem article={article} index={index} key={index} />)})
+                    }
             </div>
         </DetailBox>
     )

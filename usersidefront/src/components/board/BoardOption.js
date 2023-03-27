@@ -1,16 +1,18 @@
 import React, { useState } from "react"
+import { useNavigate } from "react-router-dom";
 import BoardOptionButton from "./BoardOptionButton"
 import ArticleCreateModal from "./ArticleCreateModal";
 
 import styled from "styled-components"
-import { Create, Search } from "@mui/icons-material"
+import { Create, Search, ArrowBack } from "@mui/icons-material"
 import BoardSearchModal from "./BoardSearchModal";
 
 
-function BoardOption(params) {
+function BoardOption() {
     // 마찬가지로 위치가 fix되어 있는 버튼을 만들어야 한다
     // 여기서 만든 버튼과 코드를 그대로 검색에서 사용할 것
-    
+    const navigate = useNavigate()
+
     function onClickHandler(targetId) {
         setBoardOptions((prevOptions) =>
             prevOptions.map((option) =>
@@ -29,6 +31,7 @@ function BoardOption(params) {
     };
 
     const [boardOptions, setBoardOptions] = useState([
+        {id: 2, component: ArrowBack, onClick: () => navigate(-1), visible: true, },
         {id: 0, component: Search, onClick: onClickHandler, visible: true, modal: <BoardSearchModal/>},
         {id: 1, component: Create, onClick: onClickHandler, visible: true, modal: <ArticleCreateModal/>},
     ])
