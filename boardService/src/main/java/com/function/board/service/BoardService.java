@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,9 +66,9 @@ public class BoardService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<BoardListResponseDto> fetchBoardPagesBy(Long lastBoardId, int size, String userId) {
+	public List<BoardListResponseDto> fetchBoardPagesBy(Long lastBoardId, int size, String userId, String keyword) {
 		List<BoardListResponseDto> boardList = new ArrayList<>();
-		Page<Board> boards = fetchPages(lastBoardId, size);
+		Page<Board> boards = fetchPages(lastBoardId, size, keyword);
 
 		for (Board board : boards) {
 			Optional<Rating> optionalRating = ratingRepository.findById(board.getId());
@@ -92,6 +94,16 @@ public class BoardService {
 	public Page<Board> fetchPages(Long lastBoardId, int size) {
 		PageRequest pageable = PageRequest.of(0, size);
 		return boardRepository.findByIdLessThanOrderByCreatedAtDesc(lastBoardId, pageable);
+	}
+
+	public Page<Board> fetchPages(Long lastBoardId, int size, String keyword) {
+		Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+		Pageable pageable = PageRequest.of(0, size, sort);
+		if (keyword == null) {
+			return boardRepository.findByIdLessThanOrderByCreatedAtDesc(lastBoardId, pageable);
+		} else {
+			return boardRepository.findByContentContainingAndIdLessThanOrderByCreatedAtDesc(keyword, lastBoardId, pageable);
+		}
 	}
 
 	@Transactional(readOnly = true)
