@@ -1,50 +1,49 @@
-import { useState } from "react"
-
 import ArticleOption from "./ArticleOption"
 import { LinkDecoNone } from "../common"
 
 import styled from "styled-components"
-import { Card, Grid, } from "@mui/material"
+import { Card, Container, Grid, } from "@mui/material"
 import { ThumbDown, ThumbUp, Comment } from "@mui/icons-material"
 
 function BoardListItem(params) {
-    // article과 관련된 모든 정보가 넘어옴
-    const { article, index } = params
-    // 일단은 잠시 사용할 좋아요 관련 변수
-    // const [ isLiked, setIsLiked ] = useState(undefined)
-    const [ numLiked,  ] = useState({like: 0, hate: 0, comments: 0})
+    const { article } = params
+    const { likeCount, dislikeCount, commentCount } = article
 
     const onLikeClickHandler = (event) => {
-        console.log(event.target)
+        console.log(event)
         event.preventDefault()
     }
 
     const articleOptions = [
-        {id: "like", iconName: ThumbUp, num: numLiked.like, onClick: onLikeClickHandler},
-        {id: "hate", iconName: ThumbDown, num: numLiked.hate, onClick: onLikeClickHandler},
-        {id: "comments", iconName: Comment, num: numLiked.comments, }
+        {id: "like", iconName: ThumbUp, num: likeCount, onClick: onLikeClickHandler},
+        {id: "hate", iconName: ThumbDown, num: dislikeCount, onClick: onLikeClickHandler},
+        {id: "comments", iconName: Comment, num: commentCount, }
     ]
 
-
     return (
-        <ArticleCard  >
-            <LinkDecoNone to={`/board/${index}`}>
-                <Grid container>
+        <LinkDecoNone to={`/board/${article.id}`} state={article} >
+            <ArticleCard style={{display: 'flex', alignItems: 'center'}}>
+                <Grid container style={{display: 'flex', alignItems: 'center'}}>
                     <Grid item xs={4}>
                         <JanvanFace src={article.src} alt={article?.id} />
                     </Grid>
+                    {/* CSS 적용하셔야 해요 */}
                     <Grid item xs={8}>
-                        <div>{article.content}</div>
-                        {articleOptions.map(option => {
-                            const {iconName, num, id } = option
-                            return (
-                                <ArticleOption iconName={iconName} num={num} onClick={option?.onClick} key={id} />
-                            )
-                        })}
+                        <Container style={{height: 100}}>{article.content}</Container>
+                        <Container style={{display: 'flex', justifyContent: 'space-around'}}>
+                            {articleOptions.map(option => {
+                                const {iconName, num, id, } = option
+                                return (
+                                    <span onClick={option?.onClick} key={id} >
+                                        <ArticleOption iconName={iconName} num={num} />
+                                    </span>
+                                )
+                            })}
+                        </Container>
                     </Grid>
                 </Grid>
-            </LinkDecoNone>
-        </ArticleCard>
+            </ArticleCard>
+        </LinkDecoNone>
     )
 }
 

@@ -4,8 +4,8 @@ const api = http;
 
 
 async function getBoardList(parameters, success, fail) {
-    const { lastBoardId, size } = parameters
-    const res = await api.get(`/boards`, {params: {lastBoardId: lastBoardId, size: size}}).then(success).catch(fail);
+    const { lastBoardId, size, userId } = parameters
+    const res = await api.get(`/boards`, {params: {lastBoardId: lastBoardId, size: size, userId: userId}}).then(success).catch(fail);
     return res
 }
 
@@ -13,11 +13,14 @@ async function putArticle(body, success, fail) {
     await api.post(`/boards`, JSON.stringify(body)).then(success).catch(fail);
 }
 
-async function getCommentList(parameters, success, fail) {
-    const { boardId } = parameters
-    const res = await api.get(`/boards/${boardId}/comments`, {params : {boardId: boardId, }}).then(success).catch(fail);
+async function getCommentList(id, success, fail) {
+    const res = await api.get(`/boards/${id}/comments`, ).then(success).catch(fail);
     return res
 }
 
+async function test(success, fail) {
+    await api.get(`/menus`).then(success).catch(fail);
+}
 
-export { getBoardList, putArticle, getCommentList }
+
+export { getBoardList, putArticle, getCommentList, test }
