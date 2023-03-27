@@ -11,9 +11,8 @@ function StickyFooter() {
 
     const navlist = [
         {name: "게시판", icon: Forum, url: "/board",},
-        {name: "식사기록", icon : LocalDining, url: "/siksa",},
-        // 나중에 동적인 이름으로 변경할 것
-        {name: "프로필", icon: AccountCircle, url: `/user/ssafy`,},
+        {name: "식사기록", icon : LocalDining, url: "/record-meal",},
+        {name: "프로필", icon: AccountCircle, url: `/user/${localStorage.getItem('userId')}`,},
     ]
 
     return (

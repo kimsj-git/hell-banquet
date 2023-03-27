@@ -10,6 +10,7 @@ import BoardDetailPage from "./BoardDetailPage";
 import UserPage from "./UserPage";
 import LoadingPage from "./LoadingPage";
 import UserInfoChangePage from "./UserInfoChangePage";
+import RecordMeal from "./RecordMeal";
 
 const routes = [
     // error pages
@@ -54,6 +55,11 @@ const routes = [
     {
         path: "/board/:int",
         element: <BoardDetailPage />
+    },
+    // Main
+    {
+        path: "record-meal",
+        element: <RecordMeal />
     }
 ]
 

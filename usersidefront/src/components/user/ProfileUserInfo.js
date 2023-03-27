@@ -1,25 +1,47 @@
-import { Button, Typography } from "@mui/material"
-import styled from "styled-components"
+import { useState, useEffect } from "react"
+import { getUserInfo } from "../../api/member"
 import { LinkDecoNone } from "../common"
 
-function ProfileUserInfo() {
-    const tempUserInfo = {
-        userId: 'ssafy',
-        nickname: '야돈존맛',
-        eMail: 'kimjih94@naver.com',
-        group: '역삼 멀티캠퍼스'
-    }
+import styled from "styled-components"
+import { Button, Typography } from "@mui/material"
 
+function ProfileUserInfo() {
+    const [userInfo, setUserInfo] = useState({
+        userId: '',
+        name: '',
+        eMail: '',
+        group: ''
+    })
+
+    const isVisible = [
+        'userId',
+        'name',
+        'email'
+    ]
+    
+    useEffect(() => {
+        async function fetchData() {
+            await getUserInfo(
+            localStorage.getItem('userId'),
+            (data) => {
+                setUserInfo(data.data)
+            },
+            (err) => console.log(err)
+        )}
+
+        fetchData()
+    }, [])
+        
     return (
         <UserInfoBox>
-            {Object.keys(tempUserInfo).map((key) => {
+            {isVisible.map((key) => {
                 return (
                     <Typography fontSize={20} key={key} >
-                        {key} | {tempUserInfo[key]}
+                        {key} | {userInfo[key]}
                     </Typography>
                 )
             })}
-            <LinkDecoNone to={'/user/ssafy/update'} style={{alignSelf: 'end'}} >
+            <LinkDecoNone to={`/user/${userInfo.userId}/update`} state={userInfo} style={{alignSelf: 'end'}} >
                 <Button variant="contained">정보 수정하기</Button>
             </LinkDecoNone>
         </UserInfoBox>

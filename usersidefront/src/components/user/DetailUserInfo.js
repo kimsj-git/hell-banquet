@@ -1,25 +1,20 @@
-import { useState } from "react"
+import { useLocation } from "react-router-dom"
 
 import { Typography } from "@mui/material"
 import styled from "styled-components"
 
 function DetailUserInfo() {
-    const [userInfo, setUserInfo] = useState({
-        id: 0,
-        userId: 'ssafy',
-        name: '야돈존맛',
-        email: 'kimjih94@naver.com',
-        group: '역삼 멀티캠퍼스',
-        regTime: '뭐 대충 23일',
-    })
-
+    
+    const location = useLocation()
+    const userInfo = {...location.state, regTime: location.state.regTime.slice(0, 10) }
+    
     const userInfoForm = {
         id: false,
         userId: 'ID',
         name: '이름',
         email: '이메일',
         regTime: '가입일자',
-        group: '소속 그룹',
+        // groupId: '소속 그룹',
     }
 
     return (
@@ -29,14 +24,18 @@ function DetailUserInfo() {
                     // 그리드로 변경!!!
                     return (
                         <>
-                        <Typography style={{...styleForTypo, width: '20%',}} fontSize={25} key={key} >
-                            {userInfoForm[key]}
+                        <Typography style={{...styleForTypo,}} fontSize={25} key={key} >
+                            {userInfoForm[key]} | {userInfo[key]}
                         </Typography>
-                        <Typography style={{...styleForTypo, width: '60%'}} fontSize={25} key={key} >
+                        {/* <Typography style={{...styleForTypo, width: '60%'}} fontSize={25} key={key} >
                             {userInfo[key]}
-                        </Typography>
+                        </Typography> */}
                         
                         </>
+                    ) 
+                } else {
+                    return (
+                        <></>
                     )
                 }
             })}

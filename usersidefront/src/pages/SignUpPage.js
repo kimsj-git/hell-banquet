@@ -1,15 +1,13 @@
 import { SignUpForm } from "../components/signup"
+import { LogoToLogin } from "../components/common"
 
 import styled from "styled-components"
-import { LinkDecoNone } from "../components/common"
 
 function SignUpPage() {
 
     return(
         <Login>
-            <LinkDecoNone to='/login' style={styleForLogo}>
-                <LogoSection />
-            </LinkDecoNone>
+            <LogoToLogin />
             <SignUpForm />
         </Login>
     )
@@ -26,18 +24,5 @@ const Login = styled.div`
     height: 932px;
 
 `
-
-const LogoSection = styled.section`
-    width: 100%;
-    height: 100%;
-
-    background: #B8DDFF;
-`
-
-const styleForLogo = {
-    width: "60%",
-    height: 130,
-    background: '#B8DDFF',
-}
 
 export default SignUpPage

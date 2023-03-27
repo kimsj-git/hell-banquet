@@ -17,7 +17,7 @@ function LoginForm () {
         {id: "password", target: inputPassword, setTarget: setInputPassword, label: "Password", focus: false, type: "password"},
     ]
 
-    const temp_user_info = Object.keys(textFieldOption).reduce((acc, key) => {
+    const tempUserInfo = Object.keys(textFieldOption).reduce((acc, key) => {
         acc[textFieldOption[key].id] = textFieldOption[key].target;
         return acc;
       }, {});
@@ -32,17 +32,14 @@ function LoginForm () {
         }
     };
 
-    const onClickHandler = (e) => {
-        e.preventDefault()
-        // 제대로된 request로 바꿔야 함
-        axios_test()
-        console.log(inputID, inputPassword, temp_user_info)
-    }
-
-    async function axios_test() {
+    async function LoginFunc(userInfo) {
         await login(
-            temp_user_info,
+            userInfo,
             (data) => {
+                // Refresh Token과 Authorization을 cookie나 session에 저장해야함
+                localStorage.setItem('userId', inputID)
+                localStorage.setItem('auth', data.headers.get('Authorization'))
+                localStorage.setItem('refresh', data.headers.get('refreshToken'))
                 alert(data.data)
                 navigate('/')
             },
@@ -50,9 +47,16 @@ function LoginForm () {
         )
     }
 
+    const onCLoginHandler = (e) => {
+        e.preventDefault()
+        // 제대로된 request로 바꿔야 함
+        LoginFunc(tempUserInfo)
+        console.log(inputID, inputPassword, tempUserInfo)
+    }
+
     return (
         <>
-            {FormWithGrid({option: textFieldOption, onClickHandler: onClickHandler, onTypingHandler: onTypingHandler})}
+            {FormWithGrid({option: textFieldOption, onClickHandler: onCLoginHandler, onTypingHandler: onTypingHandler})}
         </>
     )   
 }

@@ -1,6 +1,6 @@
 
 import { Container } from "@mui/system";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { LogedPageTemplate,  } from "../components/common"
 import { DeleteUser, DetailUserInfo, UpdateUser } from "../components/user";
@@ -15,8 +15,6 @@ function UserInfoChangePage() {
         groupId: '',
     })
 
-
-
     const onTypingHandler = (e) => {
         for (const key in Object.keys(userInfo)) {
             if (e.target.id === key) {
@@ -28,25 +26,7 @@ function UserInfoChangePage() {
             }
         }
     };
-
-    const onClickHandler = (e) => {
-        e.preventDefault()
-    }
-
-    useMemo(() => {
-        async function getUserInfo() {
-            await getUserInfo(
-                userInfo.userId,
-                (data) => {
-                    console.log(data)
-                },
-                (err) => console.log(err)
-            )
-        }
-        // getUserInfo()
-    }, [])
-
-    console.log(Object.keys(userInfo))
+    console.log(onTypingHandler)
 
     return (
         <>
@@ -66,7 +46,6 @@ const StyleForContainer = {
     display: 'flex',
     flexDirection: 'column',
 }
-
 
 
 const styleForSection = `

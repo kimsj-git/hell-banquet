@@ -1,7 +1,9 @@
 import { Container } from "@mui/system"
 import styled from "styled-components"
+import { RecommendAritcle } from "../components/board"
 
-import {LogedPageTemplate, } from "../components/common"
+import { LogedPageTemplate, } from "../components/common"
+import { OverviewDailyJanban } from "../components/janban"
 
 function LandingPage() {
     /*
@@ -12,8 +14,10 @@ function LandingPage() {
     return(
         <>
         <LogedPageTemplate />
-        <Container>
-            <JanvanSection />
+        <Container style={styleForContainer}>
+            <JanvanSection>
+                <OverviewDailyJanban />
+            </JanvanSection>
             {hour < 14 ? 
             <DailyMenuSection>
                 <div>
@@ -27,10 +31,18 @@ function LandingPage() {
                 </div>
             </DailyRankSection>
             }
-            <RecommendArticleSection />
+            <RecommendArticleSection>
+                <RecommendAritcle />
+            </RecommendArticleSection>
         </Container>
         </>
     )
+}
+const styleForContainer = {
+    display: 'flex', 
+    flexDirection: 'column', 
+    justifyContent: 'center', 
+    alignItems:'center',
 }
 
 const styleForSection = `
