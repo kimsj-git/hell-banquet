@@ -10,7 +10,8 @@ import { Container } from "@mui/system"
 function UserPage() {
     const navigate = useNavigate()
 
-    const onLogoutHandler = () => {
+    const onLogoutHandler = async () => {
+        // 로그아웃과 관련된 await request가 들어가야함
         navigate('/')
         alert('로그아웃!')
         localStorage.clear()
