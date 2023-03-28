@@ -1,61 +1,40 @@
 package com.example.uploadService;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.SdkClientException;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class S3Service {
+	private final AmazonS3 s3Client;
 
-	@Value("${aws.s3.accessKey}")
-	private String accessKey;
-
-	@Value("${aws.s3.secretKey}")
-	private String secretKey;
-
-	@Value("${aws.s3.region}")
-	private String region;
-
-	@Value("${aws.s3.bucketName}")
+	@Value("${cloud.aws.credentials.accessKey}")
 	private String bucketName;
 
-	public String upload(MultipartFile file) throws IOException {
-
-		String fileName = file.getOriginalFilename();
-		String fileExtension = fileName.substring(fileName.lastIndexOf("."));
-		String newFileName = UUID.randomUUID().toString() + fileExtension;
-
-		BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
-
-		AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-			.withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-			.withRegion(region)
-			.build();
-
+	public Resource readImageFromS3(String filePath) {
 		try {
-			ObjectMetadata metadata = new ObjectMetadata();
-			metadata.setContentType(file.getContentType());
-			metadata.setContentLength(file.getSize());
-			PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, newFileName, file.getInputStream(), metadata);
-			s3Client.putObject(putObjectRequest);
-		} catch (AmazonServiceException e) {
-			e.printStackTrace();
-		} catch (SdkClientException e) {
-			e.printStackTrace();
-		}
+			// S3에서 객체(파일)를 가져옴
+			S3Object s3Object = s3Client.getObject(bucketName, filePath);
 
-		return s3Client.getUrl(bucketName, newFileName).toString();
+			// S3에서 가져온 객체(파일)를 ByteArrayResource로 변환
+			ByteArrayResource resource = new ByteArrayResource(s3Object.getObjectContent().readAllBytes());
+
+			// S3에서 가져온 객체(파일) 스트림 닫기
+			s3Object.close();
+
+			return resource;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
