@@ -7,10 +7,8 @@ COPY src src
 RUN chmod +x ./gradlew
 RUN ./gradlew bootJAR
 
-FROM openjdk:11-jdk-slim
+FROM adoptopenjdk/openjdk11
 VOLUME /tmp
+COPY --from=builder build/libs/hell-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8085
-ARG JAR_FILE=./build/libs/hell-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} a802.jar
-ENTRYPOINT ["sh", "-c", "echo ${JAR_FILE} && java -Duser.timezone=Asia/Seoul -jar a802.jar"]
-# ENTRYPOINT  ["java", "-Duser.timezone=Asia/Seoul", "-jar", "a802.jar"]
+ENTRYPOINT ["java", "-jar", "/app.jar"]
