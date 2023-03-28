@@ -37,7 +37,7 @@ function ArticleDetail() {
             if (articles[0]?.id === -1) {
                 setArticles(data)
             } else {
-                setArticles([...articles, ... data])
+                setArticles([...articles, ...data])
             }
         } 
         
