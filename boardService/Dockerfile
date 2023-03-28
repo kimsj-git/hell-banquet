@@ -11,6 +11,6 @@ FROM openjdk:11-jdk-slim
 VOLUME /tmp
 EXPOSE 8085
 ARG JAR_FILE=./build/libs/hell-0.0.1-SNAPSHOT.jar
-RUN echo ${JAR_FILE}
 COPY ${JAR_FILE} a802.jar
-ENTRYPOINT  ["java", "-Duser.timezone=Asia/Seoul", "-jar", "a802.jar"]
+ENTRYPOINT ["sh", "-c", "echo ${JAR_FILE} && java -Duser.timezone=Asia/Seoul -jar a802.jar"]
+# ENTRYPOINT  ["java", "-Duser.timezone=Asia/Seoul", "-jar", "a802.jar"]
