@@ -1,4 +1,4 @@
-package com.example.uploadService;
+package com.function.uploadService.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -6,17 +6,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "images")
+@Table(name = "character_image")
 public class Image {
 
 	@Id
@@ -26,7 +24,13 @@ public class Image {
 	@Column(name = "file_path", nullable = false)
 	private String filePath;
 
-	@Column(name = "keyword", nullable = false)
-	private String keyword;
+	@Column(name = "props_name", nullable = false)
+	private String propsName;
+
+	@Builder
+	public Image(String filePath, String propsName) {
+		this.filePath = filePath;
+		this.propsName = propsName;
+	}
 
 }

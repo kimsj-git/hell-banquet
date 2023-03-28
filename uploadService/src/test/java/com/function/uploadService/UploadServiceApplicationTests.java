@@ -1,4 +1,4 @@
-package com.example.uploadService;
+package com.function.uploadService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

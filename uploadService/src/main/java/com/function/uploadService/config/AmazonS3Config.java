@@ -1,4 +1,4 @@
-package com.example.uploadService;
+package com.function.uploadService.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
