@@ -57,9 +57,10 @@ function Canvas(params) {
   if (isStarted && !isFinished) {
     return (
       <canvas
+        style={{background: '#E5E5E5'}}
         ref={canvasRef}
-        width={430}
-        height={840}
+        width={390}
+        height={390}
         onTouchStart={startDrawing}
         onTouchMove={draw}
         onTouchEnd={stopDrawing}
@@ -69,9 +70,10 @@ function Canvas(params) {
   } else {
     return (
       <canvas
+        style={{background: '#E5E5E5'}}
         ref={canvasRef}
-        width={430}
-        height={840}
+        width={390}
+        height={390}
       />
     )
   }

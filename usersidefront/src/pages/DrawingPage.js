@@ -1,11 +1,15 @@
 import { useState, useEffect, useRef } from "react";
+
+import { Canvas, DrawSubject } from "../components/draw";
 import { LogedPageTemplate } from "../components/common";
-import { Canvas } from "../components/draw";
+
+import styled from "styled-components";
+import { Button } from "@mui/material";
 
 function DrawingPage() {
-  const [isStarted, setIsStarted] = useState(false); // 그리기 시작 여부
-  const [isFinished, setIsFinished] = useState(false); // 그리기 종료 여부
-  const [remainingTime, setRemainingTime] = useState(5); // 남은 시간
+  const [isStarted, setIsStarted] = useState(false); 
+  const [isFinished, setIsFinished] = useState(false); 
+  const [remainingTime, setRemainingTime] = useState(5); 
   const timerRef = useRef(null); // 타이머 참조
 
   // 그리기 시작 버튼 클릭 핸들러
@@ -14,8 +18,6 @@ function DrawingPage() {
   };
 
   useEffect(() => {
-    // 타이머 초기화
-
     // 그리기 종료 여부 감시
     if (isStarted && !isFinished) {
       timerRef.current = setInterval(() => {
@@ -23,10 +25,11 @@ function DrawingPage() {
           if (prevTime === 1) {
             clearInterval(timerRef.current);
             setIsFinished(true);
+            setIsStarted(false);
           }
           return prevTime - 1;
         });
-      }, 500);
+      }, remainingTime * 100);
     }
     // 컴포넌트 언마운트 시 타이머 종료
     return () => {
@@ -37,47 +40,56 @@ function DrawingPage() {
   return (
     <>
       <LogedPageTemplate />
-      <div className="drawing-page">
+      <DrawSubject />
+      <CanvasWrapper>
         <Canvas isStarted={isStarted} isFinished={isFinished} />
         {!isStarted && (
-          <div className="start-button">
-            <button onClick={handleStartDrawing}>그리기 시작</button>
-          </div>
+          <StartButton>
+            {isFinished 
+              ? <Button variant="contained" color="error">여기까지입니다!!</Button>
+              : <Button variant="contained" onClick={handleStartDrawing}>그리기 시작</Button>
+            }
+          </StartButton>
         )}
-        {isFinished && <p>그리기가 종료되었습니다.</p>}
-      </div>
-      {isStarted && (
-        <div className="timer">
-          <p>남은 시간: {remainingTime}초</p>
-        </div>
-      )}
-      <style >{`
-        .drawing-page {
-          position: relative;
-        }
-        .blur {
-          filter: blur(5px);
-        }
-        .start-button {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          text-align: center;
-        }
-        .timer {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          background-color: white;
-          padding: 10px;
-          border-radius: 5px;
-        }
-      `}</style>
+      </CanvasWrapper>
+      <TimerWrapper>
+        {isStarted
+        ? !isFinished
+        ? 
+        <p>남은 시간: {remainingTime}초</p>
+        :
+        <></>
+        :
+        <Button variant="contained">결과를 알아볼까요?!</Button>
+      }
+      </TimerWrapper>
     </>
   );
 }
 
+const CanvasWrapper = styled.div`
+  position: relative;
+
+  margin: 5% 5% 5% 5%;
+  border-radius: 20px;
+`
+
+const StartButton = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+`
+
+const TimerWrapper = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+`
 
 
 export default DrawingPage;
