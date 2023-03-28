@@ -8,6 +8,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew bootJAR
 
 FROM adoptopenjdk/openjdk11
-COPY --from=builder build/libs/*.jar app.jar
+COPY --from=builder /app/build/libs/*.jar /app/app.jar
+# COPY --from=builder build/libs/*.jar app.jar
 EXPOSE 8085
 ENTRYPOINT ["java", "-jar", "/app.jar"]
