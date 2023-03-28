@@ -1,5 +1,4 @@
-export function Validation(params) {
-    console.log(params)
+export default function Validation(params) {
     const { input, form } = params
 
     if (input === undefined || input === '') {

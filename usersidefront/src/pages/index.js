@@ -11,6 +11,7 @@ import UserPage from "./UserPage";
 import LoadingPage from "./LoadingPage";
 import UserInfoChangePage from "./UserInfoChangePage";
 import RecordMeal from "./RecordMeal";
+import DrawingPage from "./DrawingPage"
 
 const routes = [
     // error pages
@@ -56,10 +57,14 @@ const routes = [
         path: "/board/:int",
         element: <BoardDetailPage />
     },
-    // Main
+    // AI Func
     {
         path: "record-meal",
         element: <RecordMeal />
+    },
+    {
+        path: "drawing",
+        element: <DrawingPage />
     }
 ]
 

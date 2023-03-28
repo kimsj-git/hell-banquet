@@ -19,52 +19,52 @@ function BoardList() {
         {content: 'lorem', src: undefined},
         {content: 'lorem', src: undefined, id: -1},]
     )
-    // const [newArticles, setNewArticles] = useState(undefined)
     
     const articleListRef = useRef(null);
 
     
-    // useEffect(() => {
-    //     const getMoreList = async () => {
-    //         const data = await getBoardList(
-    //             boardInfo,
-    //             (data) => {
-    //                 return data.data
-    //             },
-    //             (err) => console.log(err)
-    //         )
-    //         if (articles[0]?.id === -1) {
-    //             setArticles(data)
-    //         } else {
-    //             (articles.push(...data))
-    //         }
-    //         setBoardInfo({...boardInfo, lastBoardId: articles[articles.length - 1].id})
-    //     } 
+    useEffect(() => {
+        const getMoreList = async () => {
+            const data = await getBoardList(
+                boardInfo,
+                (data) => {
+                    return data.data
+                },
+                (err) => console.log(err)
+            )
+            if (articles[0]?.id === -1) {
+                setArticles(data)
+            } else {
+                (articles.push(...data))
+            }
+            setBoardInfo({...boardInfo, lastBoardId: articles[articles.length - 1].id})
+        } 
 
-    //     if (articles[0]?.id === -1) {
-    //         console.log('U R First')
-    //         getMoreList()
-    //     }
+        if (articles[0]?.id === -1) {
+            console.log('U R First')
+            getMoreList()
+        }
 
-    //     const observerOptions = {
-    //         root: null,
-    //         rootMargin: '100px',
-    //         threshold: 0.5
-    //     };
+        const observerOptions = {
+            root: null,
+            rootMargin: '100px',
+            threshold: 0.5
+        };
         
-    //     const observer = new IntersectionObserver(entries => {
-    //         entries.forEach(entry => {
-    //             if (entry.isIntersecting && boardInfo.lastBoardId !== 1) {
-    //                 console.log('한무스크롤 발동!!');
-    //                 getMoreList()
-    //             }
-    //         });
-    //     }, observerOptions);
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && boardInfo.lastBoardId !== 1) {
+                    console.log('한무스크롤 발동!!');
+                    getMoreList()
+                }
+            });
+        }, observerOptions);
+        console.log(articleListRef)
         
-    //     observer.observe(articleListRef.current.lastChild);
+        observer.observe(articleListRef.current.lastChild);
 
-    //     return () => observer.disconnect();
-    // }, [articles, boardInfo]);
+        return () => observer.disconnect();
+    }, [articles, boardInfo]);
 
     return (
         <div ref={articleListRef} style={{background: '#FFF3DF'}} >
@@ -77,7 +77,5 @@ function BoardList() {
 
     )
 }
-
-
 
 export default BoardList

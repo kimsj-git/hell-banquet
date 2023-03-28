@@ -1,7 +1,12 @@
 import { useState } from 'react'
 
+// update 만들 때 주석해제할 것
+// import ArticleCreateModal from './ArticleCreateModal'
+// import { Button, Modal, Box, TextField, Icon } from '@mui/material'
+
+import { Icon } from '@mui/material'
+
 import { MoreHoriz } from "@mui/icons-material"
-import { Icon } from "@mui/material"
 
 function UpDelModal(params) {
     const { article } = params
@@ -20,8 +25,9 @@ function UpDelModal(params) {
 
     const dropBox = 
     <div style={moreButtonStyle}>
-        <div onClick={onMoreClickHandler} >hello</div>
-        <div onClick={onMoreClickHandler} >hello</div>
+        {/* <ArticleCreateModal isOpen={isOpen}  /> */}
+        <div onClick={onMoreClickHandler} >수정</div>
+        <div onClick={onMoreClickHandler} >삭제</div>
     </div>
 
 
@@ -29,7 +35,7 @@ function UpDelModal(params) {
         <>
         {localStorage.userId !== article?.author 
         ? isOpen 
-            ? dropBox
+            ? dropBox //모달
             : <Icon onClick={onMoreClickHandler} component={MoreHoriz} style={moreButtonStyle} />
         : <></>}
         </>

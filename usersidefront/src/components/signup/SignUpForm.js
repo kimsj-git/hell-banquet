@@ -7,18 +7,19 @@ import { Container,  } from '@mui/material'
 function SignUpForm() {
     const [ inputID, setInputID ] = useState()
     const [ inputPassword, setInputPassword ] = useState()
+    const [ inputPasswordCheck, setInputPasswordCheck ] = useState()
     const [ inputEmail, setInputEmail ] = useState()
     const [ inputName, setInputName ] = useState()
-    const [ inputGroup, setInputGroup ] = useState()
+    // const [ inputGroup, setInputGroup ] = useState()
 
 
     const textFieldOption = [
         {id: "userId", target:inputID, setTarget: setInputID, label: "ID", focus: true, type: "id"},
         {id: "password", target: inputPassword, setTarget: setInputPassword, label: "Password", focus: false, type: "password"},
-        {id: "passwordCheck", target: inputPassword, setTarget: setInputPassword, label: "Password Check", focus: false, type: "password"},
+        {id: "passwordCheck", target: inputPasswordCheck, setTarget: setInputPasswordCheck, label: "Password Check", focus: false, type: "password"},
         {id: "email", target: inputEmail, setTarget: setInputEmail, label: "E-mail", focus: false, type: "email"},
         {id: "name", target: inputName, setTarget: setInputName, label: "별명", focus: false, },
-        {id: "group", target: inputGroup, setTarget: setInputGroup, label: "소속 그룹", focus: false, },
+        // {id: "group", target: inputGroup, setTarget: setInputGroup, label: "소속 그룹", focus: false, },
 
     ]
 
