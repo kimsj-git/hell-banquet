@@ -9,7 +9,7 @@ import { Button } from "@mui/material";
 function DrawingPage() {
   const [isStarted, setIsStarted] = useState(false); 
   const [isFinished, setIsFinished] = useState(false); 
-  const [remainingTime, setRemainingTime] = useState(5); 
+  const [remainingTime, setRemainingTime] = useState(10); 
   const timerRef = useRef(null); // 타이머 참조
 
   // 그리기 시작 버튼 클릭 핸들러
@@ -54,14 +54,11 @@ function DrawingPage() {
       </CanvasWrapper>
       <TimerWrapper>
         {isStarted
-        ? !isFinished
-        ? 
-        <p>남은 시간: {remainingTime}초</p>
-        :
-        <></>
-        :
-        <Button variant="contained">결과를 알아볼까요?!</Button>
-      }
+          ? isFinished
+            ? <Button variant="contained">결과를 알아볼까요?!</Button>
+            : <p>남은 시간: {remainingTime}초</p>
+          : <></>
+        }
       </TimerWrapper>
     </>
   );

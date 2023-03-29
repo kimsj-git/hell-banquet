@@ -41,7 +41,6 @@ function BoardList() {
         } 
 
         if (articles[0]?.id === -1) {
-            console.log('U R First')
             getMoreList()
         }
 
@@ -54,12 +53,10 @@ function BoardList() {
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && boardInfo.lastBoardId !== 1) {
-                    console.log('한무스크롤 발동!!');
                     getMoreList()
                 }
             });
         }, observerOptions);
-        console.log(articleListRef)
         
         observer.observe(articleListRef.current.lastChild);
 

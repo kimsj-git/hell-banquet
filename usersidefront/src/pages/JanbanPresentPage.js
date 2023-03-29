@@ -11,10 +11,11 @@ function JanbanPresentPage() {
         <LogedPageTemplate />
         <JanbanImg src={staticJanban} />
         <LinkDecoNone to={'/drawing'}>
-        <IconBox >
-            <StyledGestureIcon component={Gesture} style={{width: '70%', height: '70%'}}/>
-            <StyledCreateIcon component={Create} style={{width: '50%', height: '50%'}}/>
-        </IconBox>
+            <IconBox >
+                <StyledGestureIcon component={Gesture} style={{width: '70%', height: '70%'}}/>
+                <StyledCreateIcon component={Create} style={{width: '50%', height: '50%'}}/>
+                <Typp>잔반이에게 선물을 주세요!</Typp>
+            </IconBox>
         </LinkDecoNone>
         </>
     )
@@ -27,7 +28,6 @@ const JanbanImg = styled.img`
     margin: 5% 5% 0% 5%;
     border-radius: 20px;
 `
-
 const IconBox = styled.div`
     position: relative;
     width: 390px;
@@ -43,15 +43,25 @@ const styleForIcons = `
     top: 50%;
     left: 50%;
 `
-
 const StyledGestureIcon = styled(Icon)`
     ${styleForIcons}
+    color: #000000;
     
     transform: translate(-70%, -50%);
 `
 const StyledCreateIcon = styled(Icon)`
     ${styleForIcons}
-    color: #999999;
-    transform: translate(0%, -80%);
+    color: #000000;
+    transform: translate(5%, -90%);
 `
+const Typp = styled.p`
+    position: absolute;
+    bottom: 0%;
+
+    width: 100%;
+    text-align:center;
+    font-size: 24px;
+    font-weight: 1000;
+`
+
 export default JanbanPresentPage
