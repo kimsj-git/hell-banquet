@@ -27,9 +27,5 @@ cloud:
       auto: false
     credentials:
       instance-profile: true
-
-cloud:
-  aws:
-    credentials:
       accessKey: ${AWS_ACCESSKEY}
       secretKey: ${AWS_SECRETKEY}
