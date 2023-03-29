@@ -10,5 +10,5 @@ RUN ./gradlew bootJAR
 FROM adoptopenjdk/openjdk11
 VOLUME /tmp
 COPY --from=builder build/libs/uploadService-0.0.1-SNAPSHOT.jar app.jar
-EXPOSE 8060
+EXPOSE 8061
 ENTRYPOINT ["java", "-jar", "/app.jar"]
