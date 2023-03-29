@@ -12,7 +12,7 @@ spring:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
     database: mysql
   mail:
-    username: ${SPRING_MAIL_USERNAME}
+    username: ${env.SPRING_MAIL_USERNAME}
     port: 465
     properties:
     mail:
@@ -20,8 +20,8 @@ spring:
         auth: true
         ssl:
           enable: true
-    host: ${SPRING_MAIL_HOST}
-    password: ${SPRING_MAIL_PASSWORD}
+    host: ${env.SPRING_MAIL_HOST}
+    password: ${env.SPRING_MAIL_PASSWORD}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     password: a802
