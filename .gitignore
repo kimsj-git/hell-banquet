@@ -37,10 +37,10 @@ out/
 .vscode/
 
 ### Properties ###
-application.yml
+application-credentials.yml
 
 ### Log Files ###
 *.log
 *.gz
 
-application-credentials.yml
+
