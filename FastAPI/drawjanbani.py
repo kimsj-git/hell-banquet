@@ -34,22 +34,10 @@ def check_image(img):
         # _, predicted_labels = torch.max(outputs[1], 1)
         # print('Predicted Label:', category_list[predicted_labels.item()])
         # print('Probability:', outputs[1][0] * 100)
-        top_k_values, top_k_indices = torch.topk(outputs[1], 5)
+        top_k_values, top_k_indices = torch.topk(outputs[1], 3)
         for i in range(top_k_indices.size(1)):
             correct_list.add(category_list[top_k_indices[0][i]])
             # print(f"Rank {i + 1}: Label: {category_list[top_k_indices[0][i]]}, Probability: {top_k_values[0][i] * 100}")
-    print(correct_list)
+    # print(correct_list)
 
     return correct_list
-
-import io
-
-with open("우산.png", "rb") as f:
-    image = Image.open(f)
-    with io.BytesIO() as output:
-        image.save(output, format="JPEG")
-        contents = output.getvalue()
-
-a = check_image(contents)
-
-print(a)

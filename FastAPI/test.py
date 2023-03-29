@@ -9,8 +9,6 @@ import boto3
 import uuid
 
 import drawjanbani
-from drawjanbani import drawjanbani
-from drawjanbani import nets
 
 app = FastAPI()
 
@@ -30,7 +28,7 @@ async def draw_is_correct(image: UploadFile = File(), category: str = Form()):
 
     image_data = await image.read()
 
-    check_set = await drawjanbani.check_image(image_data)
+    check_set = drawjanbani.check_image(image_data)
 
     if category in check_set:
         result = True
