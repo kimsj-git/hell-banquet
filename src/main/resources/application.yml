@@ -15,11 +15,11 @@ spring:
     username: ${SPRING_MAIL_USERNAME}
     port: 465
     properties:
-    mail:
-      smtp:
-        auth: true
-        ssl:
-          enable: true
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
     host: ${SPRING_MAIL_HOST}
     password: ${SPRING_MAIL_PASSWORD}
   datasource:
