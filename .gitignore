@@ -42,3 +42,5 @@ application.yml
 ### Log Files ###
 *.log
 *.gz
+
+application-credentials.yml
