@@ -14,6 +14,6 @@ spring:
       matching-strategy: ant_path_matcher
   data:
     mongodb:
-      host: localhost
+      host: mongodb-container
       port: 27017
       database: board
