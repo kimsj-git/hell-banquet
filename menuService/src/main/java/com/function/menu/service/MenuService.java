@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -77,17 +78,14 @@ public class MenuService {
 		menuRepository.deleteById(id);
 	}
 
+	@Transactional(readOnly = true)
 	public List<Menu> getMenusByManagerIdAndDate(String managerId, String date) {
 		return menuRepository.findByManagerIdAndDate(managerId, parseDate(date));
 	}
 
+	@Transactional(readOnly = true)
 	public Menu getMenusByManagerIdAndDateAndType(String managerId, String date, String type) {
 		return menuRepository.findByManagerIdAndDateAndType(managerId, parseDate(date), type);
-	}
-
-	public LocalDate parseDate(String dateStr) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		return LocalDate.parse(dateStr, formatter);
 	}
 
 	@Transactional
@@ -98,123 +96,98 @@ public class MenuService {
 		for (int i = 1; i < requestSheet.getPhysicalNumberOfRows(); i++) {
 			Row requestRow = requestSheet.getRow(i);
 			ExcelizedMenuRegisterResultDto resultDto = new ExcelizedMenuRegisterResultDto(i);
-
-			resultDto.setManagerId(requestRow.getCell(1).getStringCellValue());
-			// System.out.println("managerId: " + resultDto.getManagerId());
-
-			resultDto.setType(requestRow.getCell(2).getStringCellValue());
-			// System.out.println("type: " + resultDto.getType());
-
-			resultDto.setCategory(requestRow.getCell(3).getStringCellValue());
-			// System.out.println("category: " + resultDto.getCategory());
-
-			resultDto.setFeature(requestRow.getCell(4).getStringCellValue());
-			// System.out.println("feature: " + resultDto.getFeature());
-
-			resultDto.setMenuItems(List.of(requestRow.getCell(5).getStringCellValue().split(", ")));
-			// System.out.println("menuItems: " + resultDto.getMenuItems());
-
-			resultDto.setMenuTypes(List.of(requestRow.getCell(6).getStringCellValue().split(", ")));
-			// System.out.println("menuTypes: " + resultDto.getMenuTypes());
-
-			double numericCellValue = requestRow.getCell(7).getNumericCellValue();
-			String dateStr = String.valueOf((int) numericCellValue);
-			// System.out.println("dateStr: " + dateStr);
-			LocalDate date = stringToLocalDate(dateStr);
-			resultDto.setDate(date);
-			// System.out.println("date: " + resultDto.getDate());
+			setResultDto(resultDto, requestRow);
 
 			long id = getNextSequence("menu_sequence", mongo);
-
-			menuRepository.save(Menu.builder()
-					.id(id)
-					.managerId(resultDto.getManagerId())
-					.date(resultDto.getDate())
-					.type(resultDto.getType())
-					.category(resultDto.getCategory())
-					.feature(resultDto.getFeature())
-					.menuItems(resultDto.getMenuItems())
-					.menuTypes(resultDto.getMenuTypes())
-					.build());
+			menuRepository.save(createMenuFromResultDto(resultDto, id));
 
 			resultList.add(resultDto);
 		}
 		return resultList;
+
+	}
+
+	private void setResultDto(ExcelizedMenuRegisterResultDto resultDto, Row requestRow) {
+		resultDto.setManagerId(getStringCellValue(requestRow, 1));
+		resultDto.setType(getStringCellValue(requestRow, 2));
+		resultDto.setCategory(getStringCellValue(requestRow, 3));
+		resultDto.setFeature(getStringCellValue(requestRow, 4));
+		resultDto.setMenuItems(getListFromString(getStringCellValue(requestRow, 5)));
+		resultDto.setMenuTypes(getListFromString(getStringCellValue(requestRow, 6)));
+		resultDto.setDate(parseDate(String.valueOf((int)getNumericCellValue(requestRow, 7))));
+	}
+
+	public LocalDate parseDate(String dateStr) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+		return LocalDate.parse(dateStr, formatter);
+	}
+
+	private String getStringCellValue(Row row, int cellIndex) {
+		return row.getCell(cellIndex).getStringCellValue();
+	}
+
+	private double getNumericCellValue(Row row, int cellIndex) {
+		return row.getCell(cellIndex).getNumericCellValue();
+	}
+
+	private List<String> getListFromString(String string) {
+		return List.of(string.split(", "));
+	}
+
+	private Menu createMenuFromResultDto(ExcelizedMenuRegisterResultDto resultDto, long id) {
+		return Menu.builder()
+			.id(id)
+			.managerId(resultDto.getManagerId())
+			.date(resultDto.getDate())
+			.type(resultDto.getType())
+			.category(resultDto.getCategory())
+			.feature(resultDto.getFeature())
+			.menuItems(resultDto.getMenuItems())
+			.menuTypes(resultDto.getMenuTypes())
+			.build();
 	}
 
 	public boolean listToExcel(List<ExcelizedMenuRegisterRequestDto> list, HttpServletResponse response) {
 		Workbook resultWorkbook = new SXSSFWorkbook();
-		Sheet resultSheet = resultWorkbook.createSheet("가입 결과");
-		resultSheet.setColumnWidth(1, 7500);
-		resultSheet.setColumnWidth(2, 4400);
-		resultSheet.setColumnWidth(3, 7500);
-		resultSheet.setColumnWidth(5, 20000);
-		Row header = resultSheet.createRow(0);
+		Sheet resultSheet = resultWorkbook.createSheet("등록 결과");
+		resultSheet.setColumnWidth(1, 5000);
+		resultSheet.setColumnWidth(5, 7000);
+		resultSheet.setColumnWidth(6, 7000);
+		resultSheet.setColumnWidth(7, 5000);
 
-		Cell headerCell = header.createCell(0);
-		headerCell.setCellValue("요청 번호");
-		headerCell = header.createCell(1);
-		headerCell.setCellValue("영양사 아이디");
-		headerCell = header.createCell(2);
-		headerCell.setCellValue("타입");
-		headerCell = header.createCell(3);
-		headerCell.setCellValue("카테고리");
-		headerCell = header.createCell(4);
-		headerCell.setCellValue("특징");
-		headerCell = header.createCell(5);
-		headerCell.setCellValue("메뉴 이름 리스트");
-		headerCell = header.createCell(6);
-		headerCell.setCellValue("메뉴 타입 리스트");
-		headerCell = header.createCell(7);
-		headerCell.setCellValue("식단 날짜");
+		Row header = resultSheet.createRow(0);
+		String[] headers = {"요청 번호", "영양사 아이디", "타입", "카테고리", "특징", "메뉴 이름 리스트", "메뉴 타입 리스트", "식단 날짜"};
+
+		for (int i = 0; i < headers.length; i++) {
+			Cell headerCell = header.createCell(i);
+			headerCell.setCellValue(headers[i]);
+		}
 
 		for (int i = 0; i < list.size(); i++) {
 			Row resultRow = resultSheet.createRow(i + 1);
+			ExcelizedMenuRegisterRequestDto menuRegisterRequestDto = list.get(i);
 
-			Cell cell = resultRow.createCell(0);
-			cell.setCellValue(i + 1);
-			cell = resultRow.createCell(1);
-			cell.setCellValue(list.get(i).getManagerId());
-			cell = resultRow.createCell(2);
-			cell.setCellValue(list.get(i).getType());
-			cell = resultRow.createCell(3);
-			cell.setCellValue(list.get(i).getCategory());
-			cell = resultRow.createCell(4);
-			cell.setCellValue(list.get(i).getFeature());
-			cell = resultRow.createCell(5);
-			cell.setCellValue(list.get(i).getMenuItems().toString());
-			cell = resultRow.createCell(6);
-			cell.setCellValue(list.get(i).getMenuTypes().toString());
-			cell = resultRow.createCell(7);
-			// double numericCellValue = requestRow.getCell(7).getNumericCellValue();
-			// String dateStr = String.valueOf((int) numericCellValue);
-			// System.out.println("dateStr: " + dateStr);
-			// LocalDate date = stringToLocalDate(dateStr);
-			// resultDto.setDate(date);
-			System.out.println(list.get(i).getDate());
-			cell.setCellValue(list.get(i).getDate());
-
+			resultRow.createCell(0).setCellValue(i + 1);
+			resultRow.createCell(1).setCellValue(menuRegisterRequestDto.getManagerId());
+			resultRow.createCell(2).setCellValue(menuRegisterRequestDto.getType());
+			resultRow.createCell(3).setCellValue(menuRegisterRequestDto.getCategory());
+			resultRow.createCell(4).setCellValue(menuRegisterRequestDto.getFeature());
+			resultRow.createCell(5).setCellValue(menuRegisterRequestDto.getMenuItems().toString());
+			resultRow.createCell(6).setCellValue(menuRegisterRequestDto.getMenuTypes().toString());
+			resultRow.createCell(7).setCellValue(menuRegisterRequestDto.getDate());
 		}
+
 		response.setContentType("application/vnd.ms-excel");
 		response.setHeader("Content-Disposition", "attachment;filename=result.xlsx");
-		// file 손상 오류 https://developer-davii.tistory.com/49
 
-		try {
-			resultWorkbook.write(response.getOutputStream());
+		try (ServletOutputStream outputStream = response.getOutputStream()) {
+			resultWorkbook.write(outputStream);
 			resultWorkbook.close();
-			response.getOutputStream().close();
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException("결과 파일 작성 중 오류가 발생했습니다. (IOException)");
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-		return false;
 	}
 
-	public LocalDate stringToLocalDate(String dateStr) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-		return LocalDate.parse(dateStr, formatter);
-	}
 }

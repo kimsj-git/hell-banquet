@@ -23,7 +23,7 @@ public class Menu {
 	@ApiModelProperty(example = "영양사 아이디")
 	private String managerId;
 
-	@ApiModelProperty(example = "식단 날짜 정보")
+	@ApiModelProperty(example = "식단 일자")
 	private LocalDate date;
 
 	@ApiModelProperty(example = "코스 A/코스 B")

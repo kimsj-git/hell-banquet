@@ -24,4 +24,5 @@ public class ExcelizedMenuRegisterResultDto {
 	public ExcelizedMenuRegisterResultDto(int requestNo) {
 		this.requestNo = requestNo;
 	}
+
 }

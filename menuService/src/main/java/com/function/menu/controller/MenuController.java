@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
@@ -128,7 +127,7 @@ public class MenuController {
 	}
 
 	@PostMapping("/convert")
-	@ApiOperation(value = "일괄 회원가입 결과 리스트를 xlsx 파일 변환", notes = "웹 페이지상에 보여지고 있는 일괄 회원가입 결과 리스트를 엑셀파일(xlsx)로 변환해준다.")
+	@ApiOperation(value = "일괄 식단 등록 결과 리스트를 xlsx 파일 변환", notes = "웹 페이지상에 보여지고 있는 일괄 식단 등록 결과 리스트를 엑셀파일(xlsx)로 변환해준다.")
 	public ResponseEntity listToExcel(
 		@RequestBody @ApiParam(value = "변환 요청 정보", required = true) List<ExcelizedMenuRegisterRequestDto> list,
 		HttpServletResponse response) {
