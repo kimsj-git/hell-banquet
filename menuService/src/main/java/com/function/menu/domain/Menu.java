@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.function.menu.dto.ExcelizedMenuRegisterResultDto;
 import com.function.menu.dto.MenuSaveRequestDto;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -44,15 +45,40 @@ public class Menu {
 	private List<String> menuTypes;
 
 	@Builder
-	public Menu(Long id, MenuSaveRequestDto dto, LocalDate date) {
+	public Menu(long id, String managerId, LocalDate date, String type, String category, String feature,
+		List<String> menuItems, List<String> menuTypes) {
 		this.id = id;
-		this.managerId = dto.getManagerId();
-		this.type = dto.getType();
-		this.category = dto.getCategory();
-		this.feature = dto.getFeature();
-		this.menuItems = dto.getMenuItems();
-		this.menuTypes = dto.getMenuTypes();
+		this.managerId = managerId;
 		this.date = date;
+		this.type = type;
+		this.category = category;
+		this.feature = feature;
+		this.menuItems = menuItems;
+		this.menuTypes = menuTypes;
 	}
+
+	// public Menu(Long id, MenuSaveRequestDto dto, LocalDate date) {
+	// 	this.id = id;
+	// 	this.managerId = dto.getManagerId();
+	// 	this.type = dto.getType();
+	// 	this.category = dto.getCategory();
+	// 	this.feature = dto.getFeature();
+	// 	this.menuItems = dto.getMenuItems();
+	// 	this.menuTypes = dto.getMenuTypes();
+	// 	this.date = date;
+	// }
+
+
+	// public Menu(Long id, ExcelizedMenuRegisterResultDto dto) {
+	// 	this.id = id;
+	// 	this.managerId = dto.getManagerId();
+	// 	this.type = dto.getType();
+	// 	this.category = dto.getCategory();
+	// 	this.feature = dto.getFeature();
+	// 	this.menuItems = dto.getMenuItems();
+	// 	this.menuTypes = dto.getMenuTypes();
+	// 	this.date = dto.getDate();
+	// }
+
 
 }
