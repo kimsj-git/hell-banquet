@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.function.menu.domain.Menu;
+import com.function.menu.dto.ExcelizedMenuRegisterRequestDto;
 import com.function.menu.dto.ExcelizedMenuRegisterResultDto;
 import com.function.menu.dto.MenuSaveRequestDto;
 import com.function.menu.service.MenuService;
@@ -51,7 +52,7 @@ public class MenuController {
 		return menuService.findMenuById(id);
 	}
 
-	@ApiOperation("{managerId}에 해당하는 영양사가 {date}에 작성한 식단 리스트를 조회한다.")
+	@ApiOperation(value = "{managerId}에 해당하는 영양사가 {date}에 작성한 식단 리스트를 조회한다.")
 	@GetMapping("/date")
 	public List<Menu> getMenusByManagerIdAndDate(
 		@RequestParam("managerId") String managerId,
@@ -126,16 +127,16 @@ public class MenuController {
 		}
 	}
 
-	// @PostMapping("/convert")
-	// @ApiOperation(value = "일괄 회원가입 결과 리스트를 xlsx 파일 변환", notes = "웹 페이지상에 보여지고 있는 일괄 회원가입 결과 리스트를 엑셀파일(xlsx)로 변환해준다.")
-	// public ResponseEntity listToExcel(
-	// 	@RequestBody @ApiParam(value = "변환 요청 정보", required = true) List<ExcelizedMenuRegisterResultDto> list,
-	// 	HttpServletResponse response) {
-	// 	if (menuService.listToExcel(list, response)) {
-	// 		return ResponseEntity.ok("리스트 변환에 성공하였습니다.");
-	// 	} else {
-	// 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리스트 변환 중 오류가 발생했습니다.");
-	// 	}
-	// }
+	@PostMapping("/convert")
+	@ApiOperation(value = "일괄 회원가입 결과 리스트를 xlsx 파일 변환", notes = "웹 페이지상에 보여지고 있는 일괄 회원가입 결과 리스트를 엑셀파일(xlsx)로 변환해준다.")
+	public ResponseEntity listToExcel(
+		@RequestBody @ApiParam(value = "변환 요청 정보", required = true) List<ExcelizedMenuRegisterRequestDto> list,
+		HttpServletResponse response) {
+		if (menuService.listToExcel(list, response)) {
+			return ResponseEntity.ok("리스트 변환에 성공하였습니다.");
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리스트 변환 중 오류가 발생했습니다.");
+		}
+	}
 
 }

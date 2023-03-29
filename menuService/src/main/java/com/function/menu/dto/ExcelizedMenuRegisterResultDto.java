@@ -11,6 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ExcelizedMenuRegisterResultDto {
+
 	private int requestNo;
 	private String managerId;
 	private String type;

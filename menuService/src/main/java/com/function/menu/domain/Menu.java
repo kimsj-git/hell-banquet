@@ -6,9 +6,6 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.function.menu.dto.ExcelizedMenuRegisterResultDto;
-import com.function.menu.dto.MenuSaveRequestDto;
-
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -56,29 +53,5 @@ public class Menu {
 		this.menuItems = menuItems;
 		this.menuTypes = menuTypes;
 	}
-
-	// public Menu(Long id, MenuSaveRequestDto dto, LocalDate date) {
-	// 	this.id = id;
-	// 	this.managerId = dto.getManagerId();
-	// 	this.type = dto.getType();
-	// 	this.category = dto.getCategory();
-	// 	this.feature = dto.getFeature();
-	// 	this.menuItems = dto.getMenuItems();
-	// 	this.menuTypes = dto.getMenuTypes();
-	// 	this.date = date;
-	// }
-
-
-	// public Menu(Long id, ExcelizedMenuRegisterResultDto dto) {
-	// 	this.id = id;
-	// 	this.managerId = dto.getManagerId();
-	// 	this.type = dto.getType();
-	// 	this.category = dto.getCategory();
-	// 	this.feature = dto.getFeature();
-	// 	this.menuItems = dto.getMenuItems();
-	// 	this.menuTypes = dto.getMenuTypes();
-	// 	this.date = dto.getDate();
-	// }
-
 
 }
