@@ -41,7 +41,7 @@ public class Board extends BaseTimeEntity {
 	@Column(nullable = false)
 	private String content;
 
-	@Column(nullable = false)
+	@Column(name = "author_id", nullable = false)
 	private String writer;
 
 	@JsonIgnore
