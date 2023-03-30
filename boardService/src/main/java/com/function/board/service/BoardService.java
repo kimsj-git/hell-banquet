@@ -1,5 +1,7 @@
 package com.function.board.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -110,6 +112,34 @@ public class BoardService {
 	public Long fetchLatestBoardId() {
 		Optional<Board> latestBoard = boardRepository.findTopByOrderByIdDesc();
 		return latestBoard.map(Board::getId).orElse(null);
+	}
+
+	public Board getBoardWithMostLikes(LocalDate date) {
+		LocalDateTime startDateTime = date.atStartOfDay();
+		LocalDateTime endDateTime = startDateTime.plusDays(1);
+
+		List<Board> boards = boardRepository.findByCreatedAtBetween(startDateTime, endDateTime);
+		if (boards.isEmpty()) {
+			return null;
+		}
+
+		Board boardWithMostLikes = null;
+		int maxLikes = 0;
+
+		for (Board board : boards) {
+			Optional<Rating> optionalRating = ratingRepository.findById(board.getId());
+
+			if (optionalRating.isPresent()) {
+				Rating rating = optionalRating.get();
+				int likeCount = rating.getLikeCount();
+
+				if (maxLikes <= likeCount) {
+					boardWithMostLikes = board;
+					maxLikes = likeCount;
+				}
+			}
+		}
+		return boardWithMostLikes;
 	}
 
 }

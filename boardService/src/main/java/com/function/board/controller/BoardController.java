@@ -1,6 +1,7 @@
 package com.function.board.controller;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -76,6 +77,22 @@ public class BoardController {
 	@GetMapping("/{id}")
 	public ResponseEntity<BoardResponseDto> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(boardService.findById(id));
+	}
+
+
+	@ApiOperation(value = "오늘의 게시글 조회")
+	@GetMapping("/today")
+	public ResponseEntity<?> getMostLikedBoard(
+		@RequestParam("date") String dateStr) {
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+		LocalDate date = LocalDate.parse(dateStr, formatter);
+		Board board = boardService.getBoardWithMostLikes(date);
+
+		if (board == null) {
+			return ResponseEntity.ok().body("아직 게시글이 없어요");
+		}
+		return ResponseEntity.ok().body(board);
 	}
 
 	@ApiOperation(value = "게시글 수정")

@@ -17,4 +17,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
 	Page<Board> findByContentContainingAndIdLessThanOrderByCreatedAtDesc(String keyword, Long lastBoardId, Pageable pageable);
 
+	List<Board> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
+
 }
