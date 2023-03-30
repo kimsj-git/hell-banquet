@@ -33,7 +33,7 @@ public class Menu {
 	private String type;
 
 	@ApiModelProperty(example = "식단 카테고리 (한식/일식/중식/양식/일품)")
-	private String category;
+	private Category category;
 
 	@ApiModelProperty(example = "식단 주요 특성 (육/해/공)")
 	private String feature;
@@ -44,7 +44,7 @@ public class Menu {
 	@ApiModelProperty(example = "메뉴 타입 리스트")
 	private List<FoodType> menuTypes;
 
-	public Menu(long id, String managerId, LocalDate date, String type, String category, String feature,
+	public Menu(long id, String managerId, LocalDate date, String type, Category category, String feature,
 		List<String> menuItems, List<FoodType> menuTypes) {
 		this.id = id;
 		this.managerId = managerId;
@@ -60,7 +60,7 @@ public class Menu {
 		this.id = id;
 		this.managerId = dto.getManagerId();
 		this.type = dto.getType();
-		this.category = dto.getCategory();
+		this.category = Category.fromValue(dto.getCategory());
 		this.feature = dto.getFeature();
 		this.menuItems = dto.getMenuItems();
 		this.menuTypes = dto.getMenuTypes().stream()
@@ -74,7 +74,7 @@ public class Menu {
 		this.managerId = dto.getManagerId();
 		this.date = dto.getDate();
 		this.type = dto.getType();
-		this.category = dto.getCategory();
+		this.category = Category.fromValue(dto.getCategory());
 		this.feature = dto.getFeature();
 		this.menuItems = dto.getMenuItems();
 		this.menuTypes = dto.getMenuTypes().stream()
