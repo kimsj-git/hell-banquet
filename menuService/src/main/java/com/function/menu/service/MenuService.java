@@ -107,13 +107,21 @@ public class MenuService {
 		resultDto.setFeature(getStringCellValue(requestRow, 4));
 		resultDto.setMenuItems(getListFromString(getStringCellValue(requestRow, 5)));
 		resultDto.setMenuTypes(getListFromString(getStringCellValue(requestRow, 6)));
-		resultDto.setDate(parseDate(String.valueOf((int)getNumericCellValue(requestRow, 7))));
+		resultDto.setDate(parseExcelDate(String.valueOf((int)getNumericCellValue(requestRow, 7))));
 	}
 
 	public LocalDate parseDate(String dateStr) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		return LocalDate.parse(dateStr, formatter);
 	}
+
+	public LocalDate parseExcelDate(String dateStr) {
+		long excelDate = Long.parseLong(dateStr);
+		return LocalDate.of(1900, 1, 1).plusDays(excelDate - 2);
+	}
+
+
+
 
 	private String getStringCellValue(Row row, int cellIndex) {
 		return row.getCell(cellIndex).getStringCellValue();
