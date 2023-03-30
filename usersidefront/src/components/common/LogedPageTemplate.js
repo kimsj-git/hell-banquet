@@ -16,6 +16,11 @@ function LogedPageTemplate() {
 
     // }, [navigate])
 
+    useEffect(()=> {
+        localStorage.setItem('userId', 'string')
+
+    }, [])
+
     return (
         <>
             <StickyHeader />

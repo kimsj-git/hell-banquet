@@ -1,3 +1,6 @@
+/* eslint-disable */
+
+
 import { useState } from 'react'
 
 import { ArticleOption, UpDelModal } from "./"
@@ -79,3 +82,4 @@ const JanvanFace = styled.img`
 `
 
 export default BoardListItem
+/* eslint-enable */

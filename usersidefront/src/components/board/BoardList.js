@@ -9,7 +9,7 @@ function BoardList() {
     const [ boardInfo, setBoardInfo ] = useState({lastBoardId: -1, size: 10, userId: localStorage.getItem('userId')})
 
     const [articles, setArticles] = useState(
-        [{content: '', src: undefined, id: -1},
+        [{content: '', src: undefined, likeCount:0, dislikeCount: 0, id: -1},
         {content: '', src: undefined},
         {content: '', src: undefined},
         {content: '', src: undefined},
@@ -25,19 +25,19 @@ function BoardList() {
     
     useEffect(() => {
         const getMoreList = async () => {
-            const data = await getBoardList(
-                boardInfo,
-                (data) => {
-                    return data.data
-                },
-                (err) => console.log(err)
-            )
-            if (articles[0]?.id === -1) {
-                setArticles(data)
-            } else {
-                (articles.push(...data))
-            }
-            setBoardInfo({...boardInfo, lastBoardId: articles[articles.length - 1].id})
+            // const data = await getBoardList(
+            //     boardInfo,
+            //     (data) => {
+            //         return data.data
+            //     },
+            //     (err) => console.log(err)
+            // )
+            // if (articles[0]?.id === -1) {
+            //     setArticles(data)
+            // } else {
+            //     (articles.push(...data))
+            // }
+            // setBoardInfo({...boardInfo, lastBoardId: articles[articles.length - 1].id})
         } 
 
         if (articles[0]?.id === -1) {
@@ -56,7 +56,7 @@ function BoardList() {
                     getMoreList()
                 }
             });
-        }, observerOptions);
+        }, [observerOptions, articles]);
         
         observer.observe(articleListRef.current.lastChild);
 
