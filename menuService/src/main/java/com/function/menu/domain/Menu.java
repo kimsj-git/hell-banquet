@@ -2,13 +2,16 @@ package com.function.menu.domain;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.function.menu.dto.ExcelizedMenuRegisterResultDto;
+import com.function.menu.dto.MenuSaveRequestDto;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -39,11 +42,10 @@ public class Menu {
 	private List<String> menuItems;
 
 	@ApiModelProperty(example = "메뉴 타입 리스트")
-	private List<String> menuTypes;
+	private List<FoodType> menuTypes;
 
-	@Builder
 	public Menu(long id, String managerId, LocalDate date, String type, String category, String feature,
-		List<String> menuItems, List<String> menuTypes) {
+		List<String> menuItems, List<FoodType> menuTypes) {
 		this.id = id;
 		this.managerId = managerId;
 		this.date = date;
@@ -52,6 +54,32 @@ public class Menu {
 		this.feature = feature;
 		this.menuItems = menuItems;
 		this.menuTypes = menuTypes;
+	}
+
+	public Menu(long id, MenuSaveRequestDto dto, LocalDate date) {
+		this.id = id;
+		this.managerId = dto.getManagerId();
+		this.type = dto.getType();
+		this.category = dto.getCategory();
+		this.feature = dto.getFeature();
+		this.menuItems = dto.getMenuItems();
+		this.menuTypes = dto.getMenuTypes().stream()
+			.map(FoodType::fromValue)
+			.collect(Collectors.toList());
+		this.date = date;
+	}
+
+	public Menu(long id, ExcelizedMenuRegisterResultDto dto) {
+		this.id = id;
+		this.managerId = dto.getManagerId();
+		this.date = dto.getDate();
+		this.type = dto.getType();
+		this.category = dto.getCategory();
+		this.feature = dto.getFeature();
+		this.menuItems = dto.getMenuItems();
+		this.menuTypes = dto.getMenuTypes().stream()
+			.map(FoodType::fromValue)
+			.collect(Collectors.toList());
 	}
 
 }

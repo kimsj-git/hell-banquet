@@ -49,17 +49,10 @@ public class MenuService {
 	@Transactional
 	public Menu save(MenuSaveRequestDto dto) {
 		long id = getNextSequence("menu_sequence", mongo);
+		System.out.println("dateStr: " + dto.getDate());
 		LocalDate date = parseDate(dto.getDate());
-		Menu menu = Menu.builder()
-			.id(id)
-			.managerId(dto.getManagerId())
-			.date(date)
-			.type(dto.getType())
-			.category(dto.getCategory())
-			.feature(dto.getFeature())
-			.menuItems(dto.getMenuItems())
-			.menuTypes(dto.getMenuTypes())
-			.build();
+		System.out.println("date : " + date);
+		Menu menu = new Menu(id, dto, date);
 		return menuRepository.save(menu);
 	}
 
@@ -135,16 +128,7 @@ public class MenuService {
 	}
 
 	private Menu createMenuFromResultDto(ExcelizedMenuRegisterResultDto resultDto, long id) {
-		return Menu.builder()
-			.id(id)
-			.managerId(resultDto.getManagerId())
-			.date(resultDto.getDate())
-			.type(resultDto.getType())
-			.category(resultDto.getCategory())
-			.feature(resultDto.getFeature())
-			.menuItems(resultDto.getMenuItems())
-			.menuTypes(resultDto.getMenuTypes())
-			.build();
+		return new Menu(id, resultDto);
 	}
 
 	public boolean listToExcel(List<ExcelizedMenuRegisterRequestDto> list, HttpServletResponse response) {

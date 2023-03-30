@@ -19,8 +19,8 @@ public class MenuSaveRequestDto {
 	private String date;
 
 	@Builder
-	public MenuSaveRequestDto(String managerId, String type, String category, String feature, List<String> menuItems,
-		List<String> menuTypes, String date) {
+	public MenuSaveRequestDto(String managerId, String type, String category, String feature,
+		List<String> menuItems, List<String> menuTypes, String date) {
 		this.managerId = managerId;
 		this.type = type;
 		this.category = category;
