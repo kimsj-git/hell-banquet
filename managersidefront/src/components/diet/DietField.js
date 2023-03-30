@@ -12,7 +12,7 @@ function DietField(params) {
 
     return (
         <SingleMenu>
-            <TextField />
+            <TextField size="small"/>
             <Select defaultValue={'밥'} style={{width: 80, margin: '0px 20px 0px 20px'}} >
                 {menuItems.map((menu) => {
                     return (
@@ -28,7 +28,9 @@ function DietField(params) {
 }
 
 const SingleMenu = styled.div`
+    height: 40px;
     display: flex;
+    margin-bottom: 20px;
 `
 
 export default DietField

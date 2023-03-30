@@ -6,25 +6,38 @@ import { DietField, ExcelButton } from "../components/diet"
 import { useEffect, useState } from "react"
 import { Button, ButtonGroup } from "@mui/material"
 
-function DietUpload() {
+function DietChange() {
     const emptyFood = {name: '', category: '', isChild: true}
-    const [ foodList, setFoodList ] = useState({A: [{...emptyFood, isChild:false}, ], B: [{...emptyFood, isChild:false}, ]})
+    const dummyDiet = { A: [
+        {name: '', category: '', isChild: false},
+        {name: '', category: '', isChild: true},
+        {name: '', category: '', isChild: true},
+        {name: '', category: '', isChild: true},
+        {name: '', category: '', isChild: true},
+        {name: '', category: '', isChild: true},
+    ],
+    B: [
+        {name: '', category: '', isChild: false},
+        {name: '', category: '', isChild: true},
+        {name: '', category: '', isChild: true},
+        {name: '', category: '', isChild: true},
+        {name: '', category: '', isChild: true},
+        {name: '', category: '', isChild: true},
+    ]}
+    const [ foodList, setFoodList ] = useState(dummyDiet)
     const [ selectedButton, setSelectedButton ] = useState('A') 
 
     useEffect(() => {
 
     }, [ foodList ])
 
-    const addFood = () => {
-        const newFoodList = { ...foodList };
-        newFoodList[selectedButton] = [...newFoodList[selectedButton], { ...emptyFood }];
-        setFoodList(newFoodList);
+    const addFood = (target) => {
+        setFoodList({...foodList[target], emptyFood})
     }
 
     const deleteFood = (index) => {
-        const newFoodList = { ...foodList };
-        newFoodList[selectedButton] = [...newFoodList[selectedButton]];
-        newFoodList[selectedButton].splice(index, 1);
+        const newFoodList = [...foodList];
+        newFoodList.splice(index, 1);
         setFoodList(newFoodList);
     };
 
@@ -40,7 +53,7 @@ function DietUpload() {
         <div style={{display: 'flex', flexDirection: 'column'}}>
             <SideBar />
             <Container >
-                <ExcelButton buttonName={'식단 일괄 등록'}/>
+                <ExcelButton buttonName={'식단 일괄 수정'}/>
                 <FlexBox style={{display: 'flex', }}>
                     <DateSelector />
                     <ButtonGroup style={{marginLeft: 20}}>
@@ -74,4 +87,4 @@ const FlexBox = styled.div`
     display: flex;
 `
 
-export default DietUpload
+export default DietChange

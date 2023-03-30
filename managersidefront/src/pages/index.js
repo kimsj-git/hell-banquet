@@ -4,6 +4,9 @@ import Error404Page from "./Error404Page";
 import LoginPage from "./LoginPage";
 import LandingPage from "./LandingPage"
 import DietUpload from "./DietUpload";
+import DietChange from "./DietChange";
+import MemberUpload from "./MemberUpload";
+import MemberRead from "./MeberRead";
 
 const router = createBrowserRouter([
     {
@@ -24,7 +27,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/diet/update',
-        element: <LandingPage />
+        element: <DietChange />
     },
     {
         path: '/statistics/daily',
@@ -36,11 +39,11 @@ const router = createBrowserRouter([
     },
     {
         path: '/member/upload',
-        element: <LandingPage />
+        element: <MemberUpload />
     },
     {
         path: '/member/read',
-        element: <LandingPage />
+        element: <MemberRead />
     },
 
 
