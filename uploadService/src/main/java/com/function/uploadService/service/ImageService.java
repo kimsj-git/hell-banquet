@@ -1,11 +1,14 @@
 package com.function.uploadService.service;
 
+import static com.function.uploadService.domain.CharacterCode.*;
+
 import java.io.IOException;
 
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.function.uploadService.domain.CharacterCode;
 import com.function.uploadService.domain.Image;
 import com.function.uploadService.domain.ImageRepository;
 
@@ -23,7 +26,7 @@ public class ImageService {
 
 		Image image = Image.builder()
 			.filePath(filePath)
-			.propsName(propsName)
+			.propsName(fromValue(propsName))
 			.build();
 		imageRepository.save(image);
 	}
@@ -32,6 +35,12 @@ public class ImageService {
 		Image image = imageRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("해당하는 잔반이가 없습니다."));
 
+		return s3Service.readImageFromS3(image.getFilePath());
+	}
+
+	public Resource getImage(String name) {
+		CharacterCode code = fromValue(name);
+		Image image = imageRepository.findOneByPropsName(code);
 		return s3Service.readImageFromS3(image.getFilePath());
 	}
 

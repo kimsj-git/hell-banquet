@@ -2,6 +2,8 @@ package com.function.uploadService.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,11 +27,12 @@ public class Image {
 	@Column(name = "file_path", nullable = false)
 	private String filePath;
 
+	@Enumerated(value = EnumType.STRING)
 	@Column(name = "props_name", nullable = false)
-	private String propsName;
+	private CharacterCode propsName;
 
 	@Builder
-	public Image(String filePath, String propsName) {
+	public Image(String filePath, CharacterCode propsName) {
 		this.filePath = filePath;
 		this.propsName = propsName;
 	}

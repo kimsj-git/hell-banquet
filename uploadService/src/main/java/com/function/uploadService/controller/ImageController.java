@@ -47,6 +47,16 @@ public class ImageController {
 		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "{name}에 해당하는 잔반이 조회")
+	@GetMapping("/name")
+	public ResponseEntity<?> getImage(@RequestParam String name) throws IOException {
+		Resource resource = imageService.getImage(name);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.IMAGE_JPEG);
+		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+	}
+
+
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
