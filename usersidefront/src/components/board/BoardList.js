@@ -1,8 +1,7 @@
 import { useRef, useEffect, useState } from "react"
 import styled from "styled-components"
 
-// getBoardList,
-import {  getEntireList } from "../../api/board"
+import { getBoardList, getEntireList } from "../../api/board"
 
 import BoardListItem from "./BoardListItem"
 

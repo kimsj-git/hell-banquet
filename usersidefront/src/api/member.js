@@ -8,7 +8,8 @@ async function login(user, success, fail) {
 }
 
 async function logout(success, fail) {
-  api.defaults.headers["refreshToken"] = localStorage.getItem("refreshToken")
+  api.defaults.headers["Authorization"] = localStorage.getItem("auth")
+  api.defaults.headers["refreshToken"] = localStorage.getItem("refresh")
 
   await api.post(`/auth/logout`, ).then(success).catch(fail);
 }
