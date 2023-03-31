@@ -1,4 +1,4 @@
-package com.function.uploadService.domain;
+package com.function.uploadService.domain.image;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "character_image")
+@Table(name = "images")
 public class Image {
 
 	@Id
@@ -28,13 +28,13 @@ public class Image {
 	private String filePath;
 
 	@Enumerated(value = EnumType.STRING)
-	@Column(name = "props_name", nullable = false)
-	private CharacterCode propsName;
+	@Column(name = "janban_code", nullable = false)
+	private JanbanCode janbanCode;
 
 	@Builder
-	public Image(String filePath, CharacterCode propsName) {
+	public Image(String filePath, JanbanCode janbanCode) {
 		this.filePath = filePath;
-		this.propsName = propsName;
+		this.janbanCode = janbanCode;
 	}
 
 }

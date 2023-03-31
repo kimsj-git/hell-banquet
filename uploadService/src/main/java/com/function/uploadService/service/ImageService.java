@@ -1,6 +1,6 @@
 package com.function.uploadService.service;
 
-import static com.function.uploadService.domain.CharacterCode.*;
+import static com.function.uploadService.domain.image.JanbanCode.*;
 
 import java.io.IOException;
 
@@ -8,9 +8,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.function.uploadService.domain.CharacterCode;
-import com.function.uploadService.domain.Image;
-import com.function.uploadService.domain.ImageRepository;
+import com.function.uploadService.domain.image.Image;
+import com.function.uploadService.domain.image.ImageRepository;
+import com.function.uploadService.domain.image.JanbanCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,12 +21,12 @@ public class ImageService {
 	private final ImageRepository imageRepository;
 	private final S3Service s3Service;
 
-	public void uploadImage(MultipartFile file, String propsName) throws IOException {
+	public void uploadImage(MultipartFile file, String janbanName) throws IOException {
 		String filePath = s3Service.uploadFileToS3(file);
 
 		Image image = Image.builder()
 			.filePath(filePath)
-			.propsName(fromValue(propsName))
+			.janbanCode(fromValue(janbanName))
 			.build();
 		imageRepository.save(image);
 	}
@@ -38,9 +38,10 @@ public class ImageService {
 		return s3Service.readImageFromS3(image.getFilePath());
 	}
 
-	public Resource getImage(String name) {
-		CharacterCode code = fromValue(name);
-		Image image = imageRepository.findOneByPropsName(code);
+	public Resource getImage(String code) {
+		// JanbanCode code = fromValue(name);
+		JanbanCode janbanCode = fromCode(code);
+		Image image = imageRepository.findOneByJanbanCode(janbanCode);
 		return s3Service.readImageFromS3(image.getFilePath());
 	}
 

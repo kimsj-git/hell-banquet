@@ -1,8 +1,8 @@
-package com.function.uploadService.domain;
+package com.function.uploadService.domain.image;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
-	Image findOneByPropsName(CharacterCode propsName);
+	Image findOneByJanbanCode(JanbanCode janbanCode);
 }
