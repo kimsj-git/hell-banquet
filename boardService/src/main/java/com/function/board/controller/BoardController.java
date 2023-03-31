@@ -1,7 +1,5 @@
 package com.function.board.controller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -85,12 +83,10 @@ public class BoardController {
 	public ResponseEntity<?> getMostLikedBoard(
 		@RequestParam("date") String dateStr) {
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-		LocalDate date = LocalDate.parse(dateStr, formatter);
-		Board board = boardService.getBoardWithMostLikes(date);
+		Board board = boardService.getBoardWithMostLikes(dateStr);
 
 		if (board == null) {
-			return ResponseEntity.ok().body("아직 게시글이 없어요");
+			return ResponseEntity.ok().body("아직 오늘 작성된 게시글이 없어요");
 		}
 		return ResponseEntity.ok().body(board);
 	}

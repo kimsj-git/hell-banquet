@@ -2,6 +2,7 @@ package com.function.board.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -104,7 +105,8 @@ public class BoardService {
 		if (keyword == null) {
 			return boardRepository.findByIdLessThanOrderByCreatedAtDesc(lastBoardId, pageable);
 		} else {
-			return boardRepository.findByContentContainingAndIdLessThanOrderByCreatedAtDesc(keyword, lastBoardId, pageable);
+			return boardRepository.findByContentContainingAndIdLessThanOrderByCreatedAtDesc(keyword, lastBoardId,
+				pageable);
 		}
 	}
 
@@ -114,8 +116,8 @@ public class BoardService {
 		return latestBoard.map(Board::getId).orElse(null);
 	}
 
-	public Board getBoardWithMostLikes(LocalDate date) {
-		LocalDateTime startDateTime = date.atStartOfDay();
+	public Board getBoardWithMostLikes(String dateStr) {
+		LocalDateTime startDateTime = parseDate(dateStr).atStartOfDay();
 		LocalDateTime endDateTime = startDateTime.plusDays(1);
 
 		List<Board> boards = boardRepository.findByCreatedAtBetween(startDateTime, endDateTime);
@@ -140,6 +142,11 @@ public class BoardService {
 			}
 		}
 		return boardWithMostLikes;
+	}
+
+	private LocalDate parseDate(String dateStr) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		return LocalDate.parse(dateStr, formatter);
 	}
 
 }
