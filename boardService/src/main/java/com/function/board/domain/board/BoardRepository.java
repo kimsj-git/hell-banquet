@@ -11,11 +11,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
 	Page<Board> findByIdLessThanOrderByCreatedAtDesc(Long lastBoardId, Pageable pageable);
-	List<Board> findAllByCreatedAtBetweenOrderByCreatedAtDesc(LocalDateTime startDate, LocalDateTime endDate);
+	// List<Board> findAllByCreatedAtBetweenOrderByCreatedAtDesc(LocalDateTime startDate, LocalDateTime endDate);
 
 	Optional<Board> findTopByOrderByIdDesc();
 
-	Page<Board> findByContentContainingAndIdLessThanOrderByCreatedAtDesc(String keyword, Long lastBoardId, Pageable pageable);
+	// Page<Board> findByContentContainingAndIdLessThanOrderByCreatedAtDesc(String keyword, Long lastBoardId, Pageable pageable);
 
 	List<Board> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 

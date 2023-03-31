@@ -9,8 +9,6 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,29 +65,28 @@ public class BoardService {
 			.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
 		boardRepository.delete(board);
 	}
-
 	@Transactional(readOnly = true)
-	public List<BoardListResponseDto> fetchBoardPagesBy(Long lastBoardId, int size, String userId, String keyword) {
+	public List<BoardListResponseDto> fetchBoardPagesBy(Long lastBoardId, int size, String userId) {
 		List<BoardListResponseDto> boardList = new ArrayList<>();
-		Page<Board> boards = fetchPages(lastBoardId, size, keyword);
+		Page<Board> boards = fetchPages(lastBoardId, size);
 
 		for (Board board : boards) {
 			Optional<Rating> optionalRating = ratingRepository.findById(board.getId());
 
-			int likeCount = 0;
-			int dislikeCount = 0;
-			int reaction = 0;
-
 			if (optionalRating.isPresent()) {
 				Rating rating = optionalRating.get();
-				likeCount = rating.getLikeCount();
-				dislikeCount = rating.getDislikeCount();
+				int likeCount = rating.getLikeCount();
+				int dislikeCount = rating.getDislikeCount();
+				int isEvaluated = 0;
 
 				if (rating.getUsers().containsKey(userId)) {
-					reaction = rating.getUsers().get(userId) ? 1 : 2;
+					// Boolean isLiked =
+					isEvaluated = rating.getUsers().get(userId) ? 1 : 2;
 				}
+				boardList.add(new BoardListResponseDto(board, likeCount, dislikeCount, isEvaluated));
+			} else {
+				boardList.add(new BoardListResponseDto(board, 0, 0, 0));
 			}
-			boardList.add(new BoardListResponseDto(board, likeCount, dislikeCount, reaction));
 		}
 		return boardList;
 	}
@@ -97,17 +94,6 @@ public class BoardService {
 	public Page<Board> fetchPages(Long lastBoardId, int size) {
 		PageRequest pageable = PageRequest.of(0, size);
 		return boardRepository.findByIdLessThanOrderByCreatedAtDesc(lastBoardId, pageable);
-	}
-
-	public Page<Board> fetchPages(Long lastBoardId, int size, String keyword) {
-		Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-		Pageable pageable = PageRequest.of(0, size, sort);
-		if (keyword == null) {
-			return boardRepository.findByIdLessThanOrderByCreatedAtDesc(lastBoardId, pageable);
-		} else {
-			return boardRepository.findByContentContainingAndIdLessThanOrderByCreatedAtDesc(keyword, lastBoardId,
-				pageable);
-		}
 	}
 
 	@Transactional(readOnly = true)

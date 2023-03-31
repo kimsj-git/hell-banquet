@@ -40,7 +40,7 @@ public class Comment extends BaseTimeEntity {
 	@JoinColumn(name = "board_id", nullable = false)
 	private Board board;
 
-	@Column(name = "author_id", nullable = false)
+	@Column(name = "writer", nullable = false)
 	private String writer;
 
 	@Column(nullable = false)

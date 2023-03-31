@@ -52,25 +52,10 @@ public class BoardController {
 	@ApiOperation(value = "게시글 페이징")
 	@GetMapping()
 	public ResponseEntity<List<BoardListResponseDto>> paging(
-		@RequestParam Long lastBoardId,
-		@RequestParam int size,
-		@RequestParam String userId,
-		// @RequestParam(required = false) String startDate,
-		// @RequestParam(required = false) String endDate,
-		@RequestParam(required = false) String keyword) {
-
-		// LocalDateTime startDateTime = startDate != null ? LocalDateTime.parse(startDate + "T00:00:00") : null;
-		// LocalDateTime endDateTime = endDate != null ? LocalDateTime.parse(endDate + "T23:59:59") : null;
-
+		@RequestParam Long lastBoardId, @RequestParam int size, @RequestParam String userId) {
 		lastBoardId = lastBoardId == -1 ? boardService.fetchLatestBoardId() : lastBoardId;
-		List<BoardListResponseDto> boardList;
-		//
-		boardList = boardService.fetchBoardPagesBy(lastBoardId, size, userId, keyword);
+		List<BoardListResponseDto> boardList = boardService.fetchBoardPagesBy(lastBoardId, size, userId);
 		return new ResponseEntity<>(boardList, HttpStatus.OK);
-		// List<BoardListResponseDto> boardList = boardService.fetchBoardPagesByPeriod(lastBoardId, size, userId, startDateTime, endDateTime);
-
-		// return new ResponseEntity<>(boardList, HttpStatus.OK);
-
 	}
 
 	@ApiOperation(value = "{id}에 해당하는 게시글 조회")
@@ -82,11 +67,8 @@ public class BoardController {
 
 	@ApiOperation(value = "오늘의 게시글 조회")
 	@GetMapping("/today")
-	public ResponseEntity<?> getMostLikedBoard(
-		@RequestParam("date") String dateStr) {
-
+	public ResponseEntity<?> getMostLikedBoard(@RequestParam("date") String dateStr) {
 		Board board = boardService.getBoardWithMostLikes(dateStr);
-
 		if (board == null) {
 			return ResponseEntity.ok().body("아직 오늘 작성된 게시글이 없어요");
 		}
