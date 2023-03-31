@@ -84,11 +84,11 @@ spring:
           predicates:
             - Path=/users/**, /managers/**
         - id: board
-          uri: http://http://j8a802.p.ssafy.io:8030/
+          uri: http://j8a802.p.ssafy.io:8030/
           predicates:
             - Path=/boards/**, /comments/**
         - id: menu
-          uri: http://http://j8a802.p.ssafy.io:8040/
+          uri: http://j8a802.p.ssafy.io:8040/
           predicates:
             - Path=/menus/**
 #            - Method=POST
