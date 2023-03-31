@@ -2,7 +2,6 @@ package com.function.uploadService.domain.janban;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import com.function.uploadService.domain.image.JanbanCode;
 
@@ -22,10 +21,14 @@ public enum JanbanFeature {
 		this.janbanCodes = janbanCodes;
 	}
 
+	// public JanbanCode getRandomJanbanCode() {
+	// 	int randomIndex = new Random().nextInt(janbanCodes.size());
+	// 	return janbanCodes.get(randomIndex);
+	// }
 	public JanbanCode getRandomJanbanCode() {
-		int randomIndex = new Random().nextInt(janbanCodes.size());
-		return janbanCodes.get(randomIndex);
+		return janbanCodes.get(0);
 	}
+
 
 	public static JanbanFeature fromValue(String value) {
 		for (JanbanFeature feature : values()) {
