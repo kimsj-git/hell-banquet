@@ -11,7 +11,10 @@ function ArticleDetail() {
     const location = useLocation()
     const articleListRef = useRef(null);
 
-    const dummy = {content: '이건 더미에용!', src: undefined}
+    const article = location.state
+    // console.log(location.state)
+    // const dummy = {content: '이건 더미에용!', src: undefined}
+
 
     const [articles, setArticles] = useState(
         [{content: 'lorem', src: undefined, id: -1},
@@ -41,8 +44,6 @@ function ArticleDetail() {
             }
         } 
         
-        getMoreComment()
-
         if (articles[0]?.id === -1) {
             console.log(`U R First at ${location.state.id}`)
             getMoreComment()
@@ -71,7 +72,7 @@ function ArticleDetail() {
 
     return (
         <DetailBox >
-            <BoardListItem article={dummy} />
+            <BoardListItem article={article} />
             <div ref={articleListRef} style={{paddingTop: '100px',paddingBottom:'100px'}}>
                     {articles.length === 0
                         ?<div style={{textAlign: 'center'}}>아직 댓글이 없어요</div>

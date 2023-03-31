@@ -25,12 +25,14 @@ function ArticleCreateModal(params) {
     async function createArticle(event) {
         event.preventDefault()
         await putArticle(
-            {author: localStorage.userId, content: content},
-            (data) => console.log(data),
+            {writer: localStorage.userId, content: content},
+            (data) => {
+                console.log(data)
+            },
             (err) => console.log(err)
         )
         // 차후에 response가 변경된다면 생성된 게시글의 detail 페이지로 이동시키고 싶음
-        navigate(`/board/0`)
+        navigate(`/board`)
         return onClose()
     } 
 

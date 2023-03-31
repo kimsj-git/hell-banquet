@@ -1,4 +1,5 @@
 import { Box, Container, Grid, Button, TextField } from '@mui/material'
+import CheckButton from '../signup/CheckButton'
 
 function FormWithGrid(params) {
     return (
@@ -12,6 +13,7 @@ function FormWithGrid(params) {
                                     helperText={params?.helperText} error={params?.error} disabled={params?.disabled}
                                     id={item.id} autoFocus={item.focus} label={item?.label} type={item.type} fullWidth 
                                 />
+                                <CheckButton />
                             </Grid>
                         )
                     })}

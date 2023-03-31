@@ -18,6 +18,7 @@ function LogoToLogin() {
             setImage(images[randomIndex]);
         };
         selectRandomImage()
+
     }, [])
     return (
         <LogoSection>

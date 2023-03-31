@@ -7,8 +7,18 @@ async function login(user, success, fail) {
   await api.post(`/auth/login`, JSON.stringify(user)).then(success).catch(fail);
 }
 
-async function signup(user, success, fail) {
-  await api.post(`/users/register`, JSON.stringify(user)).then(success).catch(fail);
+async function logout(success, fail) {
+  api.defaults.headers["refreshToken"] = localStorage.getItem("refreshToken")
+
+  await api.post(`/auth/logout`, ).then(success).catch(fail);
+}
+
+async function signup(data, success, fail) {
+  await api.post(`/users/check`, {params: {data}}).then(success).catch(fail);
+}
+
+async function checkUnique(user, success, fail) {
+  await api.get(`/auth/login`, JSON.stringify(user)).then(success).catch(fail);
 }
 
 async function getUserInfo(user, success, fail) {
@@ -37,4 +47,9 @@ async function userFirst(user, success, fail) {
 }
 
 
-export { login, signup, getUserInfo, updateUserInfo, updateUserPassword, findUserPassword, deleteUser, userFirst }
+async function getMenus(success, fail) {
+  await api.get(`/menus`, ).then(success).catch(fail);
+}
+
+
+export { login, logout, signup, checkUnique, getUserInfo, updateUserInfo, updateUserPassword, findUserPassword, deleteUser, userFirst, getMenus }

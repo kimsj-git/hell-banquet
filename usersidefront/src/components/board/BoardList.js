@@ -1,6 +1,8 @@
 import { useRef, useEffect, useState } from "react"
+import styled from "styled-components"
 
-import { getBoardList } from "../../api/board"
+// getBoardList,
+import {  getEntireList } from "../../api/board"
 
 import BoardListItem from "./BoardListItem"
 
@@ -25,19 +27,22 @@ function BoardList() {
     
     useEffect(() => {
         const getMoreList = async () => {
-            // const data = await getBoardList(
-            //     boardInfo,
-            //     (data) => {
-            //         return data.data
-            //     },
-            //     (err) => console.log(err)
-            // )
-            // if (articles[0]?.id === -1) {
-            //     setArticles(data)
-            // } else {
-            //     (articles.push(...data))
-            // }
-            // setBoardInfo({...boardInfo, lastBoardId: articles[articles.length - 1].id})
+            await getEntireList(
+                boardInfo,
+                (data) => {
+                    console.log(data.data)
+                    return data.data
+                },
+                (err) => console.log(err)
+            )
+            .then( (data) => {
+                if (articles[0]?.id === -1) {
+                    setArticles(data)
+                } else {
+                    (articles.push(...data))
+                }
+                setBoardInfo({...boardInfo, lastBoardId: articles[articles.length - 1].id})
+            })
         } 
 
         if (articles[0]?.id === -1) {
@@ -64,15 +69,21 @@ function BoardList() {
     }, [articles, boardInfo]);
 
     return (
-        <div ref={articleListRef} style={{background: '#FFF3DF'}} >
+        <>
+        <BoardListBox ref={articleListRef} style={{background: '#FFF3DF'}} >
             {articles.map((article, index) => {
                 return (
                     <BoardListItem article={article} index={index} key={index} />
                 )
             })}
-        </div>
-
+        </BoardListBox>
+        </>
     )
 }
+
+const BoardListBox = styled.div`
+background: #FFF3DF;
+padding: 10px 0px 90px 0px;
+`
 
 export default BoardList

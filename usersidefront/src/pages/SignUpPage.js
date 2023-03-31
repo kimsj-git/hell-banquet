@@ -21,7 +21,7 @@ const Login = styled.div`
     align-items: center;
 
     width: 100%;
-    height: 932px;
+    height: 100vh;
 
 `
 

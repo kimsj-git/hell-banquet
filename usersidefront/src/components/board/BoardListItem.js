@@ -1,6 +1,4 @@
 /* eslint-disable */
-
-
 import { useState } from 'react'
 
 import { ArticleOption, UpDelModal } from "./"
@@ -8,35 +6,18 @@ import { LinkDecoNone } from "../common"
 
 import styled from "styled-components"
 import { Card, Container, Grid,  } from "@mui/material"
-import { ThumbDown, ThumbUp, Comment, MoreHoriz } from "@mui/icons-material"
 
 function BoardListItem(params) {
     const { article } = params
-    const { likeCount, dislikeCount, commentCount } = article
     const [ showDropdown, setShowDropdown ] = useState(false)
 
-    const onLikeClickHandler = (event) => {
-        event.preventDefault()
-    }
-
-    const onMoreClickHandler = (event) => {
-        event.preventDefault()
-        setShowDropdown(true)
-        console.log('hello')
-    }
-
-    const articleOptions = [
-        {id: "like", iconName: ThumbUp, num: likeCount, onClick: onLikeClickHandler},
-        {id: "hate", iconName: ThumbDown, num: dislikeCount, onClick: onLikeClickHandler},
-        {id: "comments", iconName: Comment, num: commentCount, }
-    ]
+    // const onMoreClickHandler = (event) => {
+    //     event.preventDefault()
+    //     setShowDropdown(true)
+    //     console.log('hello')
+    // }
 
     const makeItCenter = {display: 'flex', alignItems: 'center'}
-    const moreButton = {
-        position: 'absolute',
-        top: '10px',
-        right: '10px',
-    }
 
     return (
         <LinkDecoNone to={`/board/${article.id}`} state={article} >
@@ -49,14 +30,7 @@ function BoardListItem(params) {
                     <Grid item xs={8}>
                         <Container style={{height: 100}}>{article.content}</Container>
                         <Container style={{display: 'flex', justifyContent: 'space-around'}}>
-                            {articleOptions.map(option => {
-                                const {iconName, num, id, } = option
-                                return (
-                                    <span onClick={option?.onClick} key={id} >
-                                        <ArticleOption iconName={iconName} num={num} />
-                                    </span>
-                                )
-                            })}
+                            <ArticleOption article={article} />
                         </Container>
                     </Grid>
                 </Grid>
@@ -71,8 +45,6 @@ const ArticleCard = styled(Card)`
     margin: 10px 0px 10px 0px; 
     height: 160px;
 `
-
-
 
 const JanvanFace = styled.img`
     width: 140px;
