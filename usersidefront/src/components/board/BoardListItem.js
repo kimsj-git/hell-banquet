@@ -43,7 +43,7 @@ const ArticleCard = styled(Card)`
     position: relative;
     display: flex;
     margin: 10px 0px 10px 0px; 
-    height: 160px;
+    height: 200px;
 `
 
 const JanvanFace = styled.img`

@@ -4,8 +4,8 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://70.12.245.187:8030/",
-    // baseURL: "http://j8a802.p.ssafy.io:8030/",
+    // baseURL: "http://70.12.245.187:8030/",
+    baseURL: "http://j8a802.p.ssafy.io:8030/",
     // baseURL: "http://j8a802.p.ssafy.io:8000/",
   
     headers: {
@@ -48,12 +48,12 @@ async function getTodayArticle(date, success, fail) {
 
 async function putLike(data, success, fail) {
     const { boardId, userId } = data
-    await api.get(`/boards/${boardId}}/like`).then(success).catch(fail);
+    await api.put(`/boards/${boardId}/like`, JSON.stringify({userId: userId})).then(success).catch(fail);
 }
 
 async function putDisLike(data, success, fail) {
     const { boardId, userId } = data
-    await api.get(`/boards/${boardId}}/dislike`).then(success).catch(fail);
+    await api.put(`/boards/${boardId}/dislike`, JSON.stringify({userId: userId})).then(success).catch(fail);
 }
 
 

@@ -9,10 +9,12 @@ function ArticleCreateModal(params) {
     const [ content, setContent ] = useState()
     const placeholder = '내용을 입력해주세요'
     const textFieldOption = [
-        {id: "content", target: content, setTarget: setContent, label: "content", focus: true, type: "password"},
+        {id: "content", target: content, setTarget: setContent, focus: true},
     ]
 
     const onTypingHandler = (e) => {
+        console.log(content)
+
         for (const key in textFieldOption) {
             const option = textFieldOption[key];
             if (e.target.id === option.id) {
