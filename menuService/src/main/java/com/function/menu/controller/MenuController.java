@@ -40,7 +40,7 @@ public class MenuController {
 	private final MenuService menuService;
 
 	@ApiOperation("모든 식단 리스트 조회 - Read 테스트를 위한 API")
-	@GetMapping("")
+	@GetMapping()
 	public List<Menu> getAllMenus() {
 		return menuService.getAllMenus();
 	}

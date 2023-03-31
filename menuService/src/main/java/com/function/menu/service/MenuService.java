@@ -48,10 +48,19 @@ public class MenuService {
 
 	@Transactional
 	public Menu save(MenuSaveRequestDto dto) {
+		// managerId를 기준으로 동일한 date를 갖는 데이터의 개수 조회
+		long count = menuRepository.countByDateAndManagerId(parseDate(dto.getDate()), dto.getManagerId());
+		if (count > 1) {
+			throw new RuntimeException("동일한 date를 갖는 데이터는 2개를 초과할 수 없습니다.");
+		} else if (count == 1) {
+			List<Menu> menus = menuRepository.findByDate(parseDate(dto.getDate()));
+			if (menus.get(0).getType().equals(dto.getType())) {
+				// MenuSaveRequestDto의 type이 달라야하는 경우 예외 처리
+				throw new RuntimeException("동일한 date를 가지고 있는 데이터가 2개일 경우, 무조건 type이 달라야 합니다.");
+			}
+		}
 		long id = getNextSequence("menu_sequence", mongo);
-		System.out.println("dateStr: " + dto.getDate());
 		LocalDate date = parseDate(dto.getDate());
-		System.out.println("date : " + date);
 		Menu menu = new Menu(id, dto, date);
 		return menuRepository.save(menu);
 	}
@@ -119,9 +128,6 @@ public class MenuService {
 		long excelDate = Long.parseLong(dateStr);
 		return LocalDate.of(1900, 1, 1).plusDays(excelDate - 2);
 	}
-
-
-
 
 	private String getStringCellValue(Row row, int cellIndex) {
 		return row.getCell(cellIndex).getStringCellValue();
