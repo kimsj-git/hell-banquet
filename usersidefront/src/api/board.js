@@ -4,8 +4,8 @@
 import axios from "axios";
 
 const api = axios.create({
-    // baseURL: "http://70.12.245.187:8030/",
-    baseURL: "http://j8a802.p.ssafy.io:8030/",
+    baseURL: "http://70.12.245.187:8030/",
+    // baseURL: "http://j8a802.p.ssafy.io:8030/",
     // baseURL: "http://j8a802.p.ssafy.io:8000/",
   
     headers: {

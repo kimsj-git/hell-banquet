@@ -13,8 +13,6 @@ function ArticleCreateModal(params) {
     ]
 
     const onTypingHandler = (e) => {
-        console.log(content)
-
         for (const key in textFieldOption) {
             const option = textFieldOption[key];
             if (e.target.id === option.id) {
@@ -41,7 +39,7 @@ function ArticleCreateModal(params) {
     return (
         <Modal open={isOpen} onClose={onClose} >
             <Box component="form" sx={styleForBox}>
-                <TextField onChange={onTypingHandler} InputProps={{ sx: { fontSize: 20 }}} multiline placeholder={placeholder} sx={styleForTextField} />
+                <TextField id="content" onChange={onTypingHandler} InputProps={{ sx: { fontSize: 20 }}} multiline placeholder={placeholder} sx={styleForTextField} />
                 <Button type="submit" onClick={createArticle} variant='contained'>
                     글 작성
                 </Button>
