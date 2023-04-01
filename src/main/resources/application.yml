@@ -104,8 +104,8 @@ spring:
           uri: http://j8a802.p.ssafy.io:8061
           predicates:
             - Path=/upload/**
-        - id: leftover
-          uri: http://j8a802.p.ssafy.io:8019/
+        - id: leftovers
+          uri: http://j8a802.p.ssafy.io:8019
           predicates:
             - Path=/leftovers/**
   #        - id: member
