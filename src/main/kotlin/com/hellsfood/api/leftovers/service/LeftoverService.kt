@@ -15,10 +15,10 @@ import javax.transaction.Transactional
 @Service
 @RequiredArgsConstructor
 class LeftoverService(
-    private val leftoverRepository: LeftoverRepository,
-    private val userRepository: UserRepository,
-    private val rankingRepository: RankingRepository,
-    private val analysisRepository: AnalysisRepository
+        private val leftoverRepository: LeftoverRepository,
+        private val userRepository: UserRepository,
+        private val rankingRepository: RankingRepository,
+        private val analysisRepository: AnalysisRepository
 ) {
 
     @Transactional
@@ -94,10 +94,11 @@ class LeftoverService(
     }
 
     fun getRankingList(userId: String): List<Ranking> {
-        val rankingList: MutableList<Ranking> = rankingRepository.findAll().toMutableList();
+        val rankingList: MutableList<Ranking> = rankingRepository.findAll().toMutableList()
         if (userId.isNotEmpty()) {
-            rankingRepository.findByUserId(userRepository.findByUserId(userId))?.let { rankingList.add(it) }
+            rankingRepository.findByUserId(userId)?.let { rankingList.add(it) }
         }
         return rankingList
     }
+
 }

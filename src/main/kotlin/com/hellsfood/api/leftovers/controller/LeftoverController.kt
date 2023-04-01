@@ -45,7 +45,7 @@ class LeftoverController(
     @GetMapping("/ranking")
     @ApiOperation(value = "일일 랭킹", notes = "")
     fun getDailyRanking(
-        @RequestParam @ApiParam(
+        @RequestParam("userId") @ApiParam(
             value = "내 랭킹 정보를 조회하고 싶은 사용자 ID. 없으면 그 사용자 ID에 대해서는 검색 안함.",
             required = false
         ) userId: String
@@ -62,4 +62,5 @@ class LeftoverController(
     ): ResponseEntity<*> {
         return ResponseEntity.ok(leftoverService.getAnalysisByDateRange(startDate, endDate))
     }
+
 }
