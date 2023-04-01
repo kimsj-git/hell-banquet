@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "images")
+@Table(name = "character_image")
 public class Image {
 
 	@Id
@@ -28,7 +28,7 @@ public class Image {
 	private String filePath;
 
 	@Enumerated(value = EnumType.STRING)
-	@Column(name = "janban_code", nullable = false)
+	@Column(name = "props_name", nullable = false)
 	private JanbanCode janbanCode;
 
 	@Builder
