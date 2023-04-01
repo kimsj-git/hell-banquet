@@ -37,14 +37,15 @@ public class Janbani {
 	@Enumerated(EnumType.STRING)
 	private JanbanCode janbanCode;
 
-	// @OneToOne
-	// @JoinColumn(name = "janban_code", referencedColumnName = "janbanCode")
-	// private Image image;
-
 	@Builder
 	public Janbani(String userId, String feature, JanbanCode janbanCode) {
 		this.userId = userId;
 		this.feature = JanbanFeature.fromValue(feature);
+		this.janbanCode = janbanCode;
+	}
+
+	public void update(JanbanFeature feature, JanbanCode janbanCode) {
+		this.feature = feature;
 		this.janbanCode = janbanCode;
 	}
 

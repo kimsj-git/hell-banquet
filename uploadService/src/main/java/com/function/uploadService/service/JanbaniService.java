@@ -17,19 +17,18 @@ public class JanbaniService {
 
 	public Janbani createJanban(String userId, String feature) {
 		// System.out.println("feature: " + feature);
+		Janbani janbani = janbaniRepository.findByUserId(userId)
+			.orElse(Janbani.builder()
+				.userId(userId)
+				.feature(feature)
+				.janbanCode(null)
+				.build());
+
 		JanbanFeature janbanFeature = JanbanFeature.fromValue(feature);
-		// System.out.println("janbanFeature: " + janbanFeature);
-
 		JanbanCode janbanCode = janbanFeature.getRandomJanbanCode();
-		// System.out.println("janbanCode: " + janbanCode);
 
-		Janbani janbani = Janbani.builder()
-			.userId(userId)
-			.feature(feature)
-			.janbanCode(janbanCode)
-			.build();
+		janbani.update(janbanFeature, janbanCode);
 		return janbaniRepository.save(janbani);
 	}
-
 
 }
