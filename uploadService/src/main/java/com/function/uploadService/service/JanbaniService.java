@@ -30,5 +30,11 @@ public class JanbaniService {
 		janbani.update(janbanFeature, janbanCode);
 		return janbaniRepository.save(janbani);
 	}
+	public String getJanban(String userId) {
+		Janbani janbani = janbaniRepository.findByUserId(userId)
+			.orElseThrow(() -> new IllegalArgumentException("해당하는 잔반이가 없습니다."));
 
+		JanbanCode janbanCode = janbani.getJanbanCode();
+		return janbanCode.toString();
+	}
 }
