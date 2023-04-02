@@ -1,6 +1,7 @@
 package com.hellsfood.api;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,28 +37,28 @@ public class BoardController {
 
 	@ApiOperation(value = "게시글 생성")
 	@PostMapping()
-	public ResponseEntity<Long> save(@RequestBody BoardSaveRequestDto requestDto) {
+	public ResponseEntity<Long> createBoard(@RequestBody BoardSaveRequestDto requestDto) {
 		return new ResponseEntity<>(boardService.save(requestDto), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "게시글 목록 조회")
+	@ApiOperation(value = "게시글 목록 조회 - 단순 Crud 테스트를 위함")
 	@GetMapping("/list")
-	public ResponseEntity<List<Board>> list() {
+	public ResponseEntity<List<Board>> getAllBoards() {
 		return ResponseEntity.ok(boardService.findAll());
 	}
 
-	@ApiOperation(value = "게시글 페이징")
+	@ApiOperation(value = "게시글 목록 조회 - 무한 스크롤 적용")
 	@GetMapping()
-	public ResponseEntity<List<BoardListResponseDto>> paging(
+	public ResponseEntity<List<BoardListResponseDto>> loadBoardsOnScroll(
 		@RequestParam Long lastBoardId, @RequestParam int size, @RequestParam String userId) {
 		lastBoardId = lastBoardId == -1 ? boardService.fetchLatestBoardId() + 1: lastBoardId;
 		List<BoardListResponseDto> boardList = boardService.fetchBoardPagesBy(lastBoardId, size, userId);
 		return new ResponseEntity<>(boardList, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "{id}에 해당하는 게시글 조회")
+	@ApiOperation(value = "게시글 상세 조회 - find by id")
 	@GetMapping("/{id}")
-	public ResponseEntity<BoardResponseDto> getBoard(
+	public ResponseEntity<BoardResponseDto> getOneBoardById(
 		@PathVariable Long id,
 		@RequestParam Long lastCommentId,
 		@RequestParam int size
@@ -66,25 +67,22 @@ public class BoardController {
 		return new ResponseEntity<>(boardService.getBoardById(id, lastCommentId, size), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "오늘의 게시글 조회")
+	@ApiOperation(value = "오늘의 게시글 조회 - 14시마다 갱신됨")
 	@GetMapping("/today")
 	public ResponseEntity<?> getMostLikedBoard(@RequestParam("date") String dateStr) {
 		Board board = boardService.getBoardWithMostLikes(dateStr);
-		if (board == null) {
-			return ResponseEntity.ok().body("아직 오늘 작성된 게시글이 없어요");
-		}
-		return ResponseEntity.ok().body(board);
+		return ResponseEntity.ok().body(Objects.requireNonNullElse(board, "아직 오늘 작성된 게시글이 없어요"));
 	}
 
 	@ApiOperation(value = "게시글 수정")
 	@PutMapping("/{id}")
-	public ResponseEntity<Long> update(@PathVariable Long id, @RequestBody BoardUpdateRequestDto requestDto) {
+	public ResponseEntity<Long> updateBoard(@PathVariable Long id, @RequestBody BoardUpdateRequestDto requestDto) {
 		return ResponseEntity.ok(boardService.update(id, requestDto));
 	}
 
 	@ApiOperation(value = "게시글 삭제")
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Long id) {
+	public void removeBoard(@PathVariable Long id) {
 		boardService.delete(id);
 	}
 
