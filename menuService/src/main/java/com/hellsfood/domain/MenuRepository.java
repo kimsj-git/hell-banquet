@@ -1,4 +1,4 @@
-package com.function.menu.domain;
+package com.hellsfood.domain;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,7 +18,6 @@ public interface MenuRepository extends MongoRepository<Menu, Long> {
 
 	@Query("{'date': ?0, 'managerId': ?1, 'type': {$ne: ?2}}")
 	List<Menu> findByDateAndManagerIdAndNotType(LocalDate date, String managerId, String type);
-
 
 }
 

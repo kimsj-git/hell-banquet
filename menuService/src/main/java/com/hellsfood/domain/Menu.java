@@ -1,4 +1,4 @@
-package com.function.menu.domain;
+package com.hellsfood.domain;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -7,17 +7,15 @@ import java.util.stream.Collectors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.function.menu.dto.ExcelizedMenuRegisterResultDto;
-import com.function.menu.dto.MenuSaveRequestDto;
+import com.hellsfood.dto.ExcelizedMenuRegisterResultDto;
+import com.hellsfood.dto.MenuSaveRequestDto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Document(collection = "menu")
 public class Menu {
@@ -31,7 +29,7 @@ public class Menu {
 	@ApiModelProperty(example = "식단 일자")
 	private LocalDate date;
 
-	@ApiModelProperty(example = "코스 A/코스 B")
+	@ApiModelProperty(example = "A/B")
 	private String type;
 
 	@ApiModelProperty(example = "식단 카테고리 (한식/일식/중식/양식/일품)")

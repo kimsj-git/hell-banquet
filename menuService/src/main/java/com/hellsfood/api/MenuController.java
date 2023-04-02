@@ -1,4 +1,4 @@
-package com.function.menu.controller;
+package com.hellsfood.api;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.function.menu.domain.Menu;
-import com.function.menu.dto.ExcelizedMenuRegisterRequestDto;
-import com.function.menu.dto.ExcelizedMenuRegisterResultDto;
-import com.function.menu.dto.MenuSaveRequestDto;
-import com.function.menu.service.MenuService;
+import com.hellsfood.domain.Menu;
+import com.hellsfood.dto.ExcelizedMenuRegisterRequestDto;
+import com.hellsfood.dto.ExcelizedMenuRegisterResultDto;
+import com.hellsfood.dto.MenuSaveRequestDto;
+import com.hellsfood.service.MenuService;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

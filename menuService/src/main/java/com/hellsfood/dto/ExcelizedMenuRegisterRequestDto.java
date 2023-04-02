@@ -1,4 +1,4 @@
-package com.function.menu.dto;
+package com.hellsfood.dto;
 
 import java.util.List;
 

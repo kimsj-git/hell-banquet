@@ -1,4 +1,4 @@
-package com.function.menu.domain;
+package com.hellsfood.domain;
 
 import lombok.Getter;
 
