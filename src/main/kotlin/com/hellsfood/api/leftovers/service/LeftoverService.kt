@@ -64,8 +64,8 @@ class LeftoverService(
     fun calculateDailyAnalysis() {
         for (i in 1..2) run {
             val courseInfo = Analysis()
-            courseInfo.served = leftoverRepository.getBeforeSumByDateAndCourse(LocalDate.now(), i)
-            courseInfo.leftovers = leftoverRepository.getAfterSumByDateAndCourse(LocalDate.now(), i)
+            courseInfo.served = leftoverRepository.getBeforeSumByDateAndCourse(LocalDate.now(), i) ?: 0
+            courseInfo.leftovers = leftoverRepository.getAfterSumByDateAndCourse(LocalDate.now(), i) ?: 0
             courseInfo.courseNo = i
             analysisRepository.save(courseInfo)
         }
@@ -102,11 +102,10 @@ class LeftoverService(
         rankingRepository.saveAll(rankingList)
     }
 
-    fun getRankingList(userId: String, integerDate: Int?): List<Ranking> {
-        val searchDate = parseDate(integerDate)
-        val rankingList = rankingRepository.findAllByDate(searchDate)
+    fun getRankingList(userId: String): List<Ranking> {
+        val rankingList = rankingRepository.findAll();
         if (userId.isNotEmpty()) {
-            rankingRepository.findByUserId(userId, dateOfToday = searchDate)?.let { rankingList.add(it) }
+            rankingRepository.findByUserId(userId)?.let { rankingList.add(it) }
         }
         return rankingList
     }
