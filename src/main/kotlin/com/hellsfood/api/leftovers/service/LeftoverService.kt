@@ -15,10 +15,10 @@ import javax.transaction.Transactional
 @Service
 @RequiredArgsConstructor
 class LeftoverService(
-        private val leftoverRepository: LeftoverRepository,
-        private val userRepository: UserRepository,
-        private val rankingRepository: RankingRepository,
-        private val analysisRepository: AnalysisRepository
+    private val leftoverRepository: LeftoverRepository,
+    private val userRepository: UserRepository,
+    private val rankingRepository: RankingRepository,
+    private val analysisRepository: AnalysisRepository
 ) {
 
     @Transactional
@@ -75,12 +75,21 @@ class LeftoverService(
         return analysisRepository.getCourseInfoByDateRange(parseDate(startDate), parseDate(endDate))
     }
 
-    private fun parseDate(date: Int): LocalDate {
-        val year = date / 10000
-        val mmDd = date % 10000
-        val month = mmDd / 100
-        val date = mmDd % 100
-        return LocalDate.of(year, month, date)
+    private fun parseDate(date: Int?): LocalDate {
+        if (date != null) {
+            val year = date / 10000
+            val mmDd = date % 10000
+            val month = mmDd / 100
+            val day = mmDd % 100
+            return LocalDate.of(year, month, day)
+        } else {
+            val currentTimeInSeoul = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("Asia/Seoul"))
+            if (currentTimeInSeoul.hour < 14) {
+                return currentTimeInSeoul.minusDays(1).toLocalDate()
+            } else {
+                return currentTimeInSeoul.toLocalDate()
+            }
+        }
     }
 
     @Transactional
@@ -93,10 +102,11 @@ class LeftoverService(
         rankingRepository.saveAll(rankingList)
     }
 
-    fun getRankingList(userId: String): List<Ranking> {
-        val rankingList: MutableList<Ranking> = rankingRepository.findAll().toMutableList()
+    fun getRankingList(userId: String, integerDate: Int?): List<Ranking> {
+        val searchDate = parseDate(integerDate)
+        val rankingList = rankingRepository.findAllByDate(searchDate)
         if (userId.isNotEmpty()) {
-            rankingRepository.findByUserId(userId)?.let { rankingList.add(it) }
+            rankingRepository.findByUserId(userId, dateOfToday = searchDate)?.let { rankingList.add(it) }
         }
         return rankingList
     }

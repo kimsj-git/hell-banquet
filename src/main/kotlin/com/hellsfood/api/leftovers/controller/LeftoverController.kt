@@ -48,9 +48,13 @@ class LeftoverController(
         @RequestParam("userId") @ApiParam(
             value = "내 랭킹 정보를 조회하고 싶은 사용자 ID. 없으면 그 사용자 ID에 대해서는 검색 안함.",
             required = false
-        ) userId: String
+        ) userId: String,
+        @RequestParam("searchDate") @ApiParam(
+            value = "랭킹 정보를 조회하려는 날짜로, yyMMdd(ex. 230402) 형식이다. 만약 값이 제공되지 않으면 한국 시간 기준의 날짜를 기준으로 설정한다.",
+            required = false
+        ) integerDate: Int?
     ): ResponseEntity<*> {
-        val dailyRanking: List<Ranking> = leftoverService.getRankingList(userId)
+        val dailyRanking: List<Ranking> = leftoverService.getRankingList(userId, integerDate)
         return ResponseEntity.ok(dailyRanking)
     }
 
