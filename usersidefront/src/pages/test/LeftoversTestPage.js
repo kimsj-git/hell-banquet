@@ -27,7 +27,7 @@ function LeftoversTestPage() {
 
     const handleGetLeftoverData = async () => {
         await getLeftoverData(
-            {userId: 'ssafy'},
+            {userId: 'ssafy', endDate: 20230401, startDate: 20230301},
             (data) => {
                 console.log(data)
                 return data
