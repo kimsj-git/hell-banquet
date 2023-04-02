@@ -11,8 +11,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 	Optional<Comment> findTopByOrderByIdDesc();
 
-	@Query("select c from Comment c where c.board.id = ?1 and c.id < ?2 order by c.createdAt DESC")
-	Page<Comment> findByBoardIdAndIdLessThanOrderByCreatedAtDesc(Long boardId, Long lastCommentId, PageRequest pageable);
+	@Query("select c from Comment c where c.board.id = ?1 and c.id < ?2 order by c.id DESC")
+	Page<Comment> findByBoardIdAndIdLessThanOrderByIdDesc(Long boardId, Long lastCommentId, PageRequest pageable);
 
 
 }

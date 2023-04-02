@@ -52,7 +52,7 @@ public class BoardService {
 			.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
 
 		PageRequest pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-		Page<Comment> comments = commentRepository.findByBoardIdAndIdLessThanOrderByCreatedAtDesc(boardId,
+		Page<Comment> comments = commentRepository.findByBoardIdAndIdLessThanOrderByIdDesc(boardId,
 			lastCommentId, pageable);
 
 		List<CommentListResponseDto> commentDtos = comments.stream()
@@ -105,7 +105,7 @@ public class BoardService {
 
 	public Page<Board> fetchPages(Long lastBoardId, int size) {
 		PageRequest pageable = PageRequest.of(0, size);
-		return boardRepository.findByIdLessThanOrderByCreatedAtDesc(lastBoardId, pageable);
+		return boardRepository.findByIdLessThanOrderByIdDesc(lastBoardId, pageable);
 	}
 
 	@Transactional(readOnly = true)

@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-	Page<Board> findByIdLessThanOrderByCreatedAtDesc(Long lastBoardId, Pageable pageable);
+	Page<Board> findByIdLessThanOrderByIdDesc(Long lastBoardId, Pageable pageable);
 	// List<Board> findAllByCreatedAtBetweenOrderByCreatedAtDesc(LocalDateTime startDate, LocalDateTime endDate);
 
 	Optional<Board> findTopByOrderByIdDesc();

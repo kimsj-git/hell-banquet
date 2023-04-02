@@ -36,9 +36,8 @@ public class BoardController {
 
 	@ApiOperation(value = "게시글 생성")
 	@PostMapping()
-	public ResponseEntity<Object> save(@RequestBody BoardSaveRequestDto requestDto) {
-		boardService.save(requestDto);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+	public ResponseEntity<Long> save(@RequestBody BoardSaveRequestDto requestDto) {
+		return new ResponseEntity<>(boardService.save(requestDto), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "게시글 목록 조회")
@@ -51,7 +50,7 @@ public class BoardController {
 	@GetMapping()
 	public ResponseEntity<List<BoardListResponseDto>> paging(
 		@RequestParam Long lastBoardId, @RequestParam int size, @RequestParam String userId) {
-		lastBoardId = lastBoardId == -1 ? boardService.fetchLatestBoardId() : lastBoardId;
+		lastBoardId = lastBoardId == -1 ? boardService.fetchLatestBoardId() + 1: lastBoardId;
 		List<BoardListResponseDto> boardList = boardService.fetchBoardPagesBy(lastBoardId, size, userId);
 		return new ResponseEntity<>(boardList, HttpStatus.OK);
 	}
@@ -63,9 +62,8 @@ public class BoardController {
 		@RequestParam Long lastCommentId,
 		@RequestParam int size
 	) {
-
-		lastCommentId = lastCommentId == -1 ? commentService.fetchLatestCommentId() : lastCommentId;
-		return ResponseEntity.ok(boardService.getBoardById(id, lastCommentId, size));
+		lastCommentId = lastCommentId == -1 ? commentService.fetchLatestCommentId() + 1: lastCommentId;
+		return new ResponseEntity<>(boardService.getBoardById(id, lastCommentId, size), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "오늘의 게시글 조회")
@@ -89,12 +87,5 @@ public class BoardController {
 	public void delete(@PathVariable Long id) {
 		boardService.delete(id);
 	}
-
-	// @ApiOperation(value = "{id}에 해당하는 댓글 목록 조회")
-	// @GetMapping("/{id}/comments")
-	// public ResponseEntity<List<CommentListResponseDto>> getCommentList(@PathVariable Long id) {
-	// 	// List<CommentListResponseDto> comments = commentService.findByBoardId(id);
-	// 	return new ResponseEntity<>(comments, HttpStatus.OK);
-	// }
 
 }

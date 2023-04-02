@@ -65,4 +65,5 @@ public class CommentService {
 		Optional<Comment> latestComment = commentRepository.findTopByOrderByIdDesc();
 		return latestComment.map(Comment::getId).orElse(null);
 	}
+
 }
