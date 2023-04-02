@@ -1,11 +1,11 @@
-import { ExcelButton } from "../components/diet"
+import { ExcelButton } from "../components/common"
 import { HeaderBar, SideBar } from "../components/navbar"
 
 import styled from "styled-components"
 import { Button, Icon } from "@mui/material";
-import { Upload } from "@mui/icons-material"
+import { Download, } from "@mui/icons-material"
 
-function MemberUpload(params) {
+function MemberUpload() {
 
     const styleForButton = {
         background: '#343434',
@@ -22,7 +22,7 @@ function MemberUpload(params) {
                 <Typo>양식 다운로드</Typo>
                 <Button style={styleForButton} variant="contained">
                     파일 다운로드
-                    <Icon component={Upload} style={{marginLeft: 20}} />
+                    <Icon component={Download} style={{marginLeft: 20}} />
                 </Button>
             </Container>
         </div>

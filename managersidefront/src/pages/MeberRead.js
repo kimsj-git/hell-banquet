@@ -1,4 +1,4 @@
-import { ExcelButton } from "../components/diet"
+import { ExcelButton } from "../components/common"
 import { HeaderBar, SideBar } from "../components/navbar"
 
 import styled from "styled-components"

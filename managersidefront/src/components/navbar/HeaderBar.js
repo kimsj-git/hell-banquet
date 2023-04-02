@@ -2,7 +2,6 @@ import { useState } from "react"
 
 import SideBar from "./SideBar"
 import { LinkDecoNone } from "../common"
-import { excelUpload } from "../../api/member"
 
 import styled from "styled-components"
 
@@ -14,15 +13,8 @@ function HeaderBar() {
         setIsMenuOpen(!isMenuOpen)
     }
 
-    const test = async () => {
-        await excelUpload(
-            (data) => console.log(data),
-            (err) => console.log(err)
-        )
-    }
-
     return (
-        <NavbarContainer onClick={test}>
+        <NavbarContainer >
             <MenuButton onClick={toggleMenu}>☰</MenuButton>
             {isMenuOpen && (
                 <MenuContainer>
