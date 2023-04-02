@@ -9,14 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @DynamicInsert
 @Entity
@@ -26,14 +22,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Role {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(length = 32, nullable = false, unique = true)
-	private String roleName;
+    @Column(length = 32, nullable = false, unique = true)
+    private String roleName;
 
-	@ManyToMany(mappedBy = "roles")
-	@JsonIgnore
-	private List<User> users;
+    @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
+    private List<User> users;
 }
