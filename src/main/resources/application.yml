@@ -113,6 +113,10 @@ spring:
           uri: http://j8a802.p.ssafy.io:8019
           predicates:
             - Path=/leftovers/**
+        - id: ai
+          uri: http://j8a802.p.ssafy.io:5000
+          predicates:
+            - Path=/ai/**
   #        - id: member
   #          uri: http://MemberService:8012/
   #          #          uri: http://localhost:8012/
