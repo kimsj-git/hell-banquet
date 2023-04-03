@@ -17,10 +17,7 @@ function SideBar() {
     { name: "주간 통계", url: "/manager/statistics/weekly" },
   ];
 
-  const memberOptions = [
-    { name: "회원 등록", url: "/manager/member/upload" },
-    { name: "회원 조회", url: "/manager/member/read" },
-  ];
+  const memberOptions = [{ name: "회원 등록", url: "/manager/member/upload" }];
 
   const navOptions = [
     { name: managerName, options: [{ name: groupName, url: "/manager" }] },
