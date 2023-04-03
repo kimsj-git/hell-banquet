@@ -82,4 +82,12 @@ class LeftoverController(
         return leftoverService.updatePlayedGame(userId, today)
     }
 
+    @GetMapping
+    @ApiOperation(value = "잔반 데이터 상세 조회 - userId & Date")
+    fun getLeftoverByUserIdAndDate(
+        @RequestParam userId: String, @RequestParam date: String
+    ): Leftover {
+        return leftoverService.getLeftoverByUserIdAndDate(userId, date)
+    }
+
 }

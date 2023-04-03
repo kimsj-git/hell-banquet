@@ -109,6 +109,7 @@ class LeftoverService(
 
         return leftover.percentage <= 0.2 && !leftover.playedGame
     }
+
     @Transactional
     fun updatePlayedGame(userId: String, today: String): Leftover {
         val leftover = leftoverRepository.findByUserIdAndDate(userId, parseDate(today))
@@ -120,5 +121,12 @@ class LeftoverService(
         } else {
             throw IllegalArgumentException("Leftover is not playable")
         }
+    }
+
+    @Transactional
+    fun getLeftoverByUserIdAndDate(userId: String, date: String): Leftover {
+        return leftoverRepository.findByUserIdAndDate(userId, parseDate(date))
+            ?: throw NoSuchElementException("Leftover not found for user $userId and date $date")
+
     }
 }
