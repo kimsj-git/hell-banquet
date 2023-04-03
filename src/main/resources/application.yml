@@ -117,6 +117,7 @@ spring:
           uri: http://j8a802.p.ssafy.io:5000
           predicates:
             - Path=/ai/**
+            - Method=POST, OPTIONS
   #        - id: member
   #          uri: http://MemberService:8012/
   #          #          uri: http://localhost:8012/
