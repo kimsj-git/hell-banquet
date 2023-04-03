@@ -188,37 +188,41 @@ class _RepeatSampler:
 
 class LoadImages:
     # YOLOv5 image/video dataloader, i.e. `python detect.py --source image.jpg/vid.mp4`
-    def __init__(self, path, img_size=640, stride=32, auto=True, transforms=None):
-        files = []
-        for p in sorted(path) if isinstance(path, (list, tuple)) else [path]:
-            p = str(Path(p).resolve())
-            if '*' in p:
-                files.extend(sorted(glob.glob(p, recursive=True)))  # glob
-            elif os.path.isdir(p):
-                files.extend(sorted(glob.glob(os.path.join(p, '*.*'))))  # dir
-            elif os.path.isfile(p):
-                files.append(p)  # files
-            else:
-                raise FileNotFoundError(f'{p} does not exist')
+    def __init__(self, path, img_file=None, img_size=640, stride=32, auto=True, transforms=None):
+        # files = []
+        # for p in sorted(path) if isinstance(path, (list, tuple)) else [path]:
+        #     p = str(Path(p).resolve())
+        #     if '*' in p:
+        #         files.extend(sorted(glob.glob(p, recursive=True)))  # glob
+        #     elif os.path.isdir(p):
+        #         files.extend(sorted(glob.glob(os.path.join(p, '*.*'))))  # dir
+        #     elif os.path.isfile(p):
+        #         files.append(p)  # files
+        #     # else:
+        #     #     raise FileNotFoundError(f'{p} does not exist')
 
-        images = [x for x in files if x.split('.')[-1].lower() in IMG_FORMATS]
-        videos = [x for x in files if x.split('.')[-1].lower() in VID_FORMATS]
-        ni, nv = len(images), len(videos)
+        # images = [x for x in files if x.split('.')[-1].lower() in IMG_FORMATS]
+        # videos = [x for x in files if x.split('.')[-1].lower() in VID_FORMATS]
+        # ni, nv = len(images), len(videos)
 
         self.img_size = img_size
         self.stride = stride
-        self.files = images + videos
-        self.nf = ni + nv  # number of files
-        self.video_flag = [False] * ni + [True] * nv
+        # self.files = images + videos
+        # self.nf = ni + nv  # number of files
+        
+        self.nf = 1     # 하나의 이미지 파일만 받기
+        # self.video_flag = [False] * ni + [True] * nv
         self.mode = 'image'
         self.auto = auto
         self.transforms = transforms  # optional
-        if any(videos):
-            self.new_video(videos[0])  # new video
-        else:
-            self.cap = None
-        assert self.nf > 0, f'No images or videos found in {p}. ' \
-                            f'Supported formats are:\nimages: {IMG_FORMATS}\nvideos: {VID_FORMATS}'
+        self.img_file = img_file
+
+        # if any(videos):
+        #     self.new_video(videos[0])  # new video
+        # else:
+        self.cap = None
+        # assert self.nf > 0, f'No images or videos found in {p}. ' \
+        #                     f'Supported formats are:\nimages: {IMG_FORMATS}\nvideos: {VID_FORMATS}'
 
     def __iter__(self):
         self.count = 0
@@ -227,30 +231,17 @@ class LoadImages:
     def __next__(self):
         if self.count == self.nf:
             raise StopIteration
-        path = self.files[self.count]
+        # path = self.files[self.count]
+        path = None
 
-        if self.video_flag[self.count]:
-            # Read video
-            self.mode = 'video'
-            ret_val, im0 = self.cap.read()
-            while not ret_val:
-                self.count += 1
-                self.cap.release()
-                if self.count == self.nf:  # last video
-                    raise StopIteration
-                path = self.files[self.count]
-                self.new_video(path)
-                ret_val, im0 = self.cap.read()
-
-            self.frame += 1
-            s = f'video {self.count + 1}/{self.nf} ({self.frame}/{self.frames}) {path}: '
-
-        else:
-            # Read image
-            self.count += 1
-            im0 = cv2.imread(path)  # BGR
-            assert im0 is not None, f'Image Not Found {path}'
-            s = f'image {self.count}/{self.nf} {path}: '
+        # Read image
+        self.count += 1
+        # im0 = cv2.imread(path)  # BGR
+        # im0 = cv2.imdecode(np.fromstring(self.img_file, np.uint8), cv2.IMREAD_COLOR)
+        # im0를 클라이언트에서 받은 이미지 파일로 대체
+        im0 = self.img_file
+        assert im0 is not None, f'Image Not Found {path}'
+        s = f'image {self.count}/{self.nf} {path}: '
 
         if self.transforms:
             im = self.transforms(cv2.cvtColor(im0, cv2.COLOR_BGR2RGB))  # transforms
@@ -259,7 +250,7 @@ class LoadImages:
             im = im.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
             im = np.ascontiguousarray(im)  # contiguous
 
-        return path, im, im0, self.cap, s
+        return path, im, im0, s
 
     def new_video(self, path):
         self.frame = 0
