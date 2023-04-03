@@ -17,7 +17,7 @@ function OverviewRanking() {
     };
     handleGetDailyRank();
   }, []);
-  return <div>{result}</div>;
+  return <div>{JSON.stringify(result)}</div>;
 }
 
 export default OverviewRanking;
