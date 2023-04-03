@@ -29,6 +29,9 @@ const Container = styled.div`
 `;
 
 const DailyStaticContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   height: 40vh;
   width: 100%;
   background: rgba(103, 80, 164, 0.2);
