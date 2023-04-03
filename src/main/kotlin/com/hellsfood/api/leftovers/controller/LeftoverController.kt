@@ -1,5 +1,6 @@
 package com.hellsfood.api.leftovers.controller
 
+import com.hellsfood.api.leftovers.data.Leftover
 import com.hellsfood.api.leftovers.data.Ranking
 import com.hellsfood.api.leftovers.dto.LeftoverRegisterRequestDto
 import com.hellsfood.api.leftovers.service.LeftoverService
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -61,6 +63,23 @@ class LeftoverController(
         @RequestParam @ApiParam(value = "종료 날짜", required = true) endDate: String
     ): ResponseEntity<*> {
         return ResponseEntity.ok(leftoverService.getAnalysisByDateRange(startDate, endDate))
+    }
+
+    @GetMapping("/is_playable")
+    @ApiOperation(value = "percentage와 playedGame 값을 검사하여 게임을 할 수 있는지를 체크한다.")
+    fun isPlayable(
+        @RequestParam("userId") userId: String,
+        @RequestParam today: String
+    ): ResponseEntity<Boolean> {
+        return ResponseEntity.ok(leftoverService.isLeftoverPlayable(userId, today))
+    }
+
+    @PutMapping("/played")
+    @ApiOperation(value = "게임을 완료하면 playedGame을 true로 바꾼다.")
+    fun playGame(
+        @RequestParam userId: String, @RequestParam today: String
+    ): Leftover {
+        return leftoverService.updatePlayedGame(userId, today)
     }
 
 }

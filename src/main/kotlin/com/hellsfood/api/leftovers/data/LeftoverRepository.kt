@@ -7,7 +7,7 @@ import java.time.LocalDate
 interface LeftoverRepository : JpaRepository<Leftover, Long> {
     fun existsByUserIdAndDate(userId: String, date: LocalDate): Boolean
 
-    fun findByUserIdAndDate(userId: String, date: LocalDate): Leftover
+    fun findByUserIdAndDate(userId: String, date: LocalDate): Leftover?
 
     @Query(
         value = "select * from leftover l where l.percentage>=0 and l.date=:date order by l.percentage", nativeQuery = true

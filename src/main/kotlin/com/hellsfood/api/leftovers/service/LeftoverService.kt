@@ -31,10 +31,9 @@ class LeftoverService(
         if (requestDto.amount == -1) {
             return false
         }
-        var date = LocalDate.now()
-        var leftover: Leftover
-        if (leftoverRepository.existsByUserIdAndDate(requestDto.userId, date)) {
-            leftover = leftoverRepository.findByUserIdAndDate(requestDto.userId, date)
+        val date = LocalDate.now()
+        var leftover: Leftover? = leftoverRepository.findByUserIdAndDate(requestDto.userId, date)
+        if (leftover != null) {
             leftover.after = requestDto.amount
             leftover.percentage = leftover.after * 1.0 / leftover.before
         } else {
@@ -42,6 +41,7 @@ class LeftoverService(
             leftover.userId = requestDto.userId
             leftover.before = requestDto.amount
             leftover.course = requestDto.courseNo
+            leftover.date = date
         }
         leftoverRepository.save(leftover)
         return true
@@ -103,4 +103,22 @@ class LeftoverService(
         return rankingList
     }
 
+    fun isLeftoverPlayable(userId: String, today: String): Boolean {
+        val leftover = leftoverRepository.findByUserIdAndDate(userId, parseDate(today))
+            ?: throw NoSuchElementException("Leftover not found for user $userId and date $today")
+
+        return leftover.percentage <= 0.2 && !leftover.playedGame
+    }
+    @Transactional
+    fun updatePlayedGame(userId: String, today: String): Leftover {
+        val leftover = leftoverRepository.findByUserIdAndDate(userId, parseDate(today))
+            ?: throw NoSuchElementException("Leftover not found for user $userId and date $today")
+
+        if (!leftover.playedGame) {
+            leftover.playedGame = true
+            return leftoverRepository.save(leftover)
+        } else {
+            throw IllegalArgumentException("Leftover is not playable")
+        }
+    }
 }

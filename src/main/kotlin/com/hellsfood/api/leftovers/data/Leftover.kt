@@ -23,6 +23,8 @@ class Leftover {
 
     var course: Int = -1
 
+    var playedGame: Boolean = false
+
     @CreatedDate
     var date: LocalDate = LocalDate.now()
 
