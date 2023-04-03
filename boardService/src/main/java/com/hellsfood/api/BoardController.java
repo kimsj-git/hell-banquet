@@ -38,13 +38,13 @@ public class BoardController {
 	@ApiOperation(value = "게시글 생성")
 	@PostMapping()
 	public ResponseEntity<Long> createBoard(@RequestBody BoardSaveRequestDto requestDto) {
-		return new ResponseEntity<>(boardService.save(requestDto), HttpStatus.OK);
+		return new ResponseEntity<>(boardService.saveBoard(requestDto), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "게시글 목록 조회 - 단순 Crud 테스트를 위함")
 	@GetMapping("/list")
 	public ResponseEntity<List<Board>> getAllBoards() {
-		return ResponseEntity.ok(boardService.findAll());
+		return ResponseEntity.ok(boardService.findAllBoards());
 	}
 
 	@ApiOperation(value = "게시글 목록 조회 - 무한 스크롤 적용")
@@ -64,9 +64,8 @@ public class BoardController {
 		@RequestParam int size,
 		@RequestParam String userId
 	) {
-		lastCommentId = lastCommentId == -
-			 1 ? commentService.fetchLatestCommentId() + 1: lastCommentId;
-		return new ResponseEntity<>(boardService.getBoardById(id, lastCommentId, size, userId), HttpStatus.OK);
+		lastCommentId = lastCommentId == -1 ? commentService.fetchLatestCommentId() + 1: lastCommentId;
+		return new ResponseEntity<>(boardService.getBoard(id, lastCommentId, size, userId), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "오늘의 게시글 조회 - 14시마다 갱신됨")
@@ -79,13 +78,13 @@ public class BoardController {
 	@ApiOperation(value = "게시글 수정")
 	@PutMapping("/{id}")
 	public ResponseEntity<Long> updateBoard(@PathVariable Long id, @RequestBody BoardUpdateRequestDto requestDto) {
-		return ResponseEntity.ok(boardService.update(id, requestDto));
+		return ResponseEntity.ok(boardService.updateBoard(id, requestDto));
 	}
 
 	@ApiOperation(value = "게시글 삭제")
 	@DeleteMapping("/{id}")
 	public void removeBoard(@PathVariable Long id) {
-		boardService.delete(id);
+		boardService.deleteBoard(id);
 	}
 
 }

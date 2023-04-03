@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CommentUpdateRequestDto {
 
-
 	private String content;
 
 }

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.hellsfood.domain.board.Board;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -18,6 +19,7 @@ public class BoardListResponseDto {
 	private final int dislikeCount;
 	private final int evaluationStatus;    // 좋아요/싫어요 평가 여부 (0: 평가 X , 1: 좋아요 , 2: 싫어요)
 
+	@Builder
 	public BoardListResponseDto(Board entity, int likeCount, int dislikeCount, int evaluationStatus) {
 		this.id = entity.getId();
 		this.content = entity.getContent();

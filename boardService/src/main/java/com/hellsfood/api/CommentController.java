@@ -19,7 +19,6 @@ import com.hellsfood.service.CommentService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
-// @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/comments")
 @RequiredArgsConstructor
