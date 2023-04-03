@@ -1,8 +1,13 @@
 package com.hellsfood.api.leftovers.service
 
-import com.hellsfood.api.leftovers.data.*
+import com.hellsfood.api.leftovers.data.Analysis
+import com.hellsfood.api.leftovers.data.AnalysisRepository
+import com.hellsfood.api.leftovers.data.Leftover
+import com.hellsfood.api.leftovers.data.LeftoverRepository
+import com.hellsfood.api.leftovers.data.Ranking
+import com.hellsfood.api.leftovers.data.RankingRepository
+
 import com.hellsfood.api.leftovers.dto.LeftoverRegisterRequestDto
-import com.hellsfood.api.users.data.UserRepository
 import lombok.RequiredArgsConstructor
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -17,7 +22,6 @@ import javax.transaction.Transactional
 @RequiredArgsConstructor
 class LeftoverService(
     private val leftoverRepository: LeftoverRepository,
-    private val userRepository: UserRepository,
     private val rankingRepository: RankingRepository,
     private val analysisRepository: AnalysisRepository
 ) {
@@ -58,7 +62,7 @@ class LeftoverService(
         }
         setRankingTable(rankingList)
 
-        calculateDailyAnalysis();
+        calculateDailyAnalysis()
     }
 
     @Transactional
@@ -76,23 +80,6 @@ class LeftoverService(
         return analysisRepository.getCourseInfoByDateRange(parseDate(startDate), parseDate(endDate))
     }
 
-//    private fun parseDate(date: Int?): LocalDate {
-//        if (date != null) {
-//            val year = date / 10000
-//            val mmDd = date % 10000
-//            val month = mmDd / 100
-//            val day = mmDd % 100
-//            return LocalDate.of(year, month, day)
-//        } else {
-//            val currentTimeInSeoul = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("Asia/Seoul"))
-//            if (currentTimeInSeoul.hour < 14) {
-//                return currentTimeInSeoul.minusDays(1).toLocalDate()
-//            } else {
-//                return currentTimeInSeoul.toLocalDate()
-//            }
-//        }
-//    }
-
     private fun parseDate(dateStr: String): LocalDate {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         return LocalDate.parse(dateStr, formatter)
@@ -109,7 +96,7 @@ class LeftoverService(
     }
 
     fun getRankingList(userId: String): List<Ranking> {
-        val rankingList = rankingRepository.findAll();
+        val rankingList = rankingRepository.findAll()
         if (userId.isNotEmpty()) {
             rankingRepository.findByUserId(userId)?.let { rankingList.add(it) }
         }
