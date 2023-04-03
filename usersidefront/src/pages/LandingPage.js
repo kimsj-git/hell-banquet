@@ -5,6 +5,7 @@ import { OverviewDailyJanban } from "../components/janban";
 import styled from "styled-components";
 import { Container } from "@mui/material";
 import OverviewRanking from "../components/analytics/OverviewRanking";
+import { MenuOverview } from "../components/menu";
 
 function LandingPage() {
   const hour = new Date().getHours();
@@ -18,7 +19,7 @@ function LandingPage() {
         </JanvanSection>
         {hour < 14 ? (
           <DailyMenuSection>
-            <div>아직 14시가 안지났나?</div>
+            <MenuOverview />
           </DailyMenuSection>
         ) : (
           <DailyRankSection>

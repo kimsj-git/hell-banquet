@@ -30,8 +30,6 @@ function StickyFooter() {
     <StickyFooterNav>
       {navlist.map((item) => {
         const pathname = location.pathname;
-        console.log(pathname, item.url);
-
         return (
           <LinkDecoNone
             to={item.url}

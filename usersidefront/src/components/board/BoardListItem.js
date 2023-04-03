@@ -15,7 +15,6 @@ function BoardListItem(params) {
     }
     // article.detail이 true인 경우 클릭 이벤트를 처리하지 않습니다.
   };
-
   return (
     <div onClick={handleClick}>
       {article?.detail ? (
@@ -24,6 +23,7 @@ function BoardListItem(params) {
           <Grid container style={makeItCenter}>
             <Grid item xs={4}>
               <JanvanFace src={article.src} alt={article?.id} />
+              <p>{article.writer}</p>
             </Grid>
             <Grid item xs={8}>
               <Container style={{ height: 100, fontSize: 20 }}>
@@ -43,23 +43,24 @@ function BoardListItem(params) {
           <ArticleCard>
             <UpDelModal article={article} />
             <Grid container style={makeItCenter}>
-              <Grid item xs={4}>
+              <Grid item xs={4} style={{ textAlign: "center" }}>
                 <JanvanFace src={article.src} alt={article?.id} />
+                <p>{article.writer}</p>
               </Grid>
               <Grid item xs={8}>
                 <Container style={{ height: 100, fontSize: 20 }}>
                   {article.content}
                 </Container>
-                <Container
+                <OptionBox>
+                  <ArticleOption article={article} />
+                </OptionBox>
+                {/* <Container
                   style={{
                     display: "flex",
                     justifyContent: "space-around",
                   }}
-                ></Container>
+                ></Container> */}
               </Grid>
-              <OptionBox>
-                <ArticleOption article={article} />
-              </OptionBox>
             </Grid>
           </ArticleCard>
         </LinkDecoNone>
