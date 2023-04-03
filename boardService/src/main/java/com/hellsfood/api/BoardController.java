@@ -61,10 +61,12 @@ public class BoardController {
 	public ResponseEntity<BoardResponseDto> getOneBoardById(
 		@PathVariable Long id,
 		@RequestParam Long lastCommentId,
-		@RequestParam int size
+		@RequestParam int size,
+		@RequestParam String userId
 	) {
-		lastCommentId = lastCommentId == -1 ? commentService.fetchLatestCommentId() + 1: lastCommentId;
-		return new ResponseEntity<>(boardService.getBoardById(id, lastCommentId, size), HttpStatus.OK);
+		lastCommentId = lastCommentId == -
+			 1 ? commentService.fetchLatestCommentId() + 1: lastCommentId;
+		return new ResponseEntity<>(boardService.getBoardById(id, lastCommentId, size, userId), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "오늘의 게시글 조회 - 14시마다 갱신됨")

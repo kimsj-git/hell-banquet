@@ -47,7 +47,7 @@ public class BoardService {
 	}
 
 	@Transactional(readOnly = true)
-	public BoardResponseDto getBoardById(Long boardId, Long lastCommentId, int size) {
+	public BoardResponseDto getBoardById(Long boardId, Long lastCommentId, int size, String userId) {
 		Board board = boardRepository.findById(boardId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
 
@@ -55,11 +55,32 @@ public class BoardService {
 		Page<Comment> comments = commentRepository.findByBoardIdAndIdLessThanOrderByIdDesc(boardId,
 			lastCommentId, pageable);
 
-		List<CommentListResponseDto> commentDtos = comments.stream()
-			.map(CommentListResponseDto::new)
-			.collect(Collectors.toList());
+		Optional<Rating> optionalRating = ratingRepository.findById(board.getId());
+		BoardResponseDto dto = null;
 
-		return new BoardResponseDto(board, commentDtos);
+		if (optionalRating.isPresent()) {
+			Rating rating = optionalRating.get();
+			int likeCount = rating.getLikeCount();
+			int dislikeCount = rating.getDislikeCount();
+			int isEvaluated = 0;
+
+			if (rating.getUsers().containsKey(userId)) {
+				isEvaluated = rating.getUsers().get(userId) ? 1 : 2;
+			}
+			List<CommentListResponseDto> commentDtos = comments.stream()
+				.map(CommentListResponseDto::new)
+				.collect(Collectors.toList());
+
+			dto = BoardResponseDto.builder()
+				.entity(board)
+				.likeCount(likeCount)
+				.dislikeCount(dislikeCount)
+				.evaluationStatus(isEvaluated)
+				.comments(commentDtos)
+				.build();
+		}
+
+		return dto;
 	}
 
 	@Transactional
