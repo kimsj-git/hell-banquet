@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hellsfood.domain.rating.Rating;
+import com.hellsfood.dto.RatingRequestDto;
 import com.hellsfood.service.RatingService;
 
 import lombok.RequiredArgsConstructor;
@@ -23,15 +24,15 @@ public class RatingController {
 
 	@PutMapping("/like")
 	public ResponseEntity<Rating> likeToBoard(@PathVariable Long boardId,
-		@RequestBody String userId) {
-		Rating rating = ratingService.reactToBoard(boardId, userId, true);
+		@RequestBody RatingRequestDto dto) {
+		Rating rating = ratingService.reactToBoard(boardId, dto.getUserId(), true);
 		return ResponseEntity.ok(rating);
 	}
 
 	@PutMapping("/dislike")
 	public ResponseEntity<Rating> dislikeToBoard(@PathVariable Long boardId,
-		@RequestBody String userId) {
-		Rating rating = ratingService.reactToBoard(boardId, userId, false);
+		@RequestBody RatingRequestDto dto) {
+		Rating rating = ratingService.reactToBoard(boardId, dto.getUserId(), false);
 		return ResponseEntity.ok(rating);
 	}
 
