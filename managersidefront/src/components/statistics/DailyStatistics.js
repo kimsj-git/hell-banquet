@@ -39,7 +39,7 @@ function DailyStatistics(params) {
   }, [date]);
 
   const chartData = {
-    labels: ["Served", "Leftovers"],
+    labels: ["배식량", "잔반량"],
     datasets: [
       {
         data: [info[course].served, info[course].leftovers],
