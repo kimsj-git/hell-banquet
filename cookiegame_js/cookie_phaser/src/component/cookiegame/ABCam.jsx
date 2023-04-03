@@ -2,10 +2,10 @@ import { useRef, useEffect, useState } from "react";
 import * as faceapi from "face-api.js";
 import styled from "styled-components";
 
-function ABCam() {
+function ABCam(props) {
   const videoRef = useRef();
   const canvasRef = useRef();
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
 
   let mouthOpen = false;
   let prevMouthOpen = false;
@@ -52,15 +52,16 @@ function ABCam() {
       const mouthAspectRatio = mouthWidth / mouthHeight;
 
       if (mouthAspectRatio > 0.5 && mouthAspectRatio < 1.5) {
-        console.log("입을 벌린 것 같습니다.");
+        // console.log("입을 벌린 것 같습니다.");
         mouthOpen = true;
       } else {
-        console.log("입을 다물고 있습니다.");
+        // console.log("입을 다물고 있습니다.");
         mouthOpen = false;
       }
 
       if (prevMouthOpen && !mouthOpen) {
-        setCount((count) => count + 1);
+        // setCount((count) => count + 1);
+        props.AB();
       }
 
       prevMouthOpen = mouthOpen;
@@ -78,7 +79,7 @@ function ABCam() {
 
   return (
     <div className="myapp">
-      <div>냠:{count}</div>
+      {/* <div>냠:{count}</div> */}
       <div>
         <Video crossOrigin="anonymous" ref={videoRef} autoPlay />
       </div>

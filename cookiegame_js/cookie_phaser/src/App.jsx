@@ -2,7 +2,7 @@ import "./assets/DotFont.css";
 import styled from "styled-components";
 import GameMain from "./assets/game_main.gif";
 import { useState } from "react";
-import RunGame from "./component/cookiegame/RunGame";
+import ABCGame from "./component/cookiegame/ABCGame";
 
 function App() {
   const [isGameStart, setIsGameStart] = useState(false);
@@ -21,7 +21,7 @@ function App() {
         </TitleContainer>
       )}
       {isGameStart ? (
-        <RunGame />
+        <ABCGame />
       ) : (
         <ContainerButton>
           <GameButton onClick={handlesetIsGameStart}>게임 시작</GameButton>

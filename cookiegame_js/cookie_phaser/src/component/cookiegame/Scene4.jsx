@@ -12,8 +12,9 @@ import image46 from "../../assets/stage_4_6.png";
 import image47 from "../../assets/stage_4_7.png";
 
 export class Scene4 extends Phaser.Scene {
-  constructor() {
+  constructor(props) {
     super("Scene4");
+    this.props = props;
   }
 
   preload() {
@@ -67,14 +68,11 @@ export class Scene4 extends Phaser.Scene {
       .setScale(0.2);
 
     // 키보드 이벤트 등록
-    this.input.keyboard.on("keydown-ENTER", this.onEnterKeyDown.bind(this));
+    this.input.keyboard.on("keydown-ENTER", this.ABC.bind(this));
+    this.game.events.on("ABC", this.ABC.bind(this));
   }
 
-  update() {
-    // 게임 업데이트
-  }
-
-  onEnterKeyDown() {
+  ABC() {
     this.enterCount++;
     if (this.enterCount >= 7) {
       this.timer.remove(false);
