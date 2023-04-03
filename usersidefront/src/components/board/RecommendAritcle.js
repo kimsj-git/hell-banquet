@@ -3,6 +3,7 @@ import staticJanban from "../../assets/images/janban.png";
 import { getTodayArticle } from "../../api/board";
 
 import styled from "styled-components";
+import { Grid } from "@mui/material";
 
 function RecommendAritcle() {
   const dummy = {
@@ -26,8 +27,19 @@ function RecommendAritcle() {
   if (todayArticle !== []) {
     return (
       <ContainerForNone>
-        <StaticJanbanImg src={staticJanban} alt='잔반이' />
-        <Typo fontSize={24}>{todayArticle.content}</Typo>
+        <Grid container>
+          <Grid item xs={6} style={{ textAlign: "center" }}>
+            <StaticJanbanImg src={staticJanban} alt='잔반이' />
+            <Typo fontSize={24}>{todayArticle.writer}</Typo>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            style={{ textAlign: "center", alignSelf: "center" }}
+          >
+            <Typo fontSize={24}>{todayArticle.content}</Typo>
+          </Grid>
+        </Grid>
       </ContainerForNone>
     );
   } else {
@@ -49,14 +61,12 @@ const ContainerForNone = styled.div`
 `;
 
 const Typo = styled.span`
-  font-size: ${(props) => {
-    return props.fontSize;
-  }}px;
+  font-size: 24px;
   text-align: center;
 `;
 
 const StaticJanbanImg = styled.img`
-  width: 200px;
+  width: 100%;
 `;
 
 export default RecommendAritcle;
