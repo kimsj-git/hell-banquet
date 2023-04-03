@@ -32,7 +32,7 @@ class LeftoverController(
         if (result) {
             return ResponseEntity.ok("${requestDto.userId}님의 ${LocalDate.now()}일 식사정보가 기록되었습니다.")
         } else {
-            return ResponseEntity.badRequest().body("유효하지 않은 저장 요청 정보입니다.");
+            return ResponseEntity.badRequest().body("유효하지 않은 저장 요청 정보입니다.")
         }
     }
 
@@ -57,8 +57,8 @@ class LeftoverController(
     @GetMapping("/analysis")
     @ApiOperation(value = "시작 날짜와 끝 날짜를 기준으로 각각의 코스에 대한 잔반 통계 정보를 반환한다.")
     fun getAnalysisByDateRange(
-        @RequestParam @ApiParam(value = "시작 날짜", required = true) startDate: Int,
-        @RequestParam @ApiParam(value = "종료 날짜", required = true) endDate: Int
+        @RequestParam @ApiParam(value = "시작 날짜", required = true) startDate: String,
+        @RequestParam @ApiParam(value = "종료 날짜", required = true) endDate: String
     ): ResponseEntity<*> {
         return ResponseEntity.ok(leftoverService.getAnalysisByDateRange(startDate, endDate))
     }

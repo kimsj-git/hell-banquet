@@ -10,6 +10,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import javax.transaction.Transactional
 
 @Service
@@ -71,25 +72,30 @@ class LeftoverService(
         }
     }
 
-    fun getAnalysisByDateRange(startDate: Int, endDate: Int): List<Analysis> {
+    fun getAnalysisByDateRange(startDate: String, endDate: String): List<Analysis> {
         return analysisRepository.getCourseInfoByDateRange(parseDate(startDate), parseDate(endDate))
     }
 
-    private fun parseDate(date: Int?): LocalDate {
-        if (date != null) {
-            val year = date / 10000
-            val mmDd = date % 10000
-            val month = mmDd / 100
-            val day = mmDd % 100
-            return LocalDate.of(year, month, day)
-        } else {
-            val currentTimeInSeoul = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("Asia/Seoul"))
-            if (currentTimeInSeoul.hour < 14) {
-                return currentTimeInSeoul.minusDays(1).toLocalDate()
-            } else {
-                return currentTimeInSeoul.toLocalDate()
-            }
-        }
+//    private fun parseDate(date: Int?): LocalDate {
+//        if (date != null) {
+//            val year = date / 10000
+//            val mmDd = date % 10000
+//            val month = mmDd / 100
+//            val day = mmDd % 100
+//            return LocalDate.of(year, month, day)
+//        } else {
+//            val currentTimeInSeoul = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("Asia/Seoul"))
+//            if (currentTimeInSeoul.hour < 14) {
+//                return currentTimeInSeoul.minusDays(1).toLocalDate()
+//            } else {
+//                return currentTimeInSeoul.toLocalDate()
+//            }
+//        }
+//    }
+
+    private fun parseDate(dateStr: String): LocalDate {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return LocalDate.parse(dateStr, formatter)
     }
 
     @Transactional
