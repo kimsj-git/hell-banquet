@@ -1,15 +1,13 @@
 package com.hellsfood.api;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,101 +37,73 @@ public class MenuController {
 
 	private final MenuService menuService;
 
-	@ApiOperation("모든 식단 리스트 조회 - Read 테스트를 위한 API")
-	@GetMapping()
-	public List<Menu> getAllMenus() {
-		return menuService.getAllMenus();
+	@ApiOperation(value = "식단 목록 조회 - 단순 Crud 테스트를 위한 API")
+	@GetMapping
+	public ResponseEntity<List<Menu>> getAllMenus() {
+		return ResponseEntity.ok(menuService.getAllMenus());
 	}
 
-	@ApiOperation(value = "{id}에 해당하는 식단 단건 조회")
+	@ApiOperation(value = "식단 상세 조회 - find by id")
 	@GetMapping("/{id}")
-	public Menu getMenuById(@PathVariable Long id) {
-		return menuService.findMenuById(id);
+	public ResponseEntity<Menu> getOneMenuById(@PathVariable Long id) {
+		return ResponseEntity.ok(menuService.findMenuById(id));
 	}
 
-	@ApiOperation(value = "{managerId}에 해당하는 영양사가 {date}에 작성한 식단 리스트를 조회한다.")
+	@ApiOperation(value = "식단 상세 조회 - {date}에 작성한 식단 리스트")
 	@GetMapping("/date")
-	public List<Menu> getMenusByManagerIdAndDate(
-		@RequestParam("managerId") String managerId,
-		@RequestParam("date") String date) {
-		return menuService.getMenusByManagerIdAndDate(managerId, date);
+	public ResponseEntity<List<Menu>> getMenusByManagerIdAndDate(@RequestParam String managerId,
+		@RequestParam String date) {
+		return ResponseEntity.ok(menuService.getMenusByManagerIdAndDate(managerId, date));
 	}
 
-	@ApiOperation("{managerId}에 해당하는 영양사가 {date}에 작성한 식단 리스트 중 {type}에 해당하는 식단를 조회한다.")
+	@ApiOperation(value = "식단 상세 조회 - {date}에 작성한 코스 {type}에 해당하는 식단")
 	@GetMapping("/type")
-	public Menu getMenuByManagerIdAndDateAndType(
-		@RequestParam("managerId") String managerId,
-		@RequestParam("date") String date,
-		@RequestParam("type") String type) {
-		return menuService.getMenusByManagerIdAndDateAndType(managerId, date, type);
+	public ResponseEntity<Menu> getMenuByManagerIdAndDateAndType(
+		@RequestParam("managerId") String managerId, @RequestParam String date, @RequestParam String type) {
+		return ResponseEntity.ok(menuService.getMenusByManagerIdAndDateAndType(managerId, date, type));
 	}
 
-	@ApiOperation("식단 생성")
-	@PostMapping()
-	public Menu createMenu(@RequestBody MenuSaveRequestDto menu) {
-		return menuService.save(menu);
+	@ApiOperation(value = "식단 생성")
+	@PostMapping
+	public ResponseEntity<Menu> createMenu(@RequestBody MenuSaveRequestDto menu) {
+		return ResponseEntity.ok(menuService.createMenu(menu));
 	}
 
-	@ApiOperation("{id}에 해당하는 식단 삭제")
+	@ApiOperation(value = "식단 삭제")
 	@DeleteMapping("/{id}")
-	public void deleteMenu(@PathVariable Long id) {
+	public void removeMenu(@PathVariable Long id) {
 		menuService.deleteMenu(id);
 	}
 
 	@PostMapping("/all")
-	@ApiOperation(value = "일괄 식단 등록 처리", notes = "엑셀 파일로 저장된 메뉴 정보를 기반으로 순차적으로 식단 등록을 진행한다.")
-	public ResponseEntity createAllMenus(
+	@ApiOperation(value = "일괄 식단 등록 처리", notes = "엑셀 파일로 저장된 메뉴 정보를 기반으로 일괄 식단 등록")
+	public ResponseEntity<List<ExcelizedMenuRegisterResultDto>> createAllMenusUsingFile(
 		@RequestParam("file") @ApiParam(value = "일괄 식단 요청 정보 xlsx 파일", required = true) MultipartFile file) {
 
-		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+		String contentType = file.getContentType();
 
-		if (!extension.contains("xls")) {
-			return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("지원되는 엑셀 파일 확장자가 아닙니다.");
+		if (Objects.isNull(contentType) || (!contentType.equals("application/vnd.ms-excel") && !contentType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))) {
+			return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(null);
 		}
 
-		Workbook workbook = null;
-		InputStream inputStream = null;
-
-		try {
-			inputStream = file.getInputStream();
-			if (extension.equals("xlsx")) {
-				workbook = new XSSFWorkbook(inputStream);
-			} else if (extension.equals("xls")) {
-				workbook = new HSSFWorkbook(inputStream);
-			}
-
+		try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
 			List<ExcelizedMenuRegisterResultDto> resultList = menuService.createAllMenus(workbook);
-			if (resultList != null) {
-				return ResponseEntity.ok(resultList);
-			} else {
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("가입 처리중 오류가 발생했습니다.");
-			}
+			return ResponseEntity.ok().body(resultList);
 		} catch (IOException e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("엑셀 파일을 읽는 중 오류가 발생하였습니다.");
-		} finally {
-			try {
-				if (workbook != null) {
-					workbook.close();
-				}
-				if (inputStream != null) {
-					inputStream.close();
-				}
-				// 삭제하려는 파일을 다시 닫습니다.
-				file.getInputStream().close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 
 	@PostMapping("/convert")
 	@ApiOperation(value = "일괄 식단 등록 결과 리스트를 xlsx 파일 변환", notes = "웹 페이지상에 보여지고 있는 일괄 식단 등록 결과 리스트를 엑셀파일(xlsx)로 변환해준다.")
-	public ResponseEntity listToExcel(
+	public ResponseEntity<String> listToExcel(
 		@RequestBody @ApiParam(value = "변환 요청 정보", required = true) List<ExcelizedMenuRegisterRequestDto> list,
 		HttpServletResponse response) {
-		if (menuService.listToExcel(list, response)) {
+		try {
+			menuService.listToExcel(list, response);
 			return ResponseEntity.ok("리스트 변환에 성공하였습니다.");
-		} else {
+		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리스트 변환 중 오류가 발생했습니다.");
 		}
 	}

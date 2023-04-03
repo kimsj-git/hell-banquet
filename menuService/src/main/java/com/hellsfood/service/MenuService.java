@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -47,22 +48,32 @@ public class MenuService {
 	}
 
 	@Transactional
-	public Menu save(MenuSaveRequestDto dto) {
+	public Menu createMenu(MenuSaveRequestDto dto) {
+		LocalDate date = parseDate(dto.getDate());
+
 		// managerId를 기준으로 동일한 date를 갖는 데이터의 개수 조회
-		long count = menuRepository.countByDateAndManagerId(parseDate(dto.getDate()), dto.getManagerId());
+		long count = menuRepository.countByDateAndManagerId(date, dto.getManagerId());
 		if (count > 1) {
 			throw new RuntimeException("동일한 date를 갖는 데이터는 2개를 초과할 수 없습니다.");
 		} else if (count == 1) {
-			List<Menu> menus = menuRepository.findByDate(parseDate(dto.getDate()));
-			if (menus.get(0).getType().equals(dto.getType())) {
-				// MenuSaveRequestDto의 type이 달라야하는 경우 예외 처리
+			Optional<Menu> existingMenu = menuRepository.findByDate(parseDate(dto.getDate()))
+				.stream()
+				.filter(menu -> !menu.getType().equals(dto.getType()))
+				.findFirst();
+
+			if (existingMenu.isPresent()) {
 				throw new RuntimeException("동일한 date를 가지고 있는 데이터가 2개일 경우, 무조건 type이 달라야 합니다.");
 			}
 		}
+
 		long id = getNextSequence("menu_sequence", mongo);
-		LocalDate date = parseDate(dto.getDate());
 		Menu menu = new Menu(id, dto, date);
 		return menuRepository.save(menu);
+	}
+
+	public LocalDate parseDate(String dateStr) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		return LocalDate.parse(dateStr, formatter);
 	}
 
 	@Transactional(readOnly = true)
@@ -102,11 +113,9 @@ public class MenuService {
 
 			long id = getNextSequence("menu_sequence", mongo);
 			menuRepository.save(createMenuFromResultDto(resultDto, id));
-
 			resultList.add(resultDto);
 		}
 		return resultList;
-
 	}
 
 	private void setResultDto(ExcelizedMenuRegisterResultDto resultDto, Row requestRow) {
@@ -117,11 +126,6 @@ public class MenuService {
 		resultDto.setMenuItems(getListFromString(getStringCellValue(requestRow, 5)));
 		resultDto.setMenuTypes(getListFromString(getStringCellValue(requestRow, 6)));
 		resultDto.setDate(parseExcelDate(String.valueOf((int)getNumericCellValue(requestRow, 7))));
-	}
-
-	public LocalDate parseDate(String dateStr) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		return LocalDate.parse(dateStr, formatter);
 	}
 
 	public LocalDate parseExcelDate(String dateStr) {
@@ -183,8 +187,13 @@ public class MenuService {
 			resultWorkbook.close();
 			return true;
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("결과 파일 작성 중 오류가 발생했습니다. (IOException)");
+			throw new RuntimeException("결과 파일 작성 중 오류가 발생했습니다. (IOException)", e);
+		} finally {
+			try {
+				resultWorkbook.close();
+			} catch (IOException e) {
+				throw new RuntimeException("결과 파일 작성 중 오류가 발생했습니다. (IOException)", e);
+			}
 		}
 	}
 
