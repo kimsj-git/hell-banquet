@@ -26,7 +26,6 @@ function DietField(params) {
     "김치",
     "절임",
   ];
-  console.log(food.category);
   const menuCategorys = {
     RICE: "밥",
     NOODLE: "면",

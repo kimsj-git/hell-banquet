@@ -1,19 +1,20 @@
 import { TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function DateSelector(params) {
-  const today = new Date().toISOString().split("T")[0];
+  const getFormatedDate = (date) => {
+    if (date) {
+      return new Date(date).toISOString().split("T")[0];
+    } else {
+      return new Date().toISOString().split("T")[0];
+    }
+  };
+  const today = getFormatedDate();
   const { setDate } = params;
   const [targetDate, setTargetDate] = useState(today);
 
-  useEffect(() => {
-    if (!params?.date) {
-      setTargetDate(new Date());
-    }
-  }, [params?.date]);
-
   const handleDateChange = (e) => {
-    const newDate = new Date(e.target.value).toISOString().split("T")[0];
+    const newDate = getFormatedDate(e.target.value);
     setTargetDate(newDate);
     setDate(newDate);
   };
