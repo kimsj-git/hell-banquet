@@ -1,9 +1,9 @@
-package com.function.uploadService.domain.janban;
+package com.hellsfood.domain.janban;
 
 import java.util.Arrays;
 import java.util.List;
 
-import com.function.uploadService.domain.image.JanbanCode;
+import com.hellsfood.domain.image.JanbanCode;
 
 import lombok.Getter;
 
@@ -25,10 +25,9 @@ public enum JanbanFeature {
 	// 	int randomIndex = new Random().nextInt(janbanCodes.size());
 	// 	return janbanCodes.get(randomIndex);
 	// }
-	public JanbanCode getRandomJanbanCode() {
+	public JanbanCode getJanbanCode() {
 		return janbanCodes.get(0);
 	}
-
 
 	public static JanbanFeature fromValue(String value) {
 		for (JanbanFeature feature : values()) {

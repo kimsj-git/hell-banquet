@@ -1,4 +1,4 @@
-package com.function.uploadService.controller;
+package com.hellsfood.api;
 
 import java.io.IOException;
 
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.function.uploadService.domain.janban.FeatureRequest;
-import com.function.uploadService.domain.janban.Janbani;
-import com.function.uploadService.service.ImageService;
-import com.function.uploadService.service.JanbaniService;
+import com.hellsfood.domain.janban.Janbani;
+import com.hellsfood.dto.JanbaniRequestDto;
+import com.hellsfood.service.ImageService;
+import com.hellsfood.service.JanbaniService;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -32,17 +32,16 @@ public class JanbaniController {
 	private final ImageService imageService;
 
 	@ApiOperation(value = "특성에 따른 잔반이 만들기")
-	@PutMapping()
-	public ResponseEntity<Janbani> createJanbani(
-		@RequestBody FeatureRequest request) {
-		Janbani janbani = janbaniService.createJanban(request.getUserId(), request.getFeature());
+	@PutMapping
+	public ResponseEntity<Janbani> createJanbani(@RequestBody JanbaniRequestDto requestDto) {
+		Janbani janbani = janbaniService.createJanban(requestDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(janbani);
 	}
 
 	@ApiOperation(value = "고유 코드로 잔반이 이미지 조회")
-	@GetMapping()
-	public ResponseEntity<?> getImage(@RequestParam String name) throws IOException {
-		Resource resource = imageService.getImage(name);
+	@GetMapping
+	public ResponseEntity<?> getImage(@RequestParam String janbanCode) {
+		Resource resource = imageService.getImage(janbanCode);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.IMAGE_JPEG);
 		return new ResponseEntity<>(resource, headers, HttpStatus.OK);

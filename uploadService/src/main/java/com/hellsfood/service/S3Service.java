@@ -1,4 +1,4 @@
-package com.function.uploadService.service;
+package com.hellsfood.service;
 
 import java.io.IOException;
 import java.util.UUID;

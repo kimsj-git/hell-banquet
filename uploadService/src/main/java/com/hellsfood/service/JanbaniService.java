@@ -1,11 +1,12 @@
-package com.function.uploadService.service;
+package com.hellsfood.service;
 
 import org.springframework.stereotype.Service;
 
-import com.function.uploadService.domain.image.JanbanCode;
-import com.function.uploadService.domain.janban.JanbanFeature;
-import com.function.uploadService.domain.janban.Janbani;
-import com.function.uploadService.domain.janban.JanbaniRepository;
+import com.hellsfood.domain.image.JanbanCode;
+import com.hellsfood.domain.janban.JanbanFeature;
+import com.hellsfood.domain.janban.Janbani;
+import com.hellsfood.domain.janban.JanbaniRepository;
+import com.hellsfood.dto.JanbaniRequestDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,8 +16,10 @@ public class JanbaniService {
 
 	private final JanbaniRepository janbaniRepository;
 
-	public Janbani createJanban(String userId, String feature) {
-		// System.out.println("feature: " + feature);
+	public Janbani createJanban(JanbaniRequestDto dto) {
+		String userId = dto.getUserId();
+		String feature = dto.getFeature();
+
 		Janbani janbani = janbaniRepository.findByUserId(userId)
 			.orElse(Janbani.builder()
 				.userId(userId)
@@ -25,11 +28,11 @@ public class JanbaniService {
 				.build());
 
 		JanbanFeature janbanFeature = JanbanFeature.fromValue(feature);
-		JanbanCode janbanCode = janbanFeature.getRandomJanbanCode();
-
+		JanbanCode janbanCode = janbanFeature.getJanbanCode();
 		janbani.update(janbanFeature, janbanCode);
 		return janbaniRepository.save(janbani);
 	}
+
 	public String getJanban(String userId) {
 		Janbani janbani = janbaniRepository.findByUserId(userId)
 			.orElseThrow(() -> new IllegalArgumentException("해당하는 잔반이가 없습니다."));
@@ -37,4 +40,5 @@ public class JanbaniService {
 		JanbanCode janbanCode = janbani.getJanbanCode();
 		return janbanCode.toString();
 	}
+
 }

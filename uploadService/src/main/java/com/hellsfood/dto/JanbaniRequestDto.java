@@ -1,11 +1,13 @@
-package com.function.uploadService.domain.janban;
+package com.hellsfood.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class FeatureRequest {
+public class JanbaniRequestDto {
+
 	private String userId;
 	private String feature;
+
 }

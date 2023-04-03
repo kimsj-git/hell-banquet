@@ -1,4 +1,4 @@
-package com.function.uploadService.domain.janban;
+package com.hellsfood.domain.janban;
 
 import java.util.Optional;
 

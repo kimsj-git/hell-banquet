@@ -1,4 +1,4 @@
-package com.function.uploadService.controller;
+package com.hellsfood.api;
 
 import java.io.IOException;
 
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.function.uploadService.service.ImageService;
-import com.function.uploadService.service.JanbaniService;
+import com.hellsfood.service.ImageService;
+import com.hellsfood.service.JanbaniService;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

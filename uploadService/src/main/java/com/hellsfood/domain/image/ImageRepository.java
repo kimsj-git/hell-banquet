@@ -1,4 +1,4 @@
-package com.function.uploadService.domain.image;
+package com.hellsfood.domain.image;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

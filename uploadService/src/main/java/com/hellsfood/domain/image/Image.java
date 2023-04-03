@@ -1,4 +1,4 @@
-package com.function.uploadService.domain.image;
+package com.hellsfood.domain.image;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.function.uploadService.config;
+package com.hellsfood.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

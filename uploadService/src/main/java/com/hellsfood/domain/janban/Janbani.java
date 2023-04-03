@@ -1,4 +1,4 @@
-package com.function.uploadService.domain.janban;
+package com.hellsfood.domain.janban;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.function.uploadService.domain.image.JanbanCode;
+import com.hellsfood.domain.image.JanbanCode;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -35,7 +35,7 @@ public class Janbani {
 
 	@Column(name = "janban_code", nullable = false)
 	@Enumerated(EnumType.STRING)
-	private JanbanCode janbanCode;
+	private JanbanCode janbanCode;			//[특성]_[소품번호]
 
 	@Builder
 	public Janbani(String userId, String feature, JanbanCode janbanCode) {
