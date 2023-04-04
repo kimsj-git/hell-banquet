@@ -28,7 +28,7 @@ function RecordMeal() {
     event.preventDefault();
     const imageUrl = mealImages[target];
     if (!imageUrl) return;
-
+    console.log(imageUrl);
     await postRecordMeal(
       imageUrl,
       (data) => {

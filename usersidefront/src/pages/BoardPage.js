@@ -1,15 +1,15 @@
-import BoardList from "../components/board/BoardList"
-import BoardOption from "../components/board/BoardOption"
-import { LogedPageTemplate } from "../components/common"
+import BoardList from "../components/board/BoardList";
+import BoardOption from "../components/board/BoardOption";
+import { LogedPageTemplate } from "../components/common";
 
 function BoardPage() {
-    return (
-        <>
-            <LogedPageTemplate />
-            <BoardList />
-            <BoardOption />
-        </>
-    )
+  return (
+    <>
+      <LogedPageTemplate />
+      <BoardList />
+      <BoardOption />
+    </>
+  );
 }
 
-export default BoardPage
+export default BoardPage;

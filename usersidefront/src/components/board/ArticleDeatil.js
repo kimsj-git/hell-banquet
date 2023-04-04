@@ -39,8 +39,8 @@ function ArticleDetail() {
           return data.data.comments;
         },
         (err) => console.log(err)
-      ).then((data) => setComments(data));
-      //   setArtilce(data);
+      );
+      setComments(data);
     };
 
     if (comments[0]?.id === -1) {
@@ -49,14 +49,14 @@ function ArticleDetail() {
   }, [comments, location, articleListRef]);
 
   return (
-    <DetailBox>
-      <BoardListItem article={{ ...article, detail: true }} />
-      <div
-        ref={articleListRef}
-        style={{ paddingTop: "100px", paddingBottom: "100px" }}
-      >
+    <>
+      <DetailBox>
+        <BoardListItem article={{ ...article, detail: true }} />
+
         {comments.length === 0 ? (
-          <div style={{ textAlign: "center" }}>아직 댓글이 없어요</div>
+          <div style={{ textAlign: "center", paddingTop: 100 }}>
+            아직 댓글이 없어요
+          </div>
         ) : (
           comments.map((article, index) => {
             return (
@@ -64,13 +64,14 @@ function ArticleDetail() {
             );
           })
         )}
-      </div>
-    </DetailBox>
+      </DetailBox>
+    </>
   );
 }
 
 const DetailBox = styled.div`
-  background: #fff3df;
+  padding: 10px 0px calc(100vh - 470px) 0px;
+  background: #edebe9;
 `;
 
 export default ArticleDetail;
