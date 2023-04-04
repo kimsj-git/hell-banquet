@@ -78,20 +78,18 @@ class LeftoverController(
     @ApiOperation(value = "percentage와 playedGame 값을 검사하여 게임을 할 수 있는지를 체크한다.")
     fun isPlayableCookieGame(
         @RequestParam("userId") userId: String,
-        @RequestParam today: String,
-        @RequestParam hasJanbani: Boolean
+        @RequestParam today: String
     ): ResponseEntity<Boolean> {
-        return ResponseEntity.ok(leftoverService.isPlayableCookieGame(userId, today, hasJanbani))
+        return ResponseEntity.ok(leftoverService.isPlayableCookieGame(userId, today))
     }
 
     @GetMapping("/is_playable/drawing")
     @ApiOperation(value = "percentage와 playedGame 값을 검사하여 게임을 할 수 있는지를 체크한다.")
     fun isPlayableDrawingGame(
         @RequestParam("userId") userId: String,
-        @RequestParam today: String,
-        @RequestParam hasJanbani: Boolean
+        @RequestParam today: String
     ): ResponseEntity<Boolean> {
-        return ResponseEntity.ok(leftoverService.isPlayableDrawingGame(userId, today, hasJanbani))
+        return ResponseEntity.ok(leftoverService.isPlayableDrawingGame(userId, today))
     }
 
     @PutMapping("/modify/{newStatus}")
@@ -99,10 +97,9 @@ class LeftoverController(
     fun updatePropStatus(
         @RequestParam("userId") userId: String,
         @RequestParam today: String,
-        @RequestParam hasJanbani: Boolean,
         @PathVariable newStatus: String
     ): ResponseEntity<Leftover> {
-        return ResponseEntity.ok(leftoverService.updatePropStatus(userId, today, hasJanbani, newStatus))
+        return ResponseEntity.ok(leftoverService.updatePropStatus(userId, today, newStatus))
     }
 
 }

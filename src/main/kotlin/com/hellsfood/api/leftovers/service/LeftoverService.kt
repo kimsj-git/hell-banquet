@@ -8,6 +8,7 @@ import com.hellsfood.api.leftovers.data.Ranking
 import com.hellsfood.api.leftovers.data.RankingRepository
 
 import com.hellsfood.api.leftovers.dto.LeftoverRegisterRequestDto
+import com.hellsfood.client.UploadServiceClient
 import lombok.RequiredArgsConstructor
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -23,7 +24,8 @@ import javax.transaction.Transactional
 class LeftoverService(
     private val leftoverRepository: LeftoverRepository,
     private val rankingRepository: RankingRepository,
-    private val analysisRepository: AnalysisRepository
+    private val analysisRepository: AnalysisRepository,
+    private val uploadServiceClient: UploadServiceClient
 ) {
 
     @Transactional
@@ -53,9 +55,9 @@ class LeftoverService(
         resetRankingTable()
         val currentTime: LocalDate = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("Asia/Seoul")).toLocalDate()
         val leftoverList = leftoverRepository.getDailyRanking(currentTime)
-        var rankingList = mutableListOf<Ranking>()
+        val rankingList = mutableListOf<Ranking>()
         for (l: Leftover in leftoverList) {
-            var cur = Ranking()
+            val cur = Ranking()
             cur.userId = l.userId
             cur.leftPercentage = l.percentage
             rankingList.add(cur)
@@ -109,36 +111,39 @@ class LeftoverService(
             ?: throw NoSuchElementException("Leftover not found for user $userId and date $date")
     }
 
-    /**
-     * janbani.updateat이 today인지를 판단하여, hasJanbani 값을 가져오는 로직을 추가해야 함 (@FeignClient 이용)
-     */
-    fun isPlayableCookieGame(userId: String, today: String, hasJanbani: Boolean): Boolean {
-        val leftover = leftoverRepository.findByUserIdAndDate(userId, parseDate(today))
-            ?: throw NoSuchElementException("Leftover not found for user $userId and date $today")
 
-        if (!hasJanbani && leftover.percentage > -1) {   //잔반이가 없으며, percentage가 -1이 아니라면?
+    /**
+     * today(yyyy-MM-dd)에 userId의 잔반이가 있는지 확인하는 함수
+     */
+    fun hasLeftoverAndJanbani(userId: String, today: String): Boolean {
+        getLeftoverByUserIdAndDate(userId, today)
+        return uploadServiceClient.hasJanbani(userId, today)
+    }
+
+    fun isPlayableCookieGame(userId: String, today: String): Boolean {
+        val leftover = getLeftoverByUserIdAndDate(userId, today)
+
+        if (!hasLeftoverAndJanbani(userId, today) && leftover.percentage > -1) {   //잔반이가 없으며, percentage가 -1이 아니라면?
             return true
         }
         return false
     }
 
-    fun isPlayableDrawingGame(userId: String, today: String, hasJanbani: Boolean): Boolean {
-        val leftover = leftoverRepository.findByUserIdAndDate(userId, parseDate(today))
-            ?: throw NoSuchElementException("Leftover not found for user $userId and date $today")
+    fun isPlayableDrawingGame(userId: String, today: String): Boolean {
+        val leftover = getLeftoverByUserIdAndDate(userId, today)
 
-        if (!hasJanbani || leftover.propStatus.equals("not assigned") || leftover.propStatus.equals("used")) {   //잔반이가 없으며, percentage가 -1이 아니라면?
+        if (!hasLeftoverAndJanbani(userId, today) || leftover.propStatus.equals("not assigned") || leftover.propStatus.equals("used")) {   //잔반이가 없으며, percentage가 -1이 아니라면?
             return false
         }
         return true
     }
 
-    fun updatePropStatus(userId: String, today: String, hasJanbani: Boolean, newPropStatus: String): Leftover {
-        val leftover = leftoverRepository.findByUserIdAndDate(userId, parseDate(today))
-            ?: throw NoSuchElementException("Leftover not found for user $userId and date $today")
+    fun updatePropStatus(userId: String, today: String, newPropStatus: String): Leftover {
+        val leftover = getLeftoverByUserIdAndDate(userId, today)
 
         // not assigned -> assigned : OK
         // assigned -> used : OK
-        if (hasJanbani &&
+        if (hasLeftoverAndJanbani(userId, today) &&
             ((leftover.propStatus.equals("not assigned") && newPropStatus.equals("assigned"))
                     || (leftover.propStatus.equals("assigned") && newPropStatus.equals("used")))
         ) {
