@@ -23,7 +23,7 @@ class Leftover {
 
     var course: Int = -1
 
-    var playedGame: Boolean = false
+    var propStatus: String = "not assigned"
 
     @CreatedDate
     var date: LocalDate = LocalDate.now()

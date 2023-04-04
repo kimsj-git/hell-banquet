@@ -103,30 +103,51 @@ class LeftoverService(
         return rankingList
     }
 
-    fun isLeftoverPlayable(userId: String, today: String): Boolean {
-        val leftover = leftoverRepository.findByUserIdAndDate(userId, parseDate(today))
-            ?: throw NoSuchElementException("Leftover not found for user $userId and date $today")
-
-        return leftover.percentage <= 0.2 && !leftover.playedGame
-    }
-
-    @Transactional
-    fun updatePlayedGame(userId: String, today: String): Leftover {
-        val leftover = leftoverRepository.findByUserIdAndDate(userId, parseDate(today))
-            ?: throw NoSuchElementException("Leftover not found for user $userId and date $today")
-
-        if (!leftover.playedGame) {
-            leftover.playedGame = true
-            return leftoverRepository.save(leftover)
-        } else {
-            throw IllegalArgumentException("Leftover is not playable")
-        }
-    }
-
     @Transactional
     fun getLeftoverByUserIdAndDate(userId: String, date: String): Leftover {
         return leftoverRepository.findByUserIdAndDate(userId, parseDate(date))
             ?: throw NoSuchElementException("Leftover not found for user $userId and date $date")
-
     }
+
+    /**
+     * janbani.updateat이 today인지를 판단하여, hasJanbani 값을 가져오는 로직을 추가해야 함 (@FeignClient 이용)
+     */
+    fun isPlayableCookieGame(userId: String, today: String, hasJanbani: Boolean): Boolean {
+        val leftover = leftoverRepository.findByUserIdAndDate(userId, parseDate(today))
+            ?: throw NoSuchElementException("Leftover not found for user $userId and date $today")
+
+        if (!hasJanbani && leftover.percentage > -1) {   //잔반이가 없으며, percentage가 -1이 아니라면?
+            return true
+        }
+        return false
+    }
+
+    fun isPlayableDrawingGame(userId: String, today: String, hasJanbani: Boolean): Boolean {
+        val leftover = leftoverRepository.findByUserIdAndDate(userId, parseDate(today))
+            ?: throw NoSuchElementException("Leftover not found for user $userId and date $today")
+
+        if (!hasJanbani || leftover.propStatus.equals("not assigned") || leftover.propStatus.equals("used")) {   //잔반이가 없으며, percentage가 -1이 아니라면?
+            return false
+        }
+        return true
+    }
+
+    fun updatePropStatus(userId: String, today: String, hasJanbani: Boolean, newPropStatus: String): Leftover {
+        val leftover = leftoverRepository.findByUserIdAndDate(userId, parseDate(today))
+            ?: throw NoSuchElementException("Leftover not found for user $userId and date $today")
+
+        // not assigned -> assigned : OK
+        // assigned -> used : OK
+        if (hasJanbani &&
+            ((leftover.propStatus.equals("not assigned") && newPropStatus.equals("assigned"))
+                    || (leftover.propStatus.equals("assigned") && newPropStatus.equals("used")))
+        ) {
+            leftover.propStatus = newPropStatus
+            leftoverRepository.save(leftover)
+            return leftover
+        } else {
+            throw IllegalArgumentException("Invalid Value")
+        }
+    }
+
 }
