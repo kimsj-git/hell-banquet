@@ -34,7 +34,6 @@ function BoardList() {
       await getBoardList(
         boardInfo,
         (data) => {
-          console.log(data)
           return data.data;
         },
         (err) => console.log(err)
@@ -77,7 +76,6 @@ function BoardList() {
 
   // Articles가 변경될 때마다 boardInfo를 수정
   useEffect(() => {
-    console.log(articles)
     setBoardInfo({
       lastBoardId: articles[articles.length - 1].id,
       size: 10,

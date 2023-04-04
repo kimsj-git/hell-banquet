@@ -51,7 +51,7 @@ const Camera = forwardRef(({ onCapture }, ref) => {
             <canvas ref={canvasRef} style={{ display: 'none' }} />
         </VideoContainer>
         <Container>
-            <Button onClick={takePicture} variant="contained">Capture</Button>
+            <Button onClick={takePicture} variant="contained">내가 왜 열심히 했지...? 그냥 적당히 하면서 취준이나 할걸</Button>
         </Container>
         </>
     );
