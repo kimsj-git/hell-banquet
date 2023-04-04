@@ -114,7 +114,7 @@ spring:
           predicates:
             - Path=/leftovers/**
         - id: ai
-          uri: http://j8a802.p.ssafy.io:5000
+          uri: https://j8a802.p.ssafy.io:5000
           predicates:
             - Path=/ai/**
             - Method=POST, OPTIONS
