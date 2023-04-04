@@ -29,7 +29,8 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: '*'
+            allowedOrigins: 
+              - '*'
               # - 'http://localhost:3000'
               # - 'http://j8a802.p.ssafy.io'
               # - 'http://j8a802.p.ssafy.io:3000'
