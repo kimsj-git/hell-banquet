@@ -1,5 +1,9 @@
 package com.hellsfood.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.hellsfood.domain.image.JanbanCode;
@@ -39,6 +43,24 @@ public class JanbaniService {
 
 		JanbanCode janbanCode = janbani.getJanbanCode();
 		return janbanCode.toString();
+	}
+
+	public Boolean hasJanbanInDate(String userId, String date) {
+		Optional<Janbani> optionalJanbani = janbaniRepository.findByUserId(userId);
+
+		if (optionalJanbani.isEmpty()) {
+			return false;
+		}
+
+		Janbani janbani = optionalJanbani.get();
+		LocalDate updateDate = janbani.getUpdateAt().toLocalDate();
+
+		return updateDate.isEqual(parseDate(date));
+	}
+
+	private LocalDate parseDate(String dateStr) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		return LocalDate.parse(dateStr, formatter);
 	}
 
 }

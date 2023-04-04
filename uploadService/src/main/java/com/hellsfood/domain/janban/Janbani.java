@@ -1,13 +1,20 @@
 package com.hellsfood.domain.janban;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.hellsfood.domain.image.JanbanCode;
 
@@ -17,6 +24,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "janbani")
@@ -35,7 +43,12 @@ public class Janbani {
 
 	@Column(name = "janban_code", nullable = false)
 	@Enumerated(EnumType.STRING)
-	private JanbanCode janbanCode;			//[특성]_[소품번호]
+	private JanbanCode janbanCode;            //[특성]_[소품번호]
+
+	@LastModifiedDate
+	@Column(name = "updated_at", nullable = false)
+	@ColumnDefault("CURRENT_TIMESTAMP")
+	private LocalDateTime updateAt;
 
 	@Builder
 	public Janbani(String userId, String feature, JanbanCode janbanCode) {

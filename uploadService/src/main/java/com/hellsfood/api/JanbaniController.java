@@ -38,6 +38,15 @@ public class JanbaniController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(janbani);
 	}
 
+	@ApiOperation(value = "today에 잔반이가 있는지 리턴")
+	@GetMapping("/hasJanbani")
+	public Boolean hasJanbani(
+		@RequestParam String userId, @RequestParam String today
+	) {
+		return janbaniService.hasJanbanInDate(userId, today);
+		// return ResponseEntity.status(HttpStatus.CREATED).body(janbani);
+	}
+
 	@ApiOperation(value = "고유 코드로 잔반이 이미지 조회")
 	@GetMapping
 	public ResponseEntity<?> getImage(@RequestParam String janbanCode) {
