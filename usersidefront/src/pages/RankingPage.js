@@ -25,8 +25,8 @@ function RankingPage() {
       <Container>
         <OverviewRanking />
         {result.length > 4 ? (
-          result.slice(4).map((info) => {
-            return <DailyRanking info={info} king={result[0]} />;
+          result.slice(4).map((info, index) => {
+            return <DailyRanking info={info} king={result[0]} key={index} />;
           })
         ) : (
           <RankBox> 오늘은 참여자가 별로 없네요ㅠ</RankBox>
