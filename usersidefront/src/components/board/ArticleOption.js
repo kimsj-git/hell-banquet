@@ -10,7 +10,7 @@ import { useEffect } from "react";
 function ArticleOption(params) {
   const { article } = params;
   // 차후에 props에서 넘어온 값으로 변경할 것
-  // 1 좋아요 2 싫어요 0 몰라유
+  // 1 좋아요체크 2 싫어요체크 0 체크없음
   const [isLiked, setIsLiked] = useState(100);
   const [likeCount, setLikeCount] = useState(0);
   const [dislikeCount, setDislikeCount] = useState(0);
@@ -25,22 +25,34 @@ function ArticleOption(params) {
       user,
       (data) => {
         console.log(data);
+        if (isLiked === 1) {
+          setIsLiked(0)
+        } else {
+          setIsLiked(1)
+        }
+        setLikeCount(data.data.likeCount)
+        setDislikeCount(data.data.dislikeCount)
       },
       (err) => console.log(err)
-    );
-    // window.location.reload(true);
-  };
-
-  const changeDisLike = async () => {
-    await putDisLike(
+      );
+    };
+    
+    const changeDisLike = async () => {
+      await putDisLike(
       user,
       (data) => {
         console.log(data);
+        if (isLiked === 2) {
+          setIsLiked(0)
+        } else {
+          setIsLiked(2)
+        }
+        setDislikeCount(data.data.dislikeCount)
+        setLikeCount(data.data.likeCount)
       },
       (err) => console.log(err)
-    );
-    // window.location.reload(true);
-  };
+      );
+    };
 
   const articleOptions = [
     {
@@ -97,9 +109,9 @@ function ArticleOption(params) {
       color:
         isLiked === myHand
           ? isLiked === 1
-            ? "#0070f3"
-            : "#990000"
-          : "#000000",
+            ? "#0070f3"   // 좋아요 블루
+            : "#990000"   // 싫어요 레드
+          : "#000000",    // 해당없음 블랙
     };
 
     const styleForButton = {
