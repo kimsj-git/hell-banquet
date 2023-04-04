@@ -6,6 +6,7 @@ import drawjanbani
 import foodseg
 
 app = FastAPI()
+app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 @app.post("/ai/draw/")
 async def draw_is_correct(image: UploadFile = File(), category: str = Form()):
