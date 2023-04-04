@@ -10,13 +10,13 @@ public class JanbaniDto {
 	private final String userId;
 	private final String feature;
 	private final String janbanCode;
-	private final LocalDateTime updateAt;
+	private final LocalDateTime updatedAt;
 
-	public JanbaniDto(String userId, String feature, String janbanCode, LocalDateTime updateAt) {
+	public JanbaniDto(String userId, String feature, String janbanCode, LocalDateTime updatedAt) {
 		this.userId = userId;
 		this.feature = feature;
 		this.janbanCode = janbanCode;
-		this.updateAt = updateAt;
+		this.updatedAt = updatedAt;
 	}
 
 }
