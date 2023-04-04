@@ -25,11 +25,11 @@ function DetailUserInfo(params) {
 
   return (
     <UserInfoBox>
-      {Object.keys(userInfo).map((key) => {
+      {Object.keys(userInfo).map((key, index) => {
         if (userInfoForm[key]) {
           const isChangable = isChanging && changable.includes(key);
           return (
-            <InfoBox key={key}>
+            <InfoBox key={index}>
               <Typography
                 style={{ ...styleForTypo, width: "30%", textAlign: "center" }}
                 fontSize={25}
@@ -56,7 +56,7 @@ function DetailUserInfo(params) {
             </InfoBox>
           );
         } else {
-          return <></>;
+          return <React.Fragment key={index}></React.Fragment>;
         }
       })}
     </UserInfoBox>
