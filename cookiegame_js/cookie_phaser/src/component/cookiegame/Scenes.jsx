@@ -27,6 +27,10 @@ import image44 from "../../assets/stage_4_4.png";
 import image45 from "../../assets/stage_4_5.png";
 import image46 from "../../assets/stage_4_6.png";
 import image47 from "../../assets/stage_4_7.png";
+import clap from "../../assets/clap.wav";
+import clapLong from "../../assets/clear.wav";
+import tada from "../../assets/tada.mp3";
+import blob from "../../assets/blob.mp3";
 
 export class Scenes extends Phaser.Scene {
   constructor(props) {
@@ -63,6 +67,10 @@ export class Scenes extends Phaser.Scene {
     this.load.image("image45", image45);
     this.load.image("image46", image46);
     this.load.image("image47", image47);
+    this.load.audio("clap", clap);
+    this.load.audio("clapLong", clapLong);
+    this.load.audio("blob", blob);
+    this.load.audio("tada", tada);
   }
 
   create() {
@@ -95,13 +103,14 @@ export class Scenes extends Phaser.Scene {
         "image10"
       )
       .setScale(0.2);
-
+    this.input.keyboard.on("keydown-ENTER", this.ABC.bind(this));
     this.game.events.on("ABC", this.ABC.bind(this));
   }
 
   ABC() {
     this.enterCount++;
     if (this.enterCount === 1) {
+      this.sound.play("blob", { duration: 500 });
       this.image.destroy();
       this.image = this.add
 
@@ -112,6 +121,7 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 2) {
+      this.sound.play("blob", { duration: 500 });
       this.image.destroy();
       this.image = this.add
         .image(
@@ -121,6 +131,7 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 3) {
+      this.sound.play("blob", { duration: 500 });
       this.image.destroy();
       this.image = this.add
         .image(
@@ -129,8 +140,21 @@ export class Scenes extends Phaser.Scene {
           "image13"
         )
         .setScale(0.2);
-      this.timeLimit += 5;
+      this.sound.play("clap", { duration: 1000 });
+      this.time.delayedCall(100, () => {
+        this.sound.play("blob", { duration: 500 });
+        this.image.destroy();
+        this.image = this.add
+          .image(
+            this.cameras.main.width / 2,
+            this.cameras.main.height / 2,
+            "image20"
+          )
+          .setScale(0.2);
+        this.timeLimit += 5;
+      });
     } else if (this.enterCount === 4) {
+      this.sound.play("blob", { duration: 500 });
       this.image.destroy();
       this.image = this.add
         .image(
@@ -140,6 +164,7 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 5) {
+      this.sound.play("blob", { duration: 500 });
       this.image.destroy();
       this.image = this.add
         .image(
@@ -149,6 +174,7 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 6) {
+      this.sound.play("blob", { duration: 500 });
       // 이미지 변경
       this.image.destroy();
       this.image = this.add
@@ -159,17 +185,30 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 7) {
+      this.sound.play("blob", { duration: 500 });
       // 이미지 변경
       this.image.destroy();
       this.image = this.add
         .image(
           this.cameras.main.width / 2,
           this.cameras.main.height / 2,
-          "image24"
+          "image25"
         )
         .setScale(0.2);
-      this.timeLimit += 5;
+      this.sound.play("clap", { duration: 1000 });
+      this.time.delayedCall(100, () => {
+        this.image.destroy();
+        this.image = this.add
+          .image(
+            this.cameras.main.width / 2,
+            this.cameras.main.height / 2,
+            "image30"
+          )
+          .setScale(0.2);
+        this.timeLimit += 5;
+      });
     } else if (this.enterCount === 8) {
+      this.sound.play("blob", { duration: 500 });
       this.image.destroy();
       this.image = this.add
         .image(
@@ -179,6 +218,7 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 9) {
+      this.sound.play("blob", { duration: 500 });
       this.image.destroy();
       this.image = this.add
         .image(
@@ -188,6 +228,7 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 10) {
+      this.sound.play("blob", { duration: 500 });
       // 이미지 변경
       this.image.destroy();
       this.image = this.add
@@ -198,6 +239,7 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 11) {
+      this.sound.play("blob", { duration: 500 });
       // 이미지 변경
       this.image.destroy();
       this.image = this.add
@@ -208,6 +250,7 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 12) {
+      this.sound.play("blob", { duration: 500 });
       // 이미지 변경
       this.image.destroy();
       this.image = this.add
@@ -217,8 +260,20 @@ export class Scenes extends Phaser.Scene {
           "image36"
         )
         .setScale(0.2);
-      this.timeLimit += 5;
+      this.sound.play("clap", { duration: 1000 });
+      this.time.delayedCall(100, () => {
+        this.image.destroy();
+        this.image = this.add
+          .image(
+            this.cameras.main.width / 2,
+            this.cameras.main.height / 2,
+            "image40"
+          )
+          .setScale(0.2);
+        this.timeLimit += 5;
+      });
     } else if (this.enterCount === 13) {
+      this.sound.play("blob", { duration: 500 });
       this.image.destroy();
       this.image = this.add
         .image(
@@ -228,6 +283,7 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 14) {
+      this.sound.play("blob", { duration: 500 });
       this.image.destroy();
       this.image = this.add
         .image(
@@ -237,6 +293,7 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 15) {
+      this.sound.play("blob", { duration: 500 });
       // 이미지 변경
       this.image.destroy();
       this.image = this.add
@@ -247,6 +304,7 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 16) {
+      this.sound.play("blob", { duration: 500 });
       // 이미지 변경
       this.image.destroy();
       this.image = this.add
@@ -257,6 +315,7 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 17) {
+      this.sound.play("blob", { duration: 500 });
       // 이미지 변경
       this.image.destroy();
       this.image = this.add
@@ -267,6 +326,7 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 18) {
+      this.sound.play("blob", { duration: 500 });
       // 이미지 변경
       this.image.destroy();
       this.image = this.add
@@ -277,8 +337,11 @@ export class Scenes extends Phaser.Scene {
         )
         .setScale(0.2);
     } else if (this.enterCount === 19) {
+      this.sound.play("blob", { duration: 500 });
       // 이미지 변경
       this.image.destroy();
+      this.sound.play("tada", { duration: 1000 });
+      this.sound.play("clapLong", { duration: 3000 });
       this.timer.remove(false);
       this.image = this.add
         .image(
@@ -304,25 +367,24 @@ export class Scenes extends Phaser.Scene {
   }
 
   gameOver() {
-    this.gameoverImage = this.add.image(
-      this.cameras.main.width / 2,
-      this.cameras.main.height / 2,
-      "gameover"
-    );
-    this.gameoverImage.setOrigin(0.5, 0.5);
+    // this.gameoverImage = this.add.image(
+    //   this.cameras.main.width / 2,
+    //   this.cameras.main.height / 2,
+    //   "gameover"
+    // );
+    // this.gameoverImage.setOrigin(0.5, 0.5).setScale(3);
   }
 
   gameClear() {
-    this.clearImage = this.add.image(this.cameras.main.width / 2, 0, "clear");
-    this.clearImage.setScale(0.5);
-
-    this.tweens.add({
-      targets: this.clearImage,
-      y: this.cameras.main.height * 0.5,
-      duration: 300,
-      onComplete: () => {
-        console.log("hi");
-      },
-    });
+    // this.clearImage = this.add.image(this.cameras.main.width / 2, 0, "clear");
+    // this.clearImage.setScale(0.5);
+    // this.tweens.add({
+    //   targets: this.clearImage,
+    //   y: this.cameras.main.height * 0.5,
+    //   duration: 300,
+    //   onComplete: () => {
+    //     console.log("hi");
+    //   },
+    // });
   }
 }

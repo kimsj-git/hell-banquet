@@ -4,14 +4,29 @@ import { Scenes } from "./Scenes";
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
 
-const ABCGame = () => {
+const ABCGame = (props) => {
   const game = useRef(null);
 
   const AB = () => {
     if (game.current) game.current.events.emit("ABC");
+    console.log(game.current.scene.keys.Scenes.enterCount);
+    if (game.current.scene.keys.Scenes.enterCount === 19) {
+      setTimeout(() => {
+        props.setGameClear(game.current.scene.keys.Scenes.timeLimit);
+      }, 1000);
+    }
   };
 
   useEffect(() => {
+    let intervalId = null;
+
+    const checkTimeLimit = () => {
+      if (game.current.scene.keys.Scenes.timeLimit === 0) {
+        props.setGameover();
+        clearInterval(intervalId);
+      }
+    };
+
     const config = {
       type: Phaser.AUTO,
       parent: "phaser-container",
@@ -25,6 +40,12 @@ const ABCGame = () => {
     };
 
     game.current = new Phaser.Game(config);
+
+    intervalId = setInterval(checkTimeLimit, 300);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (
