@@ -6,7 +6,6 @@ import { Container, Grid } from "@mui/material";
 
 function BoardListItem(params) {
   const { article } = params;
-  console.log(article)
   const makeItCenter = { display: "flex", alignItems: "center" };
 
   const handleClick = () => {

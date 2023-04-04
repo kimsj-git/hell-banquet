@@ -28,9 +28,13 @@ function BoardList() {
 
   useEffect(() => {
     const getMoreList = async () => {
+      if (boardInfo.lastBoardId === 1) {
+        return
+      }
       await getBoardList(
         boardInfo,
         (data) => {
+          console.log(data)
           return data.data;
         },
         (err) => console.log(err)
@@ -38,7 +42,7 @@ function BoardList() {
         if (articles[0]?.id === -1) {
           setArticles(data);
         } else {
-          articles.push(...data);
+          setArticles([...articles, ...data])
         }
       });
     };
@@ -73,6 +77,7 @@ function BoardList() {
 
   // Articles가 변경될 때마다 boardInfo를 수정
   useEffect(() => {
+    console.log(articles)
     setBoardInfo({
       lastBoardId: articles[articles.length - 1].id,
       size: 10,
