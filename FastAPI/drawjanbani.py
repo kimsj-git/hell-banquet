@@ -20,7 +20,7 @@ def check_image(img):
                                     transforms.ToTensor(),
                                     transforms.Normalize(mean=[0.5], std=[0.5])])
 
-    save_model = torch.load('./models/resnet34_29_256.pth', map_location=device)
+    save_model = torch.load('resnet34_29_256.pth', map_location=device)
     model.load_state_dict(save_model['model_state_dict'])
     optimizer.load_state_dict(save_model['optimizer_state_dict'])
     model.eval()
