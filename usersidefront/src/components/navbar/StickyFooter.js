@@ -43,7 +43,11 @@ function StickyFooter() {
               style={{
                 width: 40,
                 height: 40,
-                color: pathname === item.url ? "#edebe9" : "black",
+                color: pathname.includes(item.url)
+                  ? item.name === "홈" && pathname !== "/"
+                    ? "black"
+                    : "#edebe9"
+                  : "black",
               }}
             />
           </LinkDecoNone>
