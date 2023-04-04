@@ -82,9 +82,10 @@ function ArticleOption(params) {
 
   const handleClickCount = (event) => {
     event.preventDefault();
-    const target = event.target?.id;
+    let target = event.target?.id;
     if (!target) {
-      return;
+      // Icon 클릭하는 경우 target 지정
+      target = event.target.parentElement.parentElement.id
     }
 
     if (target === "1") {
@@ -130,7 +131,7 @@ function ArticleOption(params) {
         key={index}
         id={myHand}
       >
-        <Icon component={iconName} style={styleForIcon} id={myHand} />
+        <Icon component={iconName} style={styleForIcon} id={myHand} onClick={myHand === articleOptions[2].myHand ? () => {} : (event) => {event.stopPropagation(); handleClickCount(event)}}/>
         {num}
       </IconButton>
     );
