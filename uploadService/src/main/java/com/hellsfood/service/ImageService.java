@@ -29,14 +29,14 @@ public class ImageService {
 		imageRepository.save(image);
 	}
 
-	public Resource getImage(Long id) {
+	public Resource getImageById(Long id) {
 		Image image = imageRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("해당하는 잔반이가 없습니다."));
 
 		return s3Service.readImageFromS3(image.getFilePath());
 	}
 
-	public Resource getImage(String code) {
+	public Resource getImageByJanbanCode(String code) {
 		JanbanCode janbanCode = JanbanCode.valueOf(code);
 		Image image = imageRepository.findOneByJanbanCode(janbanCode);
 		return s3Service.readImageFromS3(image.getFilePath());

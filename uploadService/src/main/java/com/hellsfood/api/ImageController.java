@@ -43,26 +43,26 @@ public class ImageController {
 	@ApiOperation(value = "{id}에 해당하는 잔반이 조회")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getImage(@PathVariable Long id) {
-		Resource resource = imageService.getImage(id);
+		Resource resource = imageService.getImageById(id);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.IMAGE_JPEG);
 		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "{name}에 해당하는 잔반이 조회")
+	@ApiOperation(value = "JanbanCode로 잔반이 조회")
 	@GetMapping("/name")
-	public ResponseEntity<?> getImage(@RequestParam String name) {
-		Resource resource = imageService.getImage(name);
+	public ResponseEntity<?> getImage(@RequestParam String code) {
+		Resource resource = imageService.getImageByJanbanCode(code);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.IMAGE_JPEG);
 		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "유저별 잔반이 조회")
-	@GetMapping("")
+	@GetMapping
 	public ResponseEntity<?> getJanbani(@RequestParam String userId) {
 		String janbanCode = janbaniService.getJanban(userId);
-		Resource resource = imageService.getImage(janbanCode);
+		Resource resource = imageService.getImageByJanbanCode(janbanCode);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.IMAGE_JPEG);
 		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
