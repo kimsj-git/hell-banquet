@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hellsfood.domain.janban.Janbani;
+import com.hellsfood.dto.JanbaniDto;
 import com.hellsfood.dto.JanbaniRequestDto;
+import com.hellsfood.dto.JanbaniUpdateRequestDto;
 import com.hellsfood.service.ImageService;
 import com.hellsfood.service.JanbaniService;
 
@@ -31,11 +32,18 @@ public class JanbaniController {
 	private final JanbaniService janbaniService;
 	private final ImageService imageService;
 
-	@ApiOperation(value = "특성에 따른 잔반이 만들기")
+	@ApiOperation(value = "식단 특성에 따른 잔반이")
 	@PutMapping
-	public ResponseEntity<Janbani> createJanbani(@RequestBody JanbaniRequestDto requestDto) {
-		Janbani janbani = janbaniService.createJanban(requestDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(janbani);
+	public ResponseEntity<JanbaniDto> saveJanbani(@RequestBody JanbaniRequestDto requestDto) {
+		JanbaniDto janbaniDto = janbaniService.createJanban(requestDto).toDto();
+		return ResponseEntity.status(HttpStatus.CREATED).body(janbaniDto);
+	}
+
+	@ApiOperation(value = "소품 획득에 따른 잔반이 변경")
+	@PutMapping("/updateJanbani")
+	public ResponseEntity<JanbaniDto> updateJanbaniCode(@RequestBody JanbaniUpdateRequestDto requestDto) {
+		JanbaniDto janbaniDto = janbaniService.updateJanbanCode(requestDto).toDto();
+		return ResponseEntity.status(HttpStatus.CREATED).body(janbaniDto);
 	}
 
 	@ApiOperation(value = "today에 잔반이가 있는지 리턴")

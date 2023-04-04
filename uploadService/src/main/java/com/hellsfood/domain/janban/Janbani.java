@@ -17,6 +17,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.hellsfood.domain.image.JanbanCode;
+import com.hellsfood.dto.JanbaniDto;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -48,7 +49,7 @@ public class Janbani {
 	@LastModifiedDate
 	@Column(name = "updated_at", nullable = false)
 	@ColumnDefault("CURRENT_TIMESTAMP")
-	private LocalDateTime updateAt;
+	private LocalDateTime updatedAt;
 
 	@Builder
 	public Janbani(String userId, String feature, JanbanCode janbanCode) {
@@ -60,6 +61,14 @@ public class Janbani {
 	public void update(JanbanFeature feature, JanbanCode janbanCode) {
 		this.feature = feature;
 		this.janbanCode = janbanCode;
+	}
+
+	public void updateJanbanCode(JanbanCode janbanCode) {
+		this.janbanCode = janbanCode;
+	}
+
+	public JanbaniDto toDto() {
+		return new JanbaniDto(this.userId, this.feature.getValue(), this.feature.toString(), this.updatedAt);
 	}
 
 }
