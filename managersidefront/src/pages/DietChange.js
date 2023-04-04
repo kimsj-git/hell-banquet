@@ -127,7 +127,7 @@ function DietChange() {
 //   width: 100vh;
 // `;
 const Container = styled.div`
-  margin: 30px calc(5%) 0px calc(5%);
+  margin: 30px 5% 0px 5%;
 `;
 const FlexBox = styled.div`
   display: flex;
