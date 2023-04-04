@@ -35,9 +35,11 @@ function OverviewRanking() {
 }
 
 const Container = styled.div`
+  height: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
 `;
 const RankBox = styled.div`
   display: flex;
