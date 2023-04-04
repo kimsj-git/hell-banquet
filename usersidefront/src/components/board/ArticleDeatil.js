@@ -49,11 +49,14 @@ function ArticleDetail() {
   }, [comments, location, articleListRef]);
 
   return (
-    <DetailBox>
-      <BoardListItem article={{ ...article, detail: true }} />
-  
+    <>
+      <DetailBox>
+        <BoardListItem article={{ ...article, detail: true }} />
+
         {comments.length === 0 ? (
-          <div style={{ textAlign: "center" }}>아직 댓글이 없어요</div>
+          <div style={{ textAlign: "center", paddingTop: 100 }}>
+            아직 댓글이 없어요
+          </div>
         ) : (
           comments.map((article, index) => {
             return (
@@ -61,12 +64,14 @@ function ArticleDetail() {
             );
           })
         )}
-    </DetailBox>
+      </DetailBox>
+    </>
   );
 }
 
 const DetailBox = styled.div`
-  background: #EDEBE9;
+  padding: 10px 0px calc(100vh - 470px) 0px;
+  background: #edebe9;
 `;
 
 export default ArticleDetail;
