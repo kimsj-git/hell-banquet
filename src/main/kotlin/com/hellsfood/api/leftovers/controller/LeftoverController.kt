@@ -2,6 +2,7 @@ package com.hellsfood.api.leftovers.controller
 
 import com.hellsfood.api.leftovers.data.Leftover
 import com.hellsfood.api.leftovers.data.Ranking
+import com.hellsfood.api.leftovers.dto.DrawingGameRequestDto
 import com.hellsfood.api.leftovers.dto.LeftoverRegisterRequestDto
 import com.hellsfood.api.leftovers.service.LeftoverService
 import io.swagger.annotations.Api
@@ -9,14 +10,7 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import lombok.RequiredArgsConstructor
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @Api(tags = ["잔반 정보 API"])
@@ -74,7 +68,7 @@ class LeftoverController(
         return leftoverService.getLeftoverByUserIdAndDate(userId, date)
     }
 
-    @GetMapping("/is_playable/cookie")
+    @GetMapping("/cookie/check")
     @ApiOperation(value = "percentage와 playedGame 값을 검사하여 게임을 할 수 있는지를 체크한다.")
     fun isPlayableCookieGame(
         @RequestParam("userId") userId: String,
@@ -83,7 +77,7 @@ class LeftoverController(
         return ResponseEntity.ok(leftoverService.isPlayableCookieGame(userId, today))
     }
 
-    @GetMapping("/is_playable/drawing")
+    @GetMapping("/drawing/check")
     @ApiOperation(value = "percentage와 playedGame 값을 검사하여 게임을 할 수 있는지를 체크한다.")
     fun isPlayableDrawingGame(
         @RequestParam("userId") userId: String,
@@ -92,14 +86,19 @@ class LeftoverController(
         return ResponseEntity.ok(leftoverService.isPlayableDrawingGame(userId, today))
     }
 
-    @PutMapping("/modify/{newStatus}")
+    @PutMapping("/drawing")
     @ApiOperation(value = "percentage와 playedGame 값을 검사하여 게임을 할 수 있는지를 체크한다.")
     fun updatePropStatus(
-        @RequestParam("userId") userId: String,
-        @RequestParam today: String,
-        @PathVariable newStatus: String
+        @RequestBody requestDto: DrawingGameRequestDto
     ): ResponseEntity<Leftover> {
-        return ResponseEntity.ok(leftoverService.updatePropStatus(userId, today, newStatus))
+        return ResponseEntity.ok(
+            leftoverService.updatePropStatus(
+                requestDto.userId,
+                requestDto.today,
+                requestDto.status,
+                requestDto.propName
+            )
+        )
     }
 
 }

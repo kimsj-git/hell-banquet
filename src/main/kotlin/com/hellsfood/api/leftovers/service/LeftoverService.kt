@@ -9,6 +9,7 @@ import com.hellsfood.api.leftovers.data.RankingRepository
 
 import com.hellsfood.api.leftovers.dto.LeftoverRegisterRequestDto
 import com.hellsfood.client.UploadServiceClient
+import com.hellsfood.common.JanbaniUpdateRequestDto
 import lombok.RequiredArgsConstructor
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -138,21 +139,18 @@ class LeftoverService(
         return true
     }
 
-    fun updatePropStatus(userId: String, today: String, newPropStatus: String): Leftover {
+    @Transactional
+    fun updatePropStatus(userId: String, today: String, status: String, propName: String): Leftover {
         val leftover = getLeftoverByUserIdAndDate(userId, today)
 
-        // not assigned -> assigned : OK
-        // assigned -> used : OK
-        if (hasLeftoverAndJanbani(userId, today) &&
-            ((leftover.propStatus.equals("not assigned") && newPropStatus.equals("assigned"))
-                    || (leftover.propStatus.equals("assigned") && newPropStatus.equals("used")))
-        ) {
-            leftover.propStatus = newPropStatus
-            leftoverRepository.save(leftover)
-            return leftover
-        } else {
-            throw IllegalArgumentException("Invalid Value")
+        if (status.equals("assign") && leftover.propStatus.equals("not assigned")) {
+            leftover.propStatus = "assigned"
+        } else if (status.equals("change") && leftover.propStatus.equals("assigned")) {
+            uploadServiceClient.updateJanbaniCode(JanbaniUpdateRequestDto(userId, propName))
+            leftover.propStatus = "used"
         }
+        leftoverRepository.save(leftover)
+        return leftover
     }
 
 }
