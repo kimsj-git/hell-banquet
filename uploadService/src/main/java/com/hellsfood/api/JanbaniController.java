@@ -58,7 +58,7 @@ public class JanbaniController {
 	@ApiOperation(value = "고유 코드로 잔반이 이미지 조회")
 	@GetMapping
 	public ResponseEntity<?> getImage(@RequestParam String janbanCode) {
-		Resource resource = imageService.getImage(janbanCode);
+		Resource resource = imageService.getImageByJanbanCode(janbanCode);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.IMAGE_JPEG);
 		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
