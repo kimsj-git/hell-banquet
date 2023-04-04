@@ -31,23 +31,30 @@ class LeftoverService(
 
     @Transactional
     fun registerLeftover(requestDto: LeftoverRegisterRequestDto): Boolean {
-        if (requestDto.amount == -1) {
+        if (requestDto.before == -1 || requestDto.after == -1) {
             return false
         }
+
         val date = LocalDate.now()
-        var leftover: Leftover? = leftoverRepository.findByUserIdAndDate(requestDto.userId, date)
-        if (leftover != null) {
-            leftover.after = requestDto.amount
-            leftover.percentage = leftover.after * 1.0 / leftover.before
+        val userId = requestDto.userId
+        val courseNo = requestDto.courseNo
+        val before = requestDto.before
+        val after = requestDto.after
+
+        return if(leftoverRepository.findByUserIdAndDate(userId, date) != null) {
+            false
         } else {
-            leftover = Leftover()
-            leftover.userId = requestDto.userId
-            leftover.before = requestDto.amount
-            leftover.course = requestDto.courseNo
+            val leftover = Leftover()
+            leftover.userId = userId
+            leftover.course = courseNo
+            leftover.before = before
+            leftover.after = after
             leftover.date = date
+            leftover.percentage = after.toDouble() / before
+
+            leftoverRepository.save(leftover)
+            true
         }
-        leftoverRepository.save(leftover)
-        return true
     }
 
     // 평일 14시에 자동으로 잔반 DB를 트리거해서 랭킹 테이블 갱신
@@ -112,7 +119,6 @@ class LeftoverService(
             ?: throw NoSuchElementException("Leftover not found for user $userId and date $date")
     }
 
-
     /**
      * today(yyyy-MM-dd)에 userId의 잔반이가 있는지 확인하는 함수
      */
@@ -133,7 +139,7 @@ class LeftoverService(
     fun isPlayableDrawingGame(userId: String, today: String): Boolean {
         val leftover = getLeftoverByUserIdAndDate(userId, today)
 
-        if (!hasLeftoverAndJanbani(userId, today) || leftover.propStatus.equals("not assigned") || leftover.propStatus.equals("used")) {   //잔반이가 없으며, percentage가 -1이 아니라면?
+        if (!hasLeftoverAndJanbani(userId, today) || leftover.propStatus == "not assigned" || leftover.propStatus == "used") {   //잔반이가 없으며, percentage가 -1이 아니라면?
             return false
         }
         return true
@@ -143,9 +149,9 @@ class LeftoverService(
     fun updatePropStatus(userId: String, today: String, status: String, propName: String): Leftover {
         val leftover = getLeftoverByUserIdAndDate(userId, today)
 
-        if (status.equals("assign") && leftover.propStatus.equals("not assigned")) {
+        if (status == "assign" && leftover.propStatus == "not assigned") {
             leftover.propStatus = "assigned"
-        } else if (status.equals("change") && leftover.propStatus.equals("assigned")) {
+        } else if (status == "change" && leftover.propStatus == "assigned") {
             uploadServiceClient.updateJanbaniCode(JanbaniUpdateRequestDto(userId, propName))
             leftover.propStatus = "used"
         }

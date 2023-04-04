@@ -26,10 +26,10 @@ class LeftoverController(
         @RequestBody @ApiParam(value = "식사 정보", required = true) requestDto: LeftoverRegisterRequestDto
     ): ResponseEntity<*> {
         val result: Boolean = leftoverService.registerLeftover(requestDto)
-        if (result) {
-            return ResponseEntity.ok("${requestDto.userId}님의 ${LocalDate.now()}일 식사정보가 기록되었습니다.")
+        return if (result) {
+            ResponseEntity.ok("${requestDto.userId}님의 ${LocalDate.now()}일 식사정보가 기록되었습니다.")
         } else {
-            return ResponseEntity.badRequest().body("유효하지 않은 저장 요청 정보입니다.")
+            ResponseEntity.badRequest().body("유효하지 않은 저장 요청 정보입니다.")
         }
     }
 
@@ -69,7 +69,7 @@ class LeftoverController(
     }
 
     @GetMapping("/cookie/check")
-    @ApiOperation(value = "percentage와 playedGame 값을 검사하여 게임을 할 수 있는지를 체크한다.")
+    @ApiOperation(value = "쿠키 게임을 할 수 있는지 검사")
     fun isPlayableCookieGame(
         @RequestParam("userId") userId: String,
         @RequestParam today: String
@@ -78,7 +78,7 @@ class LeftoverController(
     }
 
     @GetMapping("/drawing/check")
-    @ApiOperation(value = "percentage와 playedGame 값을 검사하여 게임을 할 수 있는지를 체크한다.")
+    @ApiOperation(value = "그림 그리기 게임을 할 수 있는지 검사")
     fun isPlayableDrawingGame(
         @RequestParam("userId") userId: String,
         @RequestParam today: String
@@ -87,7 +87,7 @@ class LeftoverController(
     }
 
     @PutMapping("/drawing")
-    @ApiOperation(value = "percentage와 playedGame 값을 검사하여 게임을 할 수 있는지를 체크한다.")
+    @ApiOperation(value = "status의 값에 따라 propStatus 변경", notes = "1. 'assign' -> 소품을 할당하는 작업(이때 status가 assigned로 변경됨)\n\n 2. 'change' -> 그림 그리기 게임 성공 시 요청(status가 used로 변경됨)")
     fun updatePropStatus(
         @RequestBody requestDto: DrawingGameRequestDto
     ): ResponseEntity<Leftover> {
