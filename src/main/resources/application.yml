@@ -116,10 +116,14 @@ spring:
           uri: http://j8a802.p.ssafy.io:8019
           predicates:
             - Path=/leftovers/**
-        - id: ai
-          uri: http://j8a802.p.ssafy.io
+        - id: aijanban
+          uri: http://j8a802.p.ssafy.io/ai/janban
           predicates:
-            - Path=/ai/**
+            - Path=/ai/janban
+        - id: aidraw
+          uri: http://j8a802.p.ssafy.io/ai/draw
+          predicates:
+            - Path=/ai/draw
             # - Method=POST, OPTIONS
   #        - id: member
   #          uri: http://MemberService:8012/
