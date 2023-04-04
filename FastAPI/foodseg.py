@@ -1,4 +1,3 @@
-<<<<<<<< HEAD:FastAPI/foodseg.py
 import os, sys
 import torch
 from PIL import Image
@@ -101,4 +100,3 @@ async def check_janban(image: UploadFile = File()):
     response = foodseg.detect(contents)
     
     return JSONResponse(content=response)
->>>>>>>> 369fbb089628dfdd954e21bed2d1a614ad14ca44:FastAPI/test.py
