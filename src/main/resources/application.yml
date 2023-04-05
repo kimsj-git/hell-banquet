@@ -39,9 +39,6 @@ spring:
               - 'http://localhost:4000'
               - 'http://j8a802.p.ssafy.io:4000'
               - 'https://j8a802.p.ssafy.io:4000'
-              - 'http://localhost:5000'
-              - 'http://j8a802.p.ssafy.io:5000'
-              - 'https://j8a802.p.ssafy.io:5000'
             allow-credentials: true
             allowedHeaders: '*'
             exposed-headers: '*'
@@ -116,11 +113,11 @@ spring:
           uri: http://j8a802.p.ssafy.io:8019
           predicates:
             - Path=/leftovers/**
-        # - id: ai
-        #  uri: http://j8a802.p.ssafy.io:5000
-        #  predicates:
-        #    - Path=/ai/**
-            # - Method=POST, OPTIONS
+        - id: ai
+         uri: https://j8a802.p.ssafy.io:5000
+         predicates:
+           - Path=/ai/**
+          # - Method=POST, OPTIONS
   #        - id: member
   #          uri: http://MemberService:8012/
   #          #          uri: http://localhost:8012/
