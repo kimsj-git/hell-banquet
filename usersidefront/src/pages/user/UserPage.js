@@ -27,8 +27,8 @@ function UserPage() {
   };
 
   return (
-    <>
-      <LogedPageTemplate />
+      <LogedPageTemplate>
+
       <Container sx={styleForContainer}>
         <JanbanSection>
           <OverviewDailyJanban />
@@ -48,7 +48,7 @@ function UserPage() {
           로그아웃
         </Button>
       </Container>
-    </>
+      </LogedPageTemplate>
   );
 }
 

@@ -11,8 +11,8 @@ function LandingPage() {
   const hour = new Date().getHours();
 
   return (
-    <>
-      <LogedPageTemplate />
+      <LogedPageTemplate >
+
       <Container style={styleForContainer}>
         <JanvanSection>
           <OverviewDailyJanban />
@@ -32,7 +32,8 @@ function LandingPage() {
           <RecommendAritcle />
         </RecommendArticleSection>
       </Container>
-    </>
+      </LogedPageTemplate>
+
   );
 }
 const styleForContainer = {

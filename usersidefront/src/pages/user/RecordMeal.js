@@ -107,8 +107,8 @@ function RecordMeal() {
   useEffect(() => {}, [mealImages]);
 
   return (
-    <>
-      <LogedPageTemplate />
+      <LogedPageTemplate>
+
       <TypoStyle style={{fontSize: 24, padding: 20}}>
         식판 사진을 업로드
       </TypoStyle>
@@ -181,7 +181,8 @@ function RecordMeal() {
         )}
         {/* <TextField type='file' accept='image/*' onChange={handleUploadImg} />, */}
       </StyledContainer>
-    </>
+      </LogedPageTemplate>
+
   );
 }
 

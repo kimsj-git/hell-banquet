@@ -8,13 +8,15 @@ import { getLeftoverData } from "../../api/leftover";
 import styled from "styled-components";
 
 function DailyStatistics(params) {
+  ChartJS.register(ArcElement, Tooltip, Legend);
+
   const { date, course } = params;
   const [info, setInfo] = useState([
     {
       id: 1,
       served: 1062,
       leftovers: 59,
-      courseNo: 1,
+      courseNo: 0,
       date: "2023-03-24",
     },
     {
@@ -25,8 +27,16 @@ function DailyStatistics(params) {
       date: "2023-03-24",
     },
   ]);
+  const [chartData, setChartData] = useState({
+    labels: ["배식량", "잔반량"],
+    datasets: [
+      {
+        data: [100, 100],
+        backgroundColor: ["#63C132", "#F44336"],
+      },
+    ],
+  })
 
-  ChartJS.register(ArcElement, Tooltip, Legend);
 
   useEffect(() => {
     getLeftoverData(
@@ -35,18 +45,14 @@ function DailyStatistics(params) {
         return data.data;
       },
       (err) => console.log(err)
-    ).then((data) => setInfo(data));
-  }, [date]);
+    ).then((data) => { 
+      if(data !== []) {
+        setInfo(data)
+      }
 
-  const chartData = {
-    labels: ["배식량", "잔반량"],
-    datasets: [
-      {
-        data: [info[course].served, info[course].leftovers],
-        backgroundColor: ["#63C132", "#F44336"],
-      },
-    ],
-  };
+    });
+  }, [date]);
+  
 
   return (
     <CicleStaticContainer>

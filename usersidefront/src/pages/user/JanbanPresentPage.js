@@ -7,8 +7,8 @@ import { Gesture, Create } from "@mui/icons-material";
 
 function JanbanPresentPage() {
   return (
-    <>
-      <LogedPageTemplate />
+      <LogedPageTemplate>
+
       <JanbanImg src={staticJanban} />
       <LinkDecoNone to={"/drawing"}>
         <IconBox>
@@ -23,7 +23,8 @@ function JanbanPresentPage() {
           <Typp>잔반이에게 선물을 주세요!</Typp>
         </IconBox>
       </LinkDecoNone>
-    </>
+      </LogedPageTemplate>
+
   );
 }
 
