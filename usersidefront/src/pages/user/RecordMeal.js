@@ -17,7 +17,7 @@ function RecordMeal() {
   const navigate = useNavigate();
   const [mealImages, setMealImages] = useState([undefined, undefined]);
   const [isUploaded, setIsUploaded] = useState([false, false]);
-
+  console.log(mealImages)
   const handleTakeImg = (event, target) => {
     const file = event.target?.files[0];
     if (!file) return;
@@ -35,7 +35,6 @@ function RecordMeal() {
       })
       .catch((error) => console.error(error));
   };
-  console.log(mealImages[0]);
 
   const handleUploadImg = async (event, target) => {
     event.preventDefault();
@@ -139,7 +138,6 @@ function RecordMeal() {
           )}
         </MealBox>
         <MealBox>
-          {/* <PlateImg src={PlateSrc}/> */}
           <MealInput
             type='file'
             accept='image/*'
@@ -179,7 +177,6 @@ function RecordMeal() {
         ) : (
           <></>
         )}
-        {/* <TextField type='file' accept='image/*' onChange={handleUploadImg} />, */}
       </StyledContainer>
       </LogedPageTemplate>
 
@@ -199,7 +196,6 @@ const sytleForButton = {
   position: "absolute",
   right: "5%",
   bottom: "5%",
-  // transform: "translate(-50%, -50%)",
   zIndex: 2,
 
   width: "60px",
@@ -211,18 +207,7 @@ const sytleForButton = {
 };
 
 const sytleForRetryButton = {
-  position: "absolute",
-  left: "5%",
-  bottom: "5%",
-  // transform: "translate(-50%, -50%)",
-  zIndex: 2,
-
-  width: "60px",
-  height: "60px",
-
-  cursor: "pointer",
-  backgroundColor: "rgba(255, 255, 255, 0.8)",
-  borderRadius: "35px",
+  ...sytleForButton,
 };
 
 const StyledContainer = styled.div`
@@ -250,7 +235,7 @@ const MealInput = styled.input`
 
 const MealImg = styled.img`
   ${styleForSection}
-  z-index: ${(props) => (props.src === PlateSrc ? -1 : 1)};
+  z-index: ${(props) => (props.src === PlateSrc ? 1 : -1)};
   border: none;
 `;
 
@@ -258,12 +243,9 @@ const MealAlt = styled.p`
   position: absolute;
   font-size: 36px;
   font-weight: 1000;
-`;
+  z-index: ${(props) => (props.src ?-1 : 1)};
 
-// const PlateImg = styled.img`
-//   width: 600px;
-//   height: 480px;
-// `
+`;
 
 const styleForTypo = {
   fontFamily: "ChosunCentennial",

@@ -11,7 +11,6 @@ function OverviewRanking() {
     getDailyRank(
       { userId: localStorage.getItem("userId") },
       (data) => {
-        console.log(data.data)
         return data.data;
       },
       (err) => console.log(err)
@@ -22,7 +21,6 @@ function OverviewRanking() {
     <Container>
       {rankingIndex.map((rankIndex, index) => {
         if (result.length > index) {
-
           const { userId } = result[rankIndex - 1];
           return (
             <RankBox key={rankIndex}>
@@ -33,7 +31,7 @@ function OverviewRanking() {
             </RankBox>
           );
         } else {
-          return( <div>왜 아무도 밥을 안먹어!ㅠㅠㅠ</div>)
+          return( <div key={index}>왜 아무도 밥을 안먹어!ㅠㅠㅠ</div>)
         }
       })}
     </Container>

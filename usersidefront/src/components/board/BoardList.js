@@ -2,9 +2,9 @@ import { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { getBoardList } from "../../api/board";
-import { Button } from "@mui/material";
 
-import BoardListItem from "./BoardListItem";
+import { BoardListItem } from "./";
+import ArticleCreateSection from "./ArticleCreateSection";
 
 function BoardList() {
   const articleListRef = useRef(null);
@@ -26,6 +26,8 @@ function BoardList() {
     { content: "lorem", src: undefined },
     { content: "lorem", src: undefined, id: -1 },
   ]);
+
+
 
   useEffect(() => {
     const getMoreList = async () => {
@@ -86,17 +88,7 @@ function BoardList() {
 
   return (
     <>
-      <MessageBox>
-        <TypoStyle>지옥 게시판에 글을 남겨보세요..</TypoStyle>
-        <Button
-              variant='contained'
-              style={{ width: "90px", height:"40px", backgroundColor: "#950101" }}
-              size='large'
-              // onClick={handleSubmit}
-            >
-              <TypoStyle>글작성</TypoStyle>
-            </Button>
-      </MessageBox>
+      <ArticleCreateSection />
       <BoardListBox ref={articleListRef}>
         {articles.map((article, index) => {
           return <BoardListItem article={article} index={index} key={index} />;
