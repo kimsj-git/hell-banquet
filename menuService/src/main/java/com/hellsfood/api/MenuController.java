@@ -75,6 +75,12 @@ public class MenuController {
 		menuService.deleteMenu(id);
 	}
 
+	@ApiOperation(value = "식단 특성 반환")
+	@GetMapping("/feature")
+	public String getFeatureOfMenu(@RequestParam String managerId, @RequestParam String date, @RequestParam String type) {
+		return menuService.getFeatureOfMenu(managerId, date, type);
+	}
+
 	@PostMapping("/all")
 	@ApiOperation(value = "일괄 식단 등록 처리", notes = "엑셀 파일로 저장된 메뉴 정보를 기반으로 일괄 식단 등록")
 	public ResponseEntity<List<ExcelizedMenuRegisterResultDto>> createAllMenusUsingFile(

@@ -197,4 +197,9 @@ public class MenuService {
 		}
 	}
 
+	public String getFeatureOfMenu(String managerId, String date, String type) {
+		Menu menu = menuRepository.findByManagerIdAndDateAndType(managerId, parseDate(date), type);
+		return menu.getFeature();
+	}
+
 }
