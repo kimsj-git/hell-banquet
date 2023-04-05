@@ -13,6 +13,7 @@ function RecordMeal() {
   const navigate = useNavigate();
   const [mealImages, setMealImages] = useState([undefined, undefined]);
   const [isUploaded, setIsUploaded] = useState([false, false]);
+  console.log(isUploaded);
 
   const handleTakeImg = (event, target) => {
     const file = event.target?.files[0];
@@ -28,24 +29,20 @@ function RecordMeal() {
     event.preventDefault();
     const imageUrl = mealImages[target];
     if (!imageUrl) return;
-    console.log(imageUrl);
     await postRecordMeal(
       imageUrl,
       (data) => {
-        console.log(data);
-        return data;
+        return data.data;
       },
       (err) => console.log(err)
     ).then((data) => {
-      if (data) {
-        const newImage = [...mealImages];
-        newImage[target] = data?.s3_file_path;
-        setMealImages(newImage);
+      const newImage = [...mealImages];
+      newImage[target] = data?.s3_file_path;
+      setMealImages(newImage);
 
-        const newBoolean = [...isUploaded];
-        newBoolean[target] = data?.amount;
-        setIsUploaded(newBoolean);
-      }
+      const newBoolean = [...isUploaded];
+      newBoolean[target] = data?.amount;
+      setIsUploaded(newBoolean);
     });
   };
 
@@ -62,9 +59,9 @@ function RecordMeal() {
     await sendLeftoverData(
       leftOverData,
       (data) => {
-        console.log(data);
         alert(
-          `${ratio}만큼 잔반이 생성됐습니다! 
+          `${data.data}
+          ${ratio}만큼 잔반이 생성됐습니다! 
           ${ratio >= 20 ? "유감입니다!" : "감사합니다!"}`
         );
         navigate("/janban");
