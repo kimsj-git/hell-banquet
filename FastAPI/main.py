@@ -1,13 +1,14 @@
 from fastapi import FastAPI, File, Form, UploadFile
 # from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-# from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
+from fastapi.middleware.proxy_headers import TrustedHostMiddleware
 
 import drawjanbani
 import foodseg
 
 app = FastAPI()
-# app = FastAPI(ssl_keyfile="/etc/letsencrypt/live/j8a802.p.ssafy.io/privkey.pem", ssl_certfile="/etc/letsencrypt/live/j8a802.p.ssafy.io/fullchain.pem")
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
+
 # app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 # SSL 설정을 적용하기 위한 미들웨어 추가
