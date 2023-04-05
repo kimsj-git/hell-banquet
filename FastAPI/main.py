@@ -21,6 +21,7 @@ async def draw_is_correct(image: UploadFile = File(), category: str = Form()):
     else:
         result = False
     
+    print(check_set)
     return JSONResponse(content={"success": result})
 
 
