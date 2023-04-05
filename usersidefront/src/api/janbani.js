@@ -1,6 +1,15 @@
-import http from "./https.js";
+// import http from "./https.js";
 
-const api = http;
+// const api = http;
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: "https://j8a802.p.ssafy.io/api",
+
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 async function getJanbanImg(janbanCode, success, fail) {
   api.defaults.headers["Authorization"] = localStorage.getItem("auth");

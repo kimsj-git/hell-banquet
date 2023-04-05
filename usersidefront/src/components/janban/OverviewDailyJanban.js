@@ -1,14 +1,14 @@
-import { Button } from "@mui/material";
-import { Container } from "@mui/system";
-import styled from "styled-components";
+import { useState, useEffect } from "react";
+
 import staticJanban from "../../assets/images/janban.png";
 import { LinkDecoNone } from "../common";
-import { useEffect } from "react";
 import { getJanbanImg } from "../../api/janbani";
-import { useState } from "react";
+
+import styled from "styled-components";
+import { Button, Container } from "@mui/material";
 
 function OverviewDailyJanban() {
-  const [jabanImg, setJanbanImg] = useState(staticJanban);
+  const [janbanImg, setJanbanImg] = useState(staticJanban);
   const date = new Date().getHours();
   const janbanCode = "GRD_002";
   const janbanOption =
@@ -21,24 +21,28 @@ function OverviewDailyJanban() {
       await getJanbanImg(
         { janbanCode: janbanCode },
         (data) => {
-          console.log(data);
-          //   return data.data;
+          const blob = new Blob([data.data], { type: "image/png" });
+          const imageURL = URL.createObjectURL(blob);
+          return imageURL;
         },
         (err) => console.log(err)
-      ).then((data) => setJanbanImg(data));
+      ).then((res) => {
+        setJanbanImg(res);
+      });
     };
     handleGetJanban();
   }, []);
 
-  useEffect(() => {}, [jabanImg]);
+  useEffect(() => {
+    console.log(janbanImg);
+    console.log(JanbanImg);
+  }, [janbanImg]);
 
   return (
     <OverviewBox>
-      <JanbanImg src={jabanImg} alt='잔반이' />
+      <img src={"http://localhost:3000/f87a806b-055f-4b91-a073-4f8c2ab20e33"} />
+      <JanbanImg src={janbanImg} alt='잔반이' />
       <Container style={{ position: "relative", height: "100%" }}>
-        {/* <Typography style={{ position: "absolute", bottom: "50%" }}>
-          아직 안나옴!
-        </Typography> */}
         <LinkDecoNone
           to={janbanOption.url}
           style={{ position: "absolute", bottom: "10%", right: "15%" }}
@@ -60,8 +64,10 @@ const OverviewBox = styled.div`
 `;
 
 const JanbanImg = styled.img`
-  width: 200px;
-  height: 200px;
+  width: auto;
+  height: auto;
+  max-width: 200px;
+  max-height: 200px;
 `;
 
 export default OverviewDailyJanban;
