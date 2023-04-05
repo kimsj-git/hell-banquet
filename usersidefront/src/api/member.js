@@ -47,6 +47,18 @@ async function userFirst(user, success, fail) {
     .catch(fail);
 }
 
+// 매니저 전용기능
+async function excelUpload(xls, success, fail) {
+  const formData = new FormData();
+  formData.append("xls", xls);
+
+  api.defaults.headers["Authorization"] = localStorage.getItem("auth");
+  api.defaults.headers["refreshToken"] = localStorage.getItem("refresh");
+  api.defaults.headers["Content-Type"] = "multipart/form-data";
+
+  await api.post(`/managers/register/all`, formData).then(success).catch(fail);
+}
+
 export {
   signup,
   checkUnique,
@@ -56,4 +68,5 @@ export {
   findUserPassword,
   deleteUser,
   userFirst,
+  excelUpload,
 };

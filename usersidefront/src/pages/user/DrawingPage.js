@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
-import { Canvas, DrawSubject } from "../components/draw";
-import { LogedPageTemplate } from "../components/common";
+import { Canvas, DrawSubject } from "../../components/draw";
+import { LogedPageTemplate } from "../../components/common";
 
 import styled from "styled-components";
 import { Button } from "@mui/material";
@@ -10,8 +10,8 @@ function DrawingPage() {
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [remainingTime, setRemainingTime] = useState(10);
-  const [isDrawed, setIsDrawed] = useState(false);
-  const [isCheck, setIsCheck] = useState(false);
+  // const [isDrawed, setIsDrawed] = useState(false);
+  // const [isCheck, setIsCheck] = useState(false);
   const [subjectIndex, setSubjectIndex] = useState(0);
   const timerRef = useRef(null); // 타이머 참조
 
@@ -59,11 +59,11 @@ function DrawingPage() {
         {!isStarted && (
           <StartButton>
             {isFinished ? (
-              <Button variant="contained" color="error">
+              <Button variant='contained' color='error'>
                 여기까지입니다!!
               </Button>
             ) : (
-              <Button variant="contained" onClick={handleStartDrawing}>
+              <Button variant='contained' onClick={handleStartDrawing}>
                 그리기 시작
               </Button>
             )}
@@ -73,7 +73,7 @@ function DrawingPage() {
       <TimerWrapper>
         {isStarted ? (
           isFinished ? (
-            <Button variant="contained">결과를 알아볼까요?!</Button>
+            <Button variant='contained'>결과를 알아볼까요?!</Button>
           ) : (
             <p>남은 시간: {remainingTime}초</p>
           )

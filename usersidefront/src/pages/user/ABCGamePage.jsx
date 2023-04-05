@@ -1,10 +1,12 @@
-import "../assets/ABCGame/DotFont.css";
-import styled from "styled-components";
-import GameMain from "../assets/ABCGame/game_main.gif";
 import { useState } from "react";
-import ABCGame from "../components/game/ABCGame";
-import Gameover from "../assets/ABCGame/gameover.png";
-import GameClear from "../assets/ABCGame/gameclear.png";
+import "../../assets/ABCGame/DotFont.css";
+
+import GameMain from "../../assets/ABCGame/game_main.gif";
+import ABCGame from "../../components/game/ABCGame";
+import Gameover from "../../assets/ABCGame/gameover.png";
+import GameClear from "../../assets/ABCGame/gameclear.png";
+
+import styled from "styled-components";
 
 function ABCGamePage() {
   const [gameState, setGameState] = useState(0); // 0: 대기중, 1: 게임중, 2:게임오버, 3: 게임 클리어
@@ -55,8 +57,8 @@ function ABCGamePage() {
           <ContainerButton>
             <GameButton
               onClick={setGameStart}
-              backgroundColor="black"
-              textColor="white"
+              backgroundColor='black'
+              textColor='white'
             >
               다시하기
             </GameButton>
@@ -72,8 +74,8 @@ function ABCGamePage() {
           <ContainerButton>
             <GameButton
               onClick={setGameWait}
-              backgroundColor="black"
-              textColor="white"
+              backgroundColor='black'
+              textColor='white'
             >
               메인으로
             </GameButton>

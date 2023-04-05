@@ -1,24 +1,24 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import Error404Page from "./user/Error404Page";
-import LandingPage from "./user/LandingPage";
-import LoginPage from "./user/LoginPage";
-import SignUpPage from "./user/SignUpPage";
-import PasswordFind from "./user/PasswordFindPage";
-import BoardPage from "./user/BoardPage";
-import BoardDetailPage from "./user/BoardDetailPage";
-import UserPage from "./user/UserPage";
-import LoadingPage from "./user/LoadingPage";
-import UserInfoChangePage from "./user/UserInfoChangePage";
-import RecordMeal from "./user/RecordMeal";
-import DrawingPage from "./user/DrawingPage";
-import JanbanPresentPage from "./user/JanbanPresentPage";
+import Error404Page from "./Error404Page";
+import LandingPage from "./LandingPage";
+import LoginPage from "./LoginPage";
+import SignUpPage from "./SignUpPage";
+import PasswordFind from "./PasswordFindPage";
+import BoardPage from "./BoardPage";
+import BoardDetailPage from "./BoardDetailPage";
+import UserPage from "./UserPage";
+import LoadingPage from "./LoadingPage";
+import UserInfoChangePage from "./UserInfoChangePage";
+import RecordMeal from "./RecordMeal";
+import DrawingPage from "./DrawingPage";
+import JanbanPresentPage from "./JanbanPresentPage";
 import MenusTestPage from "./test/MenusTestPage";
-import TestRoutingPage from ".//test/TestRoutingPage";
+import TestRoutingPage from "./test/TestRoutingPage";
 import LeftoversTestPage from "./test/LeftoversTestPage";
-import AnalysisPage from "./user/AnalysisPage";
-import ABCGamePage from "./user/ABCGamePage";
-import RankingPage from "./user/RankingPage";
+import AnalysisPage from "./AnalysisPage";
+import ABCGamePage from "./ABCGamePage";
+import RankingPage from "./RankingPage";
 
 const routes = [
   // error pages

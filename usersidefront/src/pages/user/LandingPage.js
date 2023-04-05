@@ -1,11 +1,11 @@
-import { RecommendAritcle } from "../components/board";
-import { LinkDecoNone, LogedPageTemplate } from "../components/common";
-import { OverviewDailyJanban } from "../components/janban";
+import { RecommendAritcle } from "../../components/board";
+import { LinkDecoNone, LogedPageTemplate } from "../../components/common";
+import { OverviewDailyJanban } from "../../components/janban";
 
 import styled from "styled-components";
 import { Container } from "@mui/material";
-import OverviewRanking from "../components/analytics/OverviewRanking";
-import { MenuOverview } from "../components/menu";
+import OverviewRanking from "../../components/analytics/OverviewRanking";
+import { MenuOverview } from "../../components/menu";
 
 function LandingPage() {
   const hour = new Date().getHours();

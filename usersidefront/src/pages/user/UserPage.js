@@ -1,11 +1,11 @@
-import { LogedPageTemplate } from "../components/common";
-import { ProfileUserInfo } from "../components/user";
-import { OverviewDailyJanban } from "../components/janban";
-import { OverviewStatics } from "../components/analytics";
+import { LogedPageTemplate } from "../../components/common";
+import { ProfileUserInfo } from "../../components/user";
+import { OverviewDailyJanban } from "../../components/janban";
+import { OverviewStatics } from "../../components/analytics";
 
 import { useNavigate } from "react-router-dom";
 
-import { logout } from "../api/auth";
+import { logout } from "../../api/auth";
 
 import styled from "styled-components";
 import { Button, Container } from "@mui/material";

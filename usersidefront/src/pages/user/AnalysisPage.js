@@ -1,4 +1,4 @@
-import { LogedPageTemplate } from "../components/common";
+import { LogedPageTemplate } from "../../components/common";
 
 function AnalysisPage(params) {
   return (

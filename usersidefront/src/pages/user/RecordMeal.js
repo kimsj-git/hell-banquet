@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 
-import { LogedPageTemplate } from "../components/common";
+import { LogedPageTemplate } from "../../components/common";
+import { postRecordMeal } from "../../api/ai";
+import { sendLeftoverData } from "../../api/leftover";
 
 import styled from "styled-components";
 import { Button } from "@mui/material";
-import { postRecordMeal } from "../api/ai";
-import { sendLeftoverData } from "../api/leftover";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ReplayIcon from "@mui/icons-material/Replay";
 import { green } from "@mui/material/colors";
 
-import PlateSrc from "../assets/images/plate.png";
+import PlateSrc from "../../assets/images/plate.png";
 
 function RecordMeal() {
   const navigate = useNavigate();
@@ -111,8 +111,8 @@ function RecordMeal() {
       <StyledContainer style={{ marginBottom: 100, marginTop: 30 }}>
         <MealBox>
           <MealInput
-            type="file"
-            accept="image/*"
+            type='file'
+            accept='image/*'
             onChange={(event) => handleTakeImg(event, 0)}
           />
           <MealImg
@@ -137,8 +137,8 @@ function RecordMeal() {
         <MealBox>
           {/* <PlateImg src={PlateSrc}/> */}
           <MealInput
-            type="file"
-            accept="image/*"
+            type='file'
+            accept='image/*'
             onChange={(event) => handleTakeImg(event, 1)}
           />
           <MealImg
@@ -156,7 +156,7 @@ function RecordMeal() {
                 style={sytleForButton}
                 onClick={(event) => handleUploadImg(event, 0)}
               />
-              <ReplayIcon color="primary" style={sytleForRetryButton} />
+              <ReplayIcon color='primary' style={sytleForRetryButton} />
             </>
           )}
         </MealBox>
@@ -164,9 +164,9 @@ function RecordMeal() {
           <>
             <MessageBox>정말 제출하시겠습니까?</MessageBox>
             <Button
-              variant="contained"
+              variant='contained'
               style={{ width: "40%", backgroundColor: "#950101" }}
-              size="large"
+              size='large'
               onClick={handleSubmit}
             >
               <TypoStyle>예</TypoStyle>
@@ -239,7 +239,7 @@ const MealBox = styled.label`
   align-items: center;
   background-image: url(${PlateSrc});
   background-size: contain;
-  background-repeat:no-repeat;
+  background-repeat: no-repeat;
   background-position: center;
 `;
 
