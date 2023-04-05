@@ -11,6 +11,8 @@ import com.hellsfood.api.leftovers.dto.LeftoverRegisterRequestDto
 import com.hellsfood.api.client.UploadServiceClient
 import com.hellsfood.api.client.dto.JanbaniUpdateRequestDto
 import com.hellsfood.exception.AlreadyCompletedException
+import com.hellsfood.exception.FutureDateException
+import com.hellsfood.exception.LeftoverNotFoundException
 import lombok.RequiredArgsConstructor
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -116,9 +118,27 @@ class LeftoverService(
 
     @Transactional
     fun getLeftoverByUserIdAndDate(userId: String, date: String): Leftover {
-        return leftoverRepository.findByUserIdAndDate(userId, parseDate(date))
-            ?: throw NoSuchElementException("Leftover not found for user $userId and date $date")
+        val leftoverDate = parseDate(date)
+
+        if (leftoverDate.isAfter(LocalDate.now())) {
+            throw FutureDateException("$date in the future.")
+        }
+
+        try {
+            val getLeftover = leftoverRepository.findByUserIdAndDate(userId, leftoverDate)
+            if (getLeftover == null) {
+                throw LeftoverNotFoundException("$date 에 대한 $userId 의 잔반 기록이 없습니다.")
+            }
+            return getLeftover
+        } catch (ex: FutureDateException) {
+            throw ex
+        } catch (ex: LeftoverNotFoundException) {
+            throw ex
+        } catch (ex: Exception) {
+            throw Exception("Unexpected error occurred")
+        }
     }
+
 
     /**
      * today(yyyy-MM-dd)에 userId의 잔반이가 있는지 확인하는 함수

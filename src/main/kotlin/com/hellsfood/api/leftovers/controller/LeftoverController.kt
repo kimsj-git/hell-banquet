@@ -60,7 +60,7 @@ class LeftoverController(
         return ResponseEntity.ok(leftoverService.getAnalysisByDateRange(startDate, endDate))
     }
 
-    @GetMapping
+    @GetMapping("/detail")
     @ApiOperation(value = "잔반 데이터 상세 조회 - userId & Date")
     fun getLeftoverByUserIdAndDate(
         @RequestParam userId: String, @RequestParam date: String
