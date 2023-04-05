@@ -109,9 +109,9 @@ function RecordMeal() {
   return (
     <>
       <LogedPageTemplate />
-      <MessageBox>
-        <TypoStyle>식판 사진을 업로드</TypoStyle>
-      </MessageBox>
+      <TypoStyle style={{fontSize: 24, padding: 20}}>
+        식판 사진을 업로드
+      </TypoStyle>
       <StyledContainer style={{ marginBottom: 100, marginTop: 30 }}>
         <MealBox>
           <MealInput
@@ -158,7 +158,7 @@ function RecordMeal() {
               <CheckCircleOutlineIcon
                 sx={{ color: green[500] }}
                 style={sytleForButton}
-                onClick={(event) => handleUploadImg(event, 0)}
+                onClick={(event) => handleUploadImg(event, 1)}
               />
               <ReplayIcon color='primary' style={sytleForRetryButton} />
             </>
@@ -166,7 +166,7 @@ function RecordMeal() {
         </MealBox>
         {isUploaded[0] !== false && isUploaded[1] !== false ? (
           <>
-            <MessageBox>정말 제출하시겠습니까?</MessageBox>
+            <TypoStyle style={{fontSize: 24, padding: 20}} >정말 제출하시겠습니까?</TypoStyle>
             <Button
               variant='contained'
               style={{ width: "40%", backgroundColor: "#950101" }}
@@ -271,12 +271,6 @@ const styleForTypo = {
 
 const TypoStyle = styled.p`
   ${styleForTypo}
-`;
-
-const MessageBox = styled.p`
-  ${styleForTypo}
-  font-size: 20px;
-  padding: 20px;
 `;
 
 export default RecordMeal;
