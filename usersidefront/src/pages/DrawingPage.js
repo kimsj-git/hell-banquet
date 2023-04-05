@@ -24,6 +24,7 @@ function DrawingPage() {
     const randomIndex = Math.floor(Math.random() * 15);
     setSubjectIndex(randomIndex);
     console.log(randomIndex);
+    console.log(localStorage);
   }, []);
   useEffect(() => {
     // 그리기 종료 여부 감시
