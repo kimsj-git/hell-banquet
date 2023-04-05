@@ -17,7 +17,7 @@ function LandingPage() {
         <JanvanSection>
           <OverviewDailyJanban />
         </JanvanSection>
-        {/* {hour < 14 ? (
+        {hour < 14 ? (
           <DailyMenuSection>
             <MenuOverview />
           </DailyMenuSection>
@@ -30,7 +30,7 @@ function LandingPage() {
         )}
         <RecommendArticleSection>
           <RecommendAritcle />
-        </RecommendArticleSection> */}
+        </RecommendArticleSection>
       </Container>
     </>
   );
