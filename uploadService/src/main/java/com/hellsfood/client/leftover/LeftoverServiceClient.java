@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 // @FeignClient(name = "leftoverService", url = "localhost:8019/leftovers")
-@FeignClient(name = "leftoverService", url = "i8a802.p.ssafy.io:8019/leftovers")
+@FeignClient(name = "leftoverService", url = "j8a802.p.ssafy.io:8019/leftovers")
 public interface LeftoverServiceClient {
 
 	@GetMapping("/{date}")
