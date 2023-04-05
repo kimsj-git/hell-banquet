@@ -208,6 +208,7 @@ const sytleForButton = {
 
 const sytleForRetryButton = {
   ...sytleForButton,
+  left: "5%",
 };
 
 const StyledContainer = styled.div`
@@ -235,7 +236,7 @@ const MealInput = styled.input`
 
 const MealImg = styled.img`
   ${styleForSection}
-  z-index: ${(props) => (props.src === PlateSrc ? 1 : -1)};
+  z-index: 1;
   border: none;
 `;
 
@@ -243,7 +244,7 @@ const MealAlt = styled.p`
   position: absolute;
   font-size: 36px;
   font-weight: 1000;
-  z-index: ${(props) => (props.src ?-1 : 1)};
+  z-index: ${(props) => (props.src ? -1 : 1)};
 
 `;
 
