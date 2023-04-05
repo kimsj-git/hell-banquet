@@ -39,7 +39,7 @@ def check_image(img):
         top_k_values, top_k_indices = torch.topk(outputs[1], 3)
         for i in range(top_k_indices.size(1)):
             correct_list.add(category_list[top_k_indices[0][i]])
-            # print(f"Rank {i + 1}: Label: {category_list[top_k_indices[0][i]]}, Probability: {top_k_values[0][i] * 100}")
+            print(f"Rank {i + 1}: Label: {category_list[top_k_indices[0][i]]}, Probability: {top_k_values[0][i] * 100}")
     # print(correct_list)
 
     return correct_list
