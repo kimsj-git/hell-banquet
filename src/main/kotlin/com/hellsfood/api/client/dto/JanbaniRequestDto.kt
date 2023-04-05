@@ -1,4 +1,4 @@
-package com.hellsfood.common
+package com.hellsfood.api.client.dto
 
 data class JanbaniUpdateRequestDto(
 	val userId: String,

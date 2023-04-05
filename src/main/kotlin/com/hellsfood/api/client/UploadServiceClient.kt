@@ -1,7 +1,7 @@
-package com.hellsfood.client
+package com.hellsfood.api.client
 
-import com.hellsfood.common.JanbaniDto
-import com.hellsfood.common.JanbaniUpdateRequestDto
+import com.hellsfood.api.client.dto.JanbaniDto
+import com.hellsfood.api.client.dto.JanbaniUpdateRequestDto
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

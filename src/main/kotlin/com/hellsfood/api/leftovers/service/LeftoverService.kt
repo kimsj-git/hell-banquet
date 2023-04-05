@@ -8,8 +8,8 @@ import com.hellsfood.api.leftovers.data.Ranking
 import com.hellsfood.api.leftovers.data.RankingRepository
 
 import com.hellsfood.api.leftovers.dto.LeftoverRegisterRequestDto
-import com.hellsfood.client.UploadServiceClient
-import com.hellsfood.common.JanbaniUpdateRequestDto
+import com.hellsfood.api.client.UploadServiceClient
+import com.hellsfood.api.client.dto.JanbaniUpdateRequestDto
 import com.hellsfood.exception.AlreadyCompletedException
 import lombok.RequiredArgsConstructor
 import org.springframework.scheduling.annotation.Scheduled
