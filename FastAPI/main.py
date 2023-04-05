@@ -1,18 +1,15 @@
 from fastapi import FastAPI, File, Form, UploadFile
 # from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from fastapi.middleware.proxy_headers import TrustedHostMiddleware
 
 import drawjanbani
 import foodseg
 
 app = FastAPI()
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
-
-# app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 # SSL 설정을 적용하기 위한 미들웨어 추가
-# app.add_middleware(HTTPSRedirectMiddleware)
+app.add_middleware(HTTPSRedirectMiddleware)
 
 @app.post("/ai/draw")
 async def draw_is_correct(image: UploadFile = File(), category: str = Form()):
