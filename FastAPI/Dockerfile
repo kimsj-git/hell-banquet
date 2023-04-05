@@ -11,7 +11,4 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 
-ENV SSL_CERTFILE=/etc/letsencrypt/live/j8a802.p.ssafy.io/fullchain.pem
-ENV SSL_KEYFILE=/etc/letsencrypt/live/j8a802.p.ssafy.io/privkey.pem
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--ssl-keyfile", "${SSL_KEYFILE}", "--ssl-certfile", "${SSL_CERTFILE}"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--ssl-keyfile", "/etc/letsencrypt/live/j8a802.p.ssafy.io/fullchain.pem", "--ssl-certfile", "/etc/letsencrypt/live/j8a802.p.ssafy.io/privkey.pem"]
