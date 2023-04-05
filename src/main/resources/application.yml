@@ -106,10 +106,14 @@ spring:
 ##            - Method=GET, POST, PUT, DELETE
 #          filters:
 #            - ManagerAuthenticationFilter # 현재 로그인된 세션의 사용자가 영양사(Manager) 권한이 있는지 검사하는 필
-        - id: upload
+        - id: images
           uri: http://j8a802.p.ssafy.io:8061
           predicates:
-            - Path=/upload/**
+            - Path=/images/**
+        - id: janbani
+          uri: http://j8a802.p.ssafy.io:8061
+          predicates:
+            - Path=/janban/**
         - id: leftovers
           uri: http://j8a802.p.ssafy.io:8019
           predicates:
