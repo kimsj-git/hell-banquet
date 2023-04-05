@@ -139,17 +139,17 @@ class LeftoverService(
     fun isPlayableDrawingGame(userId: String, today: String): Boolean {
         val leftover = getLeftoverByUserIdAndDate(userId, today)
 
-        if (!hasLeftoverAndJanbani(userId, today) || leftover.propStatus == "not assigned" || leftover.propStatus == "used") {   //잔반이가 없으며, percentage가 -1이 아니라면?
-            return false
+        if (hasLeftoverAndJanbani(userId, today) && (leftover.propStatus == "assigned" || leftover.propStatus == "not assigned")) {
+            return true
         }
-        return true
+        return false
     }
 
     @Transactional
     fun updatePropStatus(userId: String, today: String, status: String, propName: String): Leftover {
         val leftover = getLeftoverByUserIdAndDate(userId, today)
 
-        if (status == "assign" && leftover.propStatus == "not assigned") {
+        if (status == "assign") {
             leftover.propStatus = "assigned"
         } else if (status == "change" && leftover.propStatus == "assigned") {
             uploadServiceClient.updateJanbaniCode(JanbaniUpdateRequestDto(userId, propName))
