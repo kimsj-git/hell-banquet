@@ -87,7 +87,7 @@ class LeftoverController(
     }
 
     @PutMapping("/drawing")
-    @ApiOperation(value = "status의 값에 따라 propStatus 변경", notes = "1. 'assign' -> 소품을 할당하는 작업(이때 status가 assigned로 변경됨)\n\n 2. 'change' -> 그림 그리기 게임 성공 시 요청(status가 used로 변경됨)")
+    @ApiOperation(value = "게임 결과 반영")
     fun updatePropStatus(
         @RequestBody requestDto: DrawingGameRequestDto
     ): ResponseEntity<Leftover> {
@@ -95,7 +95,6 @@ class LeftoverController(
             leftoverService.updatePropStatus(
                 requestDto.userId,
                 requestDto.today,
-                requestDto.status,
                 requestDto.propName
             )
         )

@@ -7,5 +7,5 @@ data class JanbaniDto(
     val userId: String,
     val feature: String,
     val janbanCode: String,
-    val updateAt: LocalDateTime
+    val updatedAt: LocalDateTime
 )

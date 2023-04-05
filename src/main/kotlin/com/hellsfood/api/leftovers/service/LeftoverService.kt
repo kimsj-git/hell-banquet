@@ -10,6 +10,7 @@ import com.hellsfood.api.leftovers.data.RankingRepository
 import com.hellsfood.api.leftovers.dto.LeftoverRegisterRequestDto
 import com.hellsfood.client.UploadServiceClient
 import com.hellsfood.common.JanbaniUpdateRequestDto
+import com.hellsfood.exception.AlreadyCompletedException
 import lombok.RequiredArgsConstructor
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -146,15 +147,22 @@ class LeftoverService(
     }
 
     @Transactional
-    fun updatePropStatus(userId: String, today: String, status: String, propName: String): Leftover {
+    fun updatePropStatus(userId: String, today: String, propName: String): Leftover {
         val leftover = getLeftoverByUserIdAndDate(userId, today)
 
-        if (status == "assign") {
+        if (leftover.propStatus == "used") {
+            throw AlreadyCompletedException("이미 게임을 완료했습니다.")
+        }
+
+        if (leftover.propStatus == "not assigned") {
             leftover.propStatus = "assigned"
-        } else if (status == "change" && leftover.propStatus == "assigned") {
+        }
+
+        if (leftover.propStatus == "assigned") {
             uploadServiceClient.updateJanbaniCode(JanbaniUpdateRequestDto(userId, propName))
             leftover.propStatus = "used"
         }
+
         leftoverRepository.save(leftover)
         return leftover
     }
