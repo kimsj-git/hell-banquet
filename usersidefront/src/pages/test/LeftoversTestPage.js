@@ -54,7 +54,8 @@ function LeftoversTestPage() {
   const handleSendData = async () => {
     await sendLeftoverData(
       {
-        amount: 0,
+        beofore: 100,
+        after: 10,
         courseNo: 1,
         userId: "string",
       },

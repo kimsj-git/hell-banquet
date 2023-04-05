@@ -3,7 +3,7 @@ import http from "./https.js";
 const api = http;
 
 api.defaults.headers["Authorization"] = localStorage.getItem("auth");
-api.defaults.headers["refreshToken"] = localStorage.getItem("refreshToken");
+api.defaults.headers["refreshToken"] = localStorage.getItem("refresh");
 
 async function getBoardList(params, success, fail) {
   const res = await api

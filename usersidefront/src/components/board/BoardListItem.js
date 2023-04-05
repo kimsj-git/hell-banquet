@@ -2,7 +2,7 @@ import { ArticleOption, UpDelModal } from "./";
 import { LinkDecoNone } from "../common";
 
 import styled from "styled-components";
-import { Card, Container, Grid } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 
 function BoardListItem(params) {
   const { article } = params;
@@ -16,22 +16,20 @@ function BoardListItem(params) {
     // article.detail이 true인 경우 클릭 이벤트를 처리하지 않습니다.
   };
   return (
-    <div onClick={handleClick}>
+    <div style={{margin: "15px 20px"}}>
       {article?.detail ? (
-        <ArticleCard>
+        // 디테일에서 보이는 게시물
+        <ArticleCard onClick={handleClick}>
           <UpDelModal article={article} />
           <Grid container style={makeItCenter}>
             <Grid item xs={4}>
               <JanvanFace src={article.src} alt={article?.id} />
-              <p>{article.writer}</p>
+              <TypoWriter>{article.writer}</TypoWriter>
             </Grid>
             <Grid item xs={8}>
-              <Container style={{ height: 100, fontSize: 20 }}>
-                {article.content}
+              <Container>
+                <TypoContent>{article.content}</TypoContent>
               </Container>
-              <Container
-                style={{ display: "flex", justifyContent: "space-around" }}
-              ></Container>
             </Grid>
             <OptionBox>
               <ArticleOption article={article} />
@@ -39,17 +37,18 @@ function BoardListItem(params) {
           </Grid>
         </ArticleCard>
       ) : (
+        // 게시물 목록에서 보이는 게시물
         <LinkDecoNone to={`/board/${article.id}`} state={article}>
-          <ArticleCard>
+          <ArticleCard onClick={handleClick}>
             <UpDelModal article={article} />
             <Grid container style={makeItCenter}>
               <Grid item xs={4} style={{ textAlign: "center" }}>
                 <JanvanFace src={article.src} alt={article?.id} />
-                <p>{article.writer}</p>
+                <TypoWriter>{article.writer}</TypoWriter>
               </Grid>
               <Grid item xs={8}>
                 <Container style={{ height: 100, fontSize: 20 }}>
-                  {article.content}
+                  <TypoContent>{article.content}</TypoContent>
                 </Container>
                 <OptionBox>
                   <ArticleOption article={article} />
@@ -72,11 +71,11 @@ function BoardListItem(params) {
 const ArticleCard = styled.div`
   position: relative;
   display: flex;
-  margin: 15px 20px;
+  // margin: 15px 20px;
   height: 200px;
-  background: #faf6ee;
+  background: #f9f9f9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 5px 5px 25px 5px;
+  border-radius: 25px 5px 25px 5px;
 `;
 
 const JanvanFace = styled.img`
@@ -92,5 +91,15 @@ const OptionBox = styled.div`
   flex-direction: row;
   justify-content: end;
 `;
+
+const TypoContent = styled.p`
+  font-family: ChosunCentennial;
+  font-size: 20px;
+`
+
+const TypoWriter = styled.p`
+  font-family: ChosunCentennial;
+  font-size: 15px;
+`
 
 export default BoardListItem;

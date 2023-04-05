@@ -26,33 +26,33 @@ function ArticleOption(params) {
       (data) => {
         console.log(data);
         if (isLiked === 1) {
-          setIsLiked(0)
+          setIsLiked(0);
         } else {
-          setIsLiked(1)
+          setIsLiked(1);
         }
-        setLikeCount(data.data.likeCount)
-        setDislikeCount(data.data.dislikeCount)
+        setLikeCount(data.data.likeCount);
+        setDislikeCount(data.data.dislikeCount);
       },
       (err) => console.log(err)
-      );
-    };
-    
-    const changeDisLike = async () => {
-      await putDisLike(
+    );
+  };
+
+  const changeDisLike = async () => {
+    await putDisLike(
       user,
       (data) => {
         console.log(data);
         if (isLiked === 2) {
-          setIsLiked(0)
+          setIsLiked(0);
         } else {
-          setIsLiked(2)
+          setIsLiked(2);
         }
-        setDislikeCount(data.data.dislikeCount)
-        setLikeCount(data.data.likeCount)
+        setDislikeCount(data.data.dislikeCount);
+        setLikeCount(data.data.likeCount);
       },
       (err) => console.log(err)
-      );
-    };
+    );
+  };
 
   const articleOptions = [
     {
@@ -85,7 +85,7 @@ function ArticleOption(params) {
     let target = event.target?.id;
     if (!target) {
       // Icon 클릭하는 경우 target 지정
-      target = event.target.parentElement.parentElement.id
+      target = event.target.parentElement.parentElement.id;
     }
 
     if (target === "1") {
@@ -106,32 +106,43 @@ function ArticleOption(params) {
     const { iconName, num, myHand } = option;
     const styleForIcon = {
       marginRight: 10,
-      fontSize: 34,
+      fontSize: 20,
       color:
+      iconName === Comment 
+      ?num !== 0 
+      ? '#A084CA' // 댓글 있
+      : '#5f5f5f' // 댓글 없
+      :
         isLiked === myHand
           ? isLiked === 1
-            ? "#0070f3"   // 좋아요 블루
+            ? "#492369"   // 좋아요 퍼플
             : "#990000"   // 싫어요 레드
-          : "#000000",    // 해당없음 블랙
+          : "#5f5f5f",    // 해당없음 그레이
     };
 
     const styleForButton = {
       padding: 0,
-      width: "6rem",
+      width: "4rem",
       height: "3rem",
+      fontSize: "20px",
     };
 
     return (
       <IconButton
         disableTouchRipple
         onClick={
-          myHand === articleOptions[2].myHand ? () => {} : handleClickCount
+          myHand === articleOptions[2].myHand
+            ? () => {}
+            : (event) => {
+                event.stopPropagation();
+                handleClickCount(event);
+              }
         }
         style={styleForButton}
         key={index}
         id={myHand}
       >
-        <Icon component={iconName} style={styleForIcon} id={myHand} onClick={myHand === articleOptions[2].myHand ? () => {} : (event) => {event.stopPropagation(); handleClickCount(event)}}/>
+        <Icon component={iconName} style={styleForIcon} id={myHand} />
         {num}
       </IconButton>
     );

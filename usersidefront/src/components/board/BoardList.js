@@ -28,6 +28,9 @@ function BoardList() {
 
   useEffect(() => {
     const getMoreList = async () => {
+      if (boardInfo.lastBoardId === 1) {
+        return
+      }
       await getBoardList(
         boardInfo,
         (data) => {
@@ -38,7 +41,7 @@ function BoardList() {
         if (articles[0]?.id === -1) {
           setArticles(data);
         } else {
-          articles.push(...data);
+          setArticles([...articles, ...data])
         }
       });
     };
@@ -92,7 +95,8 @@ function BoardList() {
 }
 
 const BoardListBox = styled.div`
-  background: #edebe9;
+  // background: #EDEBE9;
+  background: url("../../assets/bg_purple.png");
   padding: 10px 0px 90px 0px;
 `;
 
