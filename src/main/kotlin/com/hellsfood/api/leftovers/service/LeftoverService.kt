@@ -139,7 +139,7 @@ class LeftoverService(
     fun isPlayableDrawingGame(userId: String, today: String): Boolean {
         val leftover = getLeftoverByUserIdAndDate(userId, today)
 
-        if (hasLeftoverAndJanbani(userId, today) && (leftover.propStatus == "assigned" || leftover.propStatus == "not assigned")) {
+        if (hasLeftoverAndJanbani(userId, today) && !(leftover.propStatus == "used")) {
             return true
         }
         return false
