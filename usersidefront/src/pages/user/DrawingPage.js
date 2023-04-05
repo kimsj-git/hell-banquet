@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 
-import { Canvas, DrawSubject } from "../components/draw";
-import { LogedPageTemplate } from "../components/common";
+import { Canvas, DrawSubject } from "../../components/draw";
+import { LogedPageTemplate } from "../../components/common";
 import {
   getLeftover,
   putDrawingGameInfo,
   getDrawingGameInfo,
-} from "../api/leftover";
+} from "../../api/leftover";
 import styled from "styled-components";
 import { Button } from "@mui/material";
 
