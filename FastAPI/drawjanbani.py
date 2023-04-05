@@ -18,7 +18,7 @@ def check_image(img):
     transform = transforms.Compose([transforms.Resize((28, 28)),
                                     transforms.Grayscale(),
                                     transforms.ToTensor(),
-                                    transforms.InvertColors(),
+                                    transforms.Lambda(lambda x: transforms.functional.invert(x)),
                                     transforms.Normalize(mean=[0.5], std=[0.5])])
 
     # save_model = torch.load('resnet34_29_256.pth', map_location=device)
