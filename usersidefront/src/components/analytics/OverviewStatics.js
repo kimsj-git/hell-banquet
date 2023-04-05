@@ -8,7 +8,7 @@ import { getLeftover } from "../../api/leftover";
 import styled from "styled-components";
 
 function OverviewStatics(params) {
-  // const { date, course } = params;
+  // const { date, course,  } = params;
   const date = "2023-04-04";
   const userId = "manager";
   const [info, setInfo] = useState([10, 10]);

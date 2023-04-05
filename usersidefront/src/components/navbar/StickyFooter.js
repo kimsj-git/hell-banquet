@@ -1,5 +1,6 @@
 import { LinkDecoNone } from "../common";
 import { useLocation } from "react-router-dom";
+import atlas from "../../assets/images/atlas.png";
 
 import styled from "styled-components";
 import { Icon } from "@mui/material";
@@ -37,33 +38,40 @@ function StickyFooter() {
   }, []);
 
   return (
-    <StickyFooterNav scrollY={scrollY}>
-      {navlist.map((item) => {
-        const pathname = location.pathname;
-        return (
-          <LinkDecoNone
-            to={item.url}
-            key={item.name}
-            style={{
-              textDecoration: "none",
-            }}
-          >
-            <Icon
-              component={item.icon}
+    <>
+      <StickyFooterNav scrollY={scrollY}>
+        {navlist.map((item) => {
+          const pathname = location.pathname;
+          return (
+            <LinkDecoNone
+              to={item.url}
+              key={item.name}
               style={{
-                width: 40,
-                height: 40,
-                color: pathname.includes(item.url)
-                  ? item.name === "홈" && pathname !== "/"
-                    ? "black"
-                    : "#edebe9"
-                  : "black",
+                textDecoration: "none",
               }}
-            />
-          </LinkDecoNone>
-        );
-      })}
-    </StickyFooterNav>
+            >
+              <Icon
+                component={item.icon}
+                style={{
+                  width: 40,
+                  height: 40,
+                  color: pathname.includes(item.url)
+                    ? item.name === "홈" && pathname !== "/"
+                      ? "black"
+                      : "#edebe9"
+                    : "black",
+                }}
+              />
+            </LinkDecoNone>
+          );
+        })}
+        <img
+          style={{ position: "absolute", top: "100%" }}
+          src={atlas}
+          alt='atlas'
+        />
+      </StickyFooterNav>
+    </>
   );
 }
 
