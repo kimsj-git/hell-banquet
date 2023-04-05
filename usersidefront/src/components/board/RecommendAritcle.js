@@ -24,13 +24,13 @@ function RecommendAritcle() {
     ).then((data) => setTodayArticle(data));
   }, [date]);
 
-  if (todayArticle !== []) {
+  if (todayArticle !== "아직 오늘 작성된 게시글이 없어요") {
     return (
       <ContainerForNone>
         <Grid container>
           <Grid item xs={6} style={{ textAlign: "center" }}>
             <Typo fontSize={24} style={{ marginTop: "15px" }}>
-              {todayArticle.writer}
+              {todayArticle?.writer}
             </Typo>
             <StaticJanbanImg src={staticJanban} alt='잔반이' />
           </Grid>

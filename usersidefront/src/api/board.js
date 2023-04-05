@@ -39,6 +39,9 @@ async function getArticleDetail(detail, success, fail) {
 }
 
 async function getTodayArticle(date, success, fail) {
+  api.defaults.headers["Authorization"] = localStorage.getItem("auth");
+  api.defaults.headers["refreshToken"] = localStorage.getItem("refresh");
+
   const res = await api
     .get(`/boards/today`, { params: { date: date } })
     .then(success)
