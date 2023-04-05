@@ -2,7 +2,6 @@ package com.hellsfood.service;
 
 import java.io.IOException;
 
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,17 +28,16 @@ public class ImageService {
 		imageRepository.save(image);
 	}
 
-	public Resource getImageById(Long id) {
+	public String getImageS3PathById(Long id) {
 		Image image = imageRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("해당하는 잔반이가 없습니다."));
-
-		return s3Service.readImageFromS3(image.getFilePath());
+		return image.getFilePath();
 	}
 
-	public Resource getImageByJanbanCode(String code) {
+	public String getImageS3PathByJanbanCode(String code) {
 		JanbanCode janbanCode = JanbanCode.valueOf(code);
 		Image image = imageRepository.findOneByJanbanCode(janbanCode);
-		return s3Service.readImageFromS3(image.getFilePath());
+		return image.getFilePath();
 	}
 
 }

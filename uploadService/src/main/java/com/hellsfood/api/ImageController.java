@@ -2,10 +2,7 @@ package com.hellsfood.api;
 
 import java.io.IOException;
 
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,29 +40,23 @@ public class ImageController {
 	@ApiOperation(value = "{id}에 해당하는 잔반이 조회")
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getImage(@PathVariable Long id) {
-		Resource resource = imageService.getImageById(id);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.IMAGE_JPEG);
-		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+		String s3Path = imageService.getImageS3PathById(id);
+		return new ResponseEntity<>(s3Path, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "JanbanCode로 잔반이 조회")
 	@GetMapping("/name")
-	public ResponseEntity<?> getImage(@RequestParam String code) {
-		Resource resource = imageService.getImageByJanbanCode(code);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.IMAGE_JPEG);
-		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+	public ResponseEntity<String> getImage(@RequestParam String code) {
+		String s3Path = imageService.getImageS3PathByJanbanCode(code);
+		return new ResponseEntity<>(s3Path, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "유저별 잔반이 조회")
 	@GetMapping
-	public ResponseEntity<?> getJanbani(@RequestParam String userId) {
+	public ResponseEntity<String> getJanbani(@RequestParam String userId) {
 		String janbanCode = janbaniService.getJanban(userId);
-		Resource resource = imageService.getImageByJanbanCode(janbanCode);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.IMAGE_JPEG);
-		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+		String s3Path = imageService.getImageS3PathByJanbanCode(janbanCode);
+		return new ResponseEntity<>(s3Path, HttpStatus.OK);
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
