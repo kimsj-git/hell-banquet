@@ -32,6 +32,7 @@ spring:
             allowedOrigins: 
               - 'http://localhost:3000'
               - 'http://j8a802.p.ssafy.io'
+              - 'http://j8a802.p.ssafy.io:443'
               - 'http://j8a802.p.ssafy.io:3000'
               - 'https://j8a802.p.ssafy.io'
               - 'https://j8a802.p.ssafy.io:3000'
