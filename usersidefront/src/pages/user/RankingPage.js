@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 
-import { LogedPageTemplate } from "../components/common";
-import { OverviewRanking, DailyRanking } from "../components/analytics";
-import { getDailyRank } from "../api/leftover";
+import { LogedPageTemplate } from "../../components/common";
+import { OverviewRanking, DailyRanking } from "../../components/analytics";
+import { getDailyRank } from "../../api/leftover";
 
 import styled from "styled-components";
 
