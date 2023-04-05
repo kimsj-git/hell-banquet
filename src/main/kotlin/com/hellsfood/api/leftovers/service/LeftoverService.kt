@@ -153,19 +153,17 @@ class LeftoverService(
         if (leftover.propStatus == "used") {
             throw AlreadyCompletedException("이미 게임을 완료했습니다.")
         }
-
-        if (leftover.propStatus == "not assigned") {
+        else if (leftover.propStatus == "not assigned") {
             leftover.propStatus = "assigned"
         }
-
-        if (leftover.propStatus == "assigned") {
+        else if (leftover.propStatus == "assigned") {
             uploadServiceClient.updateJanbaniCode(JanbaniUpdateRequestDto(userId, propName))
             leftover.propStatus = "used"
         }
-
         leftoverRepository.save(leftover)
         return leftover
     }
+
 
     fun getLeftoversByDate(date: String): List<Leftover> {
         return leftoverRepository.findByDateAndPercentage(parseDate(date))
