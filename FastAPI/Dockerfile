@@ -7,6 +7,7 @@ COPY requirements.txt /app
 RUN apt-get update && apt-get install -y libgl1-mesa-glx
 RUN pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 RUN pip install --upgrade pip
+RUN pip install fastapi[all]
 RUN pip install -r requirements.txt
 
 COPY . /app
