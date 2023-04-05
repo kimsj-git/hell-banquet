@@ -101,4 +101,12 @@ class LeftoverController(
         )
     }
 
+    @GetMapping("/{date}")
+    @ApiOperation(value = "잔반이를 만들 수 있는 Leftover 객체를 반환함")
+    fun getLeftoversByDate(
+        @PathVariable date: String
+    ): List<Leftover> {
+        return leftoverService.getLeftoversByDate(date)
+    }
+
 }

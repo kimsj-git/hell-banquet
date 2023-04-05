@@ -159,4 +159,8 @@ class LeftoverService(
         return leftover
     }
 
+    fun getLeftoversByDate(date: String): List<Leftover> {
+        return leftoverRepository.findByDateAndPercentage(parseDate(date))
+    }
+
 }
