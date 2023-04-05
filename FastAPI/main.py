@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, Form, UploadFile
+from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 # from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
