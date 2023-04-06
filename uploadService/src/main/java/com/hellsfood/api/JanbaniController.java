@@ -59,6 +59,12 @@ public class JanbaniController {
 		return new ResponseEntity<>(s3Path, HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "강제 업데이트")
+	@GetMapping("/force-update")
+	public void updateJanbani() {
+		janbaniService.createJanbanAll();
+	}
+
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
