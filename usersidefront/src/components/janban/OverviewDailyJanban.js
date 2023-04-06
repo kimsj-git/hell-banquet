@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { Container } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import HellLivingPoint from "./HellLivingPoint";
 
 function OverviewDailyJanban() {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +25,6 @@ function OverviewDailyJanban() {
       await getUserImg(
         { userId: localStorage.getItem("userId") },
         (data) => {
-          console.log(data.data);
           return data.data;
         },
         (err) => console.log(err)
@@ -36,27 +36,33 @@ function OverviewDailyJanban() {
     handleGetJanban();
   }, []);
 
-  useEffect(() => {}, [janbanImg]);
 
   return (
-    <LinkDecoNone to={janbanOption.url}>
-      <OverviewBox>
-        <Container style={{ position: "relative", height: "100%" }}>
-          {isLoading ? (
-            <Box sx={{ display: "flex" }}>
-              <CircularProgress />
-            </Box>
-          ) : (
-            <JanbanImg
-              src={janbanImg ? janbanImg : staticJanban}
-              alt='잔반이'
-            />
-          )}
-        </Container>
-      </OverviewBox>
-    </LinkDecoNone>
+    <OverviewBox>
+      <Container style={{ position: "relative", height: "100%", }}>
+        <Box sx={{ display: "flex", flexDirection:'row', alignItems: 'center' }}>
+        {isLoading ? (
+            <CircularProgress />
+            ) : (
+              <>
+          <JanbanImg src={janbanImg ? janbanImg : staticJanban} alt="잔반이" />
+          <HellLivingPoint />
+          </>
+        )}
+        </Box>
+        <LinkDecoNone
+          to={janbanOption.url}
+          style={{ position: "absolute", bottom: "10%", right: "15%" }}
+        >
+          {/* <Button variant='contained' color='warning'>
+            {janbanOption.message}
+          </Button> */}
+        </LinkDecoNone>
+      </Container>
+    </OverviewBox>
   );
 }
+
 
 const OverviewBox = styled.div`
   width: 100%;
@@ -70,6 +76,8 @@ const JanbanImg = styled.img`
   height: auto;
   max-width: 200px;
   max-height: 200px;
+  margin-top: 5%;
+  margin-left: 10%;
 `;
 
 export default OverviewDailyJanban;
