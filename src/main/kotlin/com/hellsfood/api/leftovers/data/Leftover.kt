@@ -7,7 +7,6 @@ import javax.persistence.*
 
 @DynamicInsert
 @Entity
-@Table(name = "leftover")
 class Leftover {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
