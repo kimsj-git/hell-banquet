@@ -1,5 +1,3 @@
-import { Grid } from "@mui/material";
-
 import { LinkDecoNone } from "../common";
 
 import styled from "styled-components";
@@ -15,20 +13,20 @@ function StickyHeader() {
             <TypoStyle>지옥 뷔페</TypoStyle>
           </LogoStyle>
         </LinkDecoNone>
-        <GroupStyle>
-          <LinkDecoNone to="/">
+        <MenuStyle>
+          <LinkDecoNone to="/board">
             <TypoStyleMenu>게시판</TypoStyleMenu>
           </LinkDecoNone>
-          <LinkDecoNone to="/">
+          <LinkDecoNone to="/record-meal">
             <TypoStyleMenu>식사하기</TypoStyleMenu>
           </LinkDecoNone>
-          <LinkDecoNone to="/">
+          <LinkDecoNone to="/analysis">
             <TypoStyleMenu>통계</TypoStyleMenu>
           </LinkDecoNone>
-          <LinkDecoNone to="/">
+          <LinkDecoNone to={`/user/${localStorage.getItem('userId')}`}>
             <TypoStyleMenu>내정보</TypoStyleMenu>
           </LinkDecoNone>
-        </GroupStyle>
+        </MenuStyle>
       </HeaderStyle>
     </StickyHeaderNav>
   );
@@ -96,7 +94,7 @@ const LogoStyle = styled.div`
   align-items: center;
 `;
 
-const GroupStyle = styled.div`
+const MenuStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
