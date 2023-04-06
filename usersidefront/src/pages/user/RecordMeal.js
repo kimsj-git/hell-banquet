@@ -215,7 +215,7 @@ function RecordMeal() {
             }}
           />}
           {mealImages[1] === undefined ? (
-            <MealAlt src={mealImages[0]}>After</MealAlt>
+            <MealAlt src={mealImages[1]}>After</MealAlt>
           ) : (
             <>
               <CheckCircleOutline
