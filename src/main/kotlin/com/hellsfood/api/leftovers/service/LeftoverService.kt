@@ -119,8 +119,9 @@ class LeftoverService(
     @Transactional
     fun getLeftoverByUserIdAndDate(userId: String, date: String): Leftover {
         val leftoverDate = parseDate(date)
+        val today = parseDate("2023-04-07")
 
-        if (leftoverDate.isAfter(LocalDate.now())) {
+        if (leftoverDate.isAfter(today)) {
             throw FutureDateException("$date in the future.")
         }
 
