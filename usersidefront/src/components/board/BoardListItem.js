@@ -9,7 +9,7 @@ import { Container, Grid } from "@mui/material";
 import staticJanban from "../../assets/images/staticJanban.png";
 
 function BoardListItem(params) {
-  const { article, isChild } = params;
+  const { article, isChild, comments, setComments } = params;
   const [janbanImg, setJanbanImg] = useState(staticJanban);
   const makeItCenter = { display: "flex", alignItems: "center" };
   const handleClick = () => {
@@ -45,23 +45,23 @@ function BoardListItem(params) {
                 src={janbanImg ? janbanImg : staticJanban}
                 alt={article?.id}
               />
-              <TypoWriter>{article.writer}</TypoWriter>
+              <TypoWriter style={{textAlign: "center", margin: 0}}>{article.writer}</TypoWriter>
             </Grid>
             <Grid item xs={8}>
               <Container>
                 <TypoContent>{article.content}</TypoContent>
               </Container>
-            </Grid>
             <OptionBox>
               <ArticleOption article={article} />
             </OptionBox>
+            </Grid>
           </Grid>
         </ArticleCard>
       ) : (
         // 게시물 목록에서 보이는 게시물
         <LinkDecoNone to={`/board/${article.id}`} state={article}>
           <ArticleCard onClick={handleClick} id={article.id} isChild={isChild}>
-            <UpDelModal article={article} />
+            <UpDelModal article={article} comments={comments} setComments={setComments} />
             <Grid container style={makeItCenter}>
               <Grid item xs={4} style={{ textAlign: "center" }}>
                 <JanvanFace

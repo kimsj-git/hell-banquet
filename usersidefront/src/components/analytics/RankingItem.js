@@ -5,15 +5,13 @@ import { getUserImg } from "../../api/janbani";
 
 import styled from "styled-components";
 
-function DailyRanking(params) {
-  const { info, king } = params;
+function RankingItem(params) {
+  const { rankIndex, userId } = params;
   const [janbanImg, setJanbanImg] = useState();
 
-  
-  useEffect(() => {
   const handleGetJanban = async () => {
     await getUserImg(
-      { userId: info.userId },
+      { userId: userId },
       (data) => {
         return data.data;
       },
@@ -23,41 +21,43 @@ function DailyRanking(params) {
       setJanbanImg(res);
     });
   };
-    handleGetJanban()
-}, [info])
+
+  useEffect(() => {
+    handleGetJanban();
+  }, [userId]);
 
   return (
-    <RankBox>
-      <Typo>{info.rank - king.rank}등</Typo>
-      <StaticJanbanImg src={janbanImg ? janbanImg : staticJanban} />
-      <Typo>{info.userId}</Typo>
+    <RankBox key={rankIndex}>
+      <StaticJanbanImg
+        src={janbanImg ? janbanImg : staticJanban}
+        rank={rankIndex}
+        alt="잔반이"
+      />
+      <Typo>{rankIndex}등</Typo>
+      <Typo style={{ fontSize: "20px", fontWeight: "600" }}>
+        {userId}
+      </Typo>
     </RankBox>
   );
 }
 
 const RankBox = styled.div`
-  color: black;
-  margin: 10px 0px 10px 0px;
-  background: #b9a0fe;
-  width: 80%;
-  border-radius: 20px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  border-radius: 20px;
+  text-align: center;
   align-items: center;
 `;
 
 const StaticJanbanImg = styled.img`
-  width: 60px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-left: 5%;
+  width: ${(props) => (4 - props.rank) * 60}px;
+  margin-top: 15px;
 `;
 
 const Typo = styled.p`
   font-family: CookieRun-Regular;
   margin: 0;
-  margin-left: 10%;
   text-transform: uppercase;
 `;
 
-export default DailyRanking;
+export default RankingItem;

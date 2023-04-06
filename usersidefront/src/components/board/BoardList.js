@@ -25,7 +25,7 @@ function BoardList() {
     { content: "", src: undefined, writer: "ssafy" },
     { content: "", src: undefined, writer: "ssafy" },
     { content: "", src: undefined, writer: "ssafy" },
-    { content: "lorem", src: undefined, id: -1 },
+    { content: "Loading...", src: undefined, id: -1 },
   ]);
 
   useEffect(() => {
@@ -100,23 +100,6 @@ function BoardList() {
 const BoardListBox = styled.div`
   // background: #EDEBE9;
   padding: 10px 0px 90px 0px;
-`;
-
-const MessageBox = styled.div`
-  background: #faf6ee;
-  padding: 5px;
-  margin-left: 10%;
-  margin-right: 10%;
-  margin-top: 10%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const TypoStyle = styled.p`
-  font-family: ChosunCentennial;
-  font-size: 15px;
 `;
 
 export default BoardList;

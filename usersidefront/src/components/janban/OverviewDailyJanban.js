@@ -5,10 +5,16 @@ import { LinkDecoNone } from "../common";
 import { getUserImg } from "../../api/janbani";
 
 import styled from "styled-components";
-import { Container } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import HellLivingPoint from "./HellLivingPoint";
+
+const janbanNames = {
+  GRD: "잔반이",
+  SEA: "해반이",
+  SKY: "공반이",
+};
 
 function OverviewDailyJanban() {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,6 +31,7 @@ function OverviewDailyJanban() {
       await getUserImg(
         { userId: localStorage.getItem("userId") },
         (data) => {
+          // console.log(data)
           return data.data;
         },
         (err) => console.log(err)
@@ -36,47 +43,86 @@ function OverviewDailyJanban() {
     handleGetJanban();
   }, []);
 
-  useEffect(() => {}, [janbanImg]);
+  let janbanName = "";
+  if (janbanImg) {
+    const type = janbanImg.split("/").pop().split("_")[0];
+    janbanName = janbanNames[type];
+  }
 
   return (
-    <OverviewBox>
-      <Container style={{ position: "relative", height: "100%" }}>
-        {isLoading ? (
-          <Box sx={{ display: "flex" }}>
+      <Container style={styleForContainer}>
+        <Box>
+          {isLoading ? (
             <CircularProgress />
-          </Box>
-        ) : (
-          <>
-          <JanbanImg src={janbanImg} alt="잔반이" />
-          <HellLivingPoint />
-          </>
+          ) : (
+            <>
+              <JanbanImg
+                src={janbanImg ? janbanImg : staticJanban}
+                alt="잔반이"
+              />
+              <HellLivingPoint />
+            </>
+          )}
+        {isLoading ? <></> : (
+          <TypoJanban>
+          {janbanImg ? '' : "... 잔반이가 아직 자고있네요 zZ"}
+        </TypoJanban>
         )}
-        <LinkDecoNone
-          to={janbanOption.url}
-          style={{ position: "absolute", bottom: "10%", right: "15%" }}
-        >
-          {/* <Button variant='contained' color='warning'>
+      </Box>
+      {isLoading ? (
+        <></>
+      ) : (
+        <TypoJanban>
+          {janbanImg
+            ? `${janbanName} 입니다!`
+            : "... 잔반이가 아직 자고있네요 zZ"}
+        </TypoJanban>
+      )}
+      {!janbanImg && (
+        <LinkDecoNone to="/record-meal">
+          <Button
+            variant="contained"
+            style={{ backgroundColor: "#492369", margin: 10 }}
+          >
+            <TypoJanban style={{fontSize: "15px"}}>잔반이 깨우러 가기</TypoJanban>
+          </Button>
+        </LinkDecoNone>
+      )}
+      <LinkDecoNone
+        to={janbanOption.url}
+        style={{ position: "absolute", bottom: "10%", right: "15%" }}
+      >
+        {/* <Button variant='contained' color='warning'>
             {janbanOption.message}
           </Button> */}
-        </LinkDecoNone>
-      </Container>
-    </OverviewBox>
+      </LinkDecoNone>
+    </Container>
   );
 }
 
-
-const OverviewBox = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
+const styleForContainer = {
+  display: "flex",
+  flexDirection: "column",
+  height: "100%",
+  alignItems: "center",
+  justifyContent: "center",
+  textAlign: "center",
+};
 
 const JanbanImg = styled.img`
   width: auto;
   height: auto;
   max-width: 200px;
   max-height: 200px;
+  // margin-top: 5%;
+  // margin-left: 10%;
+`;
+
+const TypoJanban = styled.p`
+  margin: 0;
+  text-align: center;
+  font-family: CookieRun-Regular;
+  font-size: 20px;
 `;
 
 export default OverviewDailyJanban;
