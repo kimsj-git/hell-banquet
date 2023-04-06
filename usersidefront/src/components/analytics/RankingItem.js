@@ -9,6 +9,7 @@ function RankingItem(params) {
     const {rankIndex, userId} = params
     const [janbanImg, setJanbanImg ] = useState()
 
+    useEffect(() => {
     const handleGetJanban = async () => {
         await getUserImg(
           { userId: userId },
@@ -22,7 +23,6 @@ function RankingItem(params) {
         });
       };
 
-    useEffect(() => {
         handleGetJanban()
     }, [userId])
 

@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import { getDailyRank } from "../../api/leftover";
-import staticJanban from "../../assets/images/janban.png";
 import styled from "styled-components";
 import RankingItem from "./RankingItem";
 
 function OverviewRanking() {
   const [result, setResult] = useState(["user1", "user3", "user2"]);
-  const [janbanImg, setJanbanImg ] = useState(staticJanban)
   const rankingIndex = [2, 1, 3];
 
   useEffect(() => {

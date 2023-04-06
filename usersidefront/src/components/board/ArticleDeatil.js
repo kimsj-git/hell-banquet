@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import BoardListItem from "./BoardListItem";
@@ -8,7 +8,6 @@ import styled from "styled-components";
 
 function ArticleDetail() {
   const location = useLocation();
-  const articleListRef = useRef(null);
   const [article, ] = useState(location.state);
   const [comments, setComments] = useState([
     { content: "Loading...", src: undefined, id: -1 },
@@ -42,7 +41,7 @@ function ArticleDetail() {
     };
 
       getMoreComment();
-  }, [comments, location, articleListRef]);
+  }, [location]);
 
   return (
     <>

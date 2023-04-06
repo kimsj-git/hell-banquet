@@ -5,7 +5,7 @@ import { MoreHoriz } from "@mui/icons-material";
 import { updateArticle } from "../../api/board";
 
 function UpDelModal(params) {
-  const { article, comments, setComments } = params;
+  const { article } = params;
   const [isOpen, setIsOpen] = useState(false);
   const [content, setContent] = useState(article.content);
 
@@ -21,8 +21,6 @@ function UpDelModal(params) {
       () => {},
       (err) => console.log(err)
     );
-    setIsOpen(false)
-    setComments([...comments, {writer: localStorage.getItem('userId'), content: content, id: 99}])
   };
 
   const handleDelete = (event) => {
