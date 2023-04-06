@@ -53,7 +53,7 @@ class LeftoverService(
             leftover.before = before
             leftover.after = after
             leftover.date = date
-            leftover.percentage = after.toDouble() / before
+            leftover.percentage = before.toDouble() / after
 
             leftoverRepository.save(leftover)
             true
