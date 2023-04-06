@@ -17,7 +17,7 @@ function LandingPage() {
           <TypoJanban>오늘의 잔반이는...</TypoJanban>
           <OverviewDailyJanban />
         </JanvanSection>
-        {hour > 14 ? (
+        {hour < 14 ? (
           <DailyMenuSection>
             <MenuOverview />
           </DailyMenuSection>
