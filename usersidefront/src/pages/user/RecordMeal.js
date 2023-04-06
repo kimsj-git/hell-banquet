@@ -177,7 +177,7 @@ function RecordMeal() {
           지옥 뷔페에 오신 것을 환영합니다...
         </TypoStyle>
         <TypoStyle style={{ color: "#5f5f5f", paddingBottom: 15 }}>
-          입장을 위해 식사 전후 사진을 올려주세요.
+          입장을 위해 메뉴 선택 후 식사 전후 사진을 올려주세요.
         </TypoStyle>
         <TypoStyle
           style={{
@@ -370,6 +370,7 @@ const MessageBox = styled.div`
   margin-left: 10%;
   margin-right: 10%;
   margin-top: 5%;
+  margin-bottom: 5%;
   display: flex;
   flex-direction: column;
   justify-content: center;
