@@ -7,6 +7,7 @@ import java.time.LocalDate
 interface LeftoverRepository : JpaRepository<Leftover, Long> {
     fun existsByUserIdAndDate(userId: String, date: LocalDate): Boolean
 
+    @Query(value = "select * from leftover l where l.user_id = ?1 and l.date = ?2", nativeQuery = true)
     fun findByUserIdAndDate(userId: String, date: LocalDate): Leftover?
 
     @Query(
