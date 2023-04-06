@@ -125,7 +125,7 @@ function RecordMeal() {
           ${ratio}만큼 잔반이 생성됐습니다! 
           ${ratio >= 20 ? "유감입니다!" : "감사합니다!"}`
         );
-        navigate("/janban");
+        navigate("/record-meal/janban");
       },
       (err) => console.log(err)
     );
