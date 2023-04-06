@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.servlet.ServletOutputStream;
@@ -98,7 +99,8 @@ public class MenuService {
 
 	@Transactional(readOnly = true)
 	public Menu getMenusByManagerIdAndDateAndType(String managerId, String date, String type) {
-		return menuRepository.findByManagerIdAndDateAndType(managerId, parseDate(date), type);
+		return menuRepository.findByManagerIdAndDateAndType(managerId, parseDate(date), type)
+			.orElseThrow(() -> new NoSuchElementException("해당 일자에 식단이 없습니다."));
 	}
 
 	@Transactional
@@ -112,8 +114,13 @@ public class MenuService {
 			setResultDto(resultDto, requestRow);
 
 			long id = getNextSequence("menu_sequence", mongo);
-			menuRepository.save(createMenuFromResultDto(resultDto, id));
-			resultList.add(resultDto);
+			Optional<Menu> optionalMenu = menuRepository.findByManagerIdAndDateAndType(resultDto.getManagerId(),
+				resultDto.getDate(), resultDto.getType());
+
+			if (optionalMenu.isEmpty()) {
+				menuRepository.save(createMenuFromResultDto(resultDto, id));
+				resultList.add(resultDto);
+			}
 		}
 		return resultList;
 	}
@@ -189,7 +196,8 @@ public class MenuService {
 	}
 
 	public String getFeatureOfMenu(String managerId, String date, String type) {
-		Menu menu = menuRepository.findByManagerIdAndDateAndType(managerId, parseDate(date), type);
+		Menu menu = menuRepository.findByManagerIdAndDateAndType(managerId, parseDate(date), type)
+			.orElseThrow(() -> new NoSuchElementException("해당 식단이 없어요"));
 		return menu.getFeature();
 	}
 
