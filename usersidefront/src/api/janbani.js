@@ -2,6 +2,7 @@ import http from "./https.js";
 
 const api = http;
 
+
 async function getJanbanImg(janbanCode, success, fail) {
   api.defaults.headers["Authorization"] = localStorage.getItem("auth");
   api.defaults.headers["refreshToken"] = localStorage.getItem("refresh");

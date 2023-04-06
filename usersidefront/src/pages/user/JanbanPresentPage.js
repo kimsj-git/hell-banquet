@@ -7,10 +7,9 @@ import { Gesture, Create } from "@mui/icons-material";
 
 function JanbanPresentPage() {
   return (
-    <>
-      <LogedPageTemplate />
+    <LogedPageTemplate>
       <JanbanImg src={staticJanban} />
-      <LinkDecoNone to={"/drawing"}>
+      <LinkDecoNone to={"/drawing"} style={{ position: "relative" }}>
         <IconBox>
           <StyledGestureIcon
             component={Gesture}
@@ -23,7 +22,7 @@ function JanbanPresentPage() {
           <Typp>잔반이에게 선물을 주세요!</Typp>
         </IconBox>
       </LinkDecoNone>
-    </>
+    </LogedPageTemplate>
   );
 }
 
@@ -36,8 +35,7 @@ const JanbanImg = styled.img`
 `;
 const IconBox = styled.div`
   position: relative;
-  width: 390px;
-  height: 390px;
+  height: 50%;
   background: rgba(191, 192, 187, 0.5);
 
   margin: 5% 5% 25% 5%;

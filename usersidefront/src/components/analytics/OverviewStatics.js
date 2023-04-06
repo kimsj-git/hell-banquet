@@ -8,16 +8,14 @@ import { getLeftover } from "../../api/leftover";
 import styled from "styled-components";
 
 function OverviewStatics(params) {
-  // const { date, course,  } = params;
-  const date = "2023-04-04";
-  const userId = "manager";
+  const { date } = params;
   const [info, setInfo] = useState([10, 10]);
 
   ChartJS.register(ArcElement, Tooltip, Legend);
 
   useEffect(() => {
     getLeftover(
-      { userId: userId, date: date },
+      { userId: localStorage.getItem('userId'), date: date },
       (data) => {
         return data.data;
       },
@@ -30,7 +28,8 @@ function OverviewStatics(params) {
     datasets: [
       {
         data: [info[0], info[1]],
-        backgroundColor: ["#078767", "#FF0000"],
+        // backgroundColor: ["#078767", "#FF0000"],
+        backgroundColor: ["#93329E", "#440A67"],
       },
     ],
   };

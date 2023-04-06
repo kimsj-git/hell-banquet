@@ -2,21 +2,25 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 
 import { LogedPageTemplate } from "../../components/common";
+import { MenuOverview } from "../../components/menu";
 import { postRecordMeal } from "../../api/ai";
-import { sendLeftoverData } from "../../api/leftover";
+import {
+  getCookieGameInfo,
+  getDrawingGameInfo,
+  sendLeftoverData,
+} from "../../api/leftover";
+import PlateSrc from "../../assets/images/plate.png";
 
 import styled from "styled-components";
 import { Button } from "@mui/material";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import ReplayIcon from "@mui/icons-material/Replay";
+import { Replay, CheckCircleOutline } from "@mui/icons-material";
 import { green } from "@mui/material/colors";
-
-import PlateSrc from "../../assets/images/plate.png";
 
 function RecordMeal() {
   const navigate = useNavigate();
-  const [mealImages, setMealImages] = useState([undefined, undefined]);
   const [isUploaded, setIsUploaded] = useState([false, false]);
+  const [mealImages, setMealImages] = useState([undefined, undefined]);
+  const [selectedMenu, setSelectedMenu] = useState("A");
 
   const handleTakeImg = (event, target) => {
     const file = event.target?.files[0];
@@ -35,12 +39,12 @@ function RecordMeal() {
       })
       .catch((error) => console.error(error));
   };
-  console.log(mealImages[0]);
 
   const handleUploadImg = async (event, target) => {
     event.preventDefault();
     const imageUrl = mealImages[target];
     if (!imageUrl) return;
+
     await postRecordMeal(
       imageUrl,
       (data) => {
@@ -85,7 +89,7 @@ function RecordMeal() {
     const leftOverData = {
       before: isUploaded[0],
       after: isUploaded[1],
-      courseNo: 0,
+      courseNo: selectedMenu === "A" ? 0 : 1,
       userId: localStorage.getItem("userId"),
     };
 
@@ -103,11 +107,50 @@ function RecordMeal() {
     );
   };
 
-  useEffect(() => {}, [mealImages]);
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    const userStateChecker = async () => {
+      const cookie = await getCookieGameInfo(
+        {
+          today: today,
+          userId: localStorage.getItem("userId"),
+        },
+        (data) => {
+          return data.data;
+        },
+        (err) => console.log(err)
+      ).then((result) => {
+        return result;
+      });
+      const drawing = await getDrawingGameInfo(
+        {
+          today: today,
+          userId: localStorage.getItem("userId"),
+        },
+        (data) => {
+          return data.data;
+        },
+        (err) => console.log(err)
+      ).then((result) => {
+        return result;
+      });
+
+      if (cookie || drawing) {
+        navigate("/janban");
+      }
+    };
+    userStateChecker();
+  }, [mealImages]);
 
   return (
-    <>
-      <LogedPageTemplate />
+    <LogedPageTemplate>
+      <TypoStyle style={{ fontSize: 24, padding: 20 }}>
+        식판 사진을 업로드
+      </TypoStyle>
+      <MenuOverview
+        target={selectedMenu}
+        onClick={(target) => setSelectedMenu(target)}
+      />
       <StyledContainer style={{ marginBottom: 100, marginTop: 30 }}>
         <MealBox>
           <MealInput
@@ -125,17 +168,16 @@ function RecordMeal() {
             <MealAlt src={mealImages[0]}>Before</MealAlt>
           ) : (
             <>
-              <CheckCircleOutlineIcon
+              <CheckCircleOutline
                 sx={{ color: green[500] }}
                 style={sytleForButton}
                 onClick={(event) => handleUploadImg(event, 0)}
               />
-              <ReplayIcon color='primary' style={sytleForRetryButton} />
+              <Replay color='primary' style={sytleForRetryButton} />
             </>
           )}
         </MealBox>
         <MealBox>
-          {/* <PlateImg src={PlateSrc}/> */}
           <MealInput
             type='file'
             accept='image/*'
@@ -151,18 +193,20 @@ function RecordMeal() {
             <MealAlt src={mealImages[0]}>After</MealAlt>
           ) : (
             <>
-              <CheckCircleOutlineIcon
+              <CheckCircleOutline
                 sx={{ color: green[500] }}
                 style={sytleForButton}
-                onClick={(event) => handleUploadImg(event, 0)}
+                onClick={(event) => handleUploadImg(event, 1)}
               />
-              <ReplayIcon color='primary' style={sytleForRetryButton} />
+              <Replay color='primary' style={sytleForRetryButton} />
             </>
           )}
         </MealBox>
         {isUploaded[0] !== false && isUploaded[1] !== false ? (
           <>
-            <MessageBox>정말 제출하시겠습니까?</MessageBox>
+            <TypoStyle style={{ fontSize: 24, padding: 20 }}>
+              정말 제출하시겠습니까?
+            </TypoStyle>
             <Button
               variant='contained'
               style={{ width: "40%", backgroundColor: "#950101" }}
@@ -175,9 +219,8 @@ function RecordMeal() {
         ) : (
           <></>
         )}
-        {/* <TextField type='file' accept='image/*' onChange={handleUploadImg} />, */}
       </StyledContainer>
-    </>
+    </LogedPageTemplate>
   );
 }
 
@@ -194,7 +237,6 @@ const sytleForButton = {
   position: "absolute",
   right: "5%",
   bottom: "5%",
-  // transform: "translate(-50%, -50%)",
   zIndex: 2,
 
   width: "60px",
@@ -206,18 +248,8 @@ const sytleForButton = {
 };
 
 const sytleForRetryButton = {
-  position: "absolute",
+  ...sytleForButton,
   left: "5%",
-  bottom: "5%",
-  // transform: "translate(-50%, -50%)",
-  zIndex: 2,
-
-  width: "60px",
-  height: "60px",
-
-  cursor: "pointer",
-  backgroundColor: "rgba(255, 255, 255, 0.8)",
-  borderRadius: "35px",
 };
 
 const StyledContainer = styled.div`
@@ -237,10 +269,6 @@ const MealBox = styled.label`
   position: relative;
   justify-content: center;
   align-items: center;
-  background-image: url(${PlateSrc});
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
 `;
 
 const MealInput = styled.input`
@@ -249,7 +277,7 @@ const MealInput = styled.input`
 
 const MealImg = styled.img`
   ${styleForSection}
-  z-index: ${(props) => (props.src === PlateSrc ? -1 : 1)};
+  z-index: 1;
   border: none;
 `;
 
@@ -257,12 +285,8 @@ const MealAlt = styled.p`
   position: absolute;
   font-size: 36px;
   font-weight: 1000;
+  z-index: ${(props) => (props.src ? -1 : 1)};
 `;
-
-// const PlateImg = styled.img`
-//   width: 600px;
-//   height: 480px;
-// `
 
 const styleForTypo = {
   fontFamily: "ChosunCentennial",
@@ -271,12 +295,6 @@ const styleForTypo = {
 
 const TypoStyle = styled.p`
   ${styleForTypo}
-`;
-
-const MessageBox = styled.p`
-  ${styleForTypo}
-  font-size: 20px;
-  padding: 20px;
 `;
 
 export default RecordMeal;

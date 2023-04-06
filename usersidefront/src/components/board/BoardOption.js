@@ -4,9 +4,9 @@ import BoardOptionButton from "./BoardOptionButton";
 import ArticleCreateModal from "./ArticleCreateModal";
 
 import styled from "styled-components";
-import { Create, ArrowBack, MoreVert } from "@mui/icons-material";
-import BoardSearchModal from "./BoardSearchModal";
 import { Container } from "@mui/material";
+import { Create, ArrowBack, MoreVert, } from "@mui/icons-material";
+import BoardSearchModal from "./BoardSearchModal";
 
 function BoardOption() {
   const navigate = useNavigate();
