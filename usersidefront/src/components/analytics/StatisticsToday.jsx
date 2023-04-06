@@ -43,7 +43,8 @@ const StatsticsToday = () => {
     datasets: [
       {
         data: [info[0], info[1]],
-        backgroundColor: ["#078767", "#FF0000"],
+        // backgroundColor: ["#078767", "#FF0000"],
+        backgroundColor: ["#93329E", "#440A67"],
       },
     ],
   };
@@ -56,6 +57,7 @@ const StatsticsToday = () => {
         variant="contained"
         size="small"
         sx={{ fontSize: "16px", fontWeight: "bold" }}
+        color="secondary"
       >
         {todayString}
       </Button>

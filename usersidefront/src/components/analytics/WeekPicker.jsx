@@ -59,6 +59,7 @@ function WeekPicker(props) {
   };
   const ExampleCustomInput = ({ value, onClick }) => (
     <Button
+      color="secondary"
       variant="contained"
       size="small"
       sx={{ fontSize: "16px", fontWeight: "bold" }}

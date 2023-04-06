@@ -20,7 +20,7 @@ const StatisticsWeek = (props) => {
       {
         // type: "bar",
         label: "배식량",
-        backgroundColor: "#078767",
+        backgroundColor: "#93329E",
         data: [mon[0], tue[0], wes[0], thu[0], fri[0]],
         // borderColor: "red",
         // borderWidth: 2,
@@ -28,7 +28,7 @@ const StatisticsWeek = (props) => {
       {
         // type: "bar",
         label: "잔반량",
-        backgroundColor: "#FF0000",
+        backgroundColor: "#440A67",
         data: [mon[1], tue[1], wes[1], thu[1], fri[1]],
         // borderColor: "green",
         // borderWidth: 2,

@@ -27,7 +27,8 @@ const StatisticWeekDou = (props) => {
     datasets: [
       {
         data: [props.weekBefore, props.weekAfter],
-        backgroundColor: ["#078767", "#FF0000"],
+        // backgroundColor: ["#078767", "#FF0000"],
+        backgroundColor: ["#93329E", "#440A67"],
       },
     ],
   };
