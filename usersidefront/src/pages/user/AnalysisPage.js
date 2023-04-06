@@ -169,7 +169,8 @@ import WeekPicker from "../../components/analytics/WeekPicker";
 import StatisticsWeek from "../../components/analytics/StatisticsWeek";
 import StatisticWeekDou from "../../components/analytics/StatisticWeekDou";
 import { SelectMunu } from "../../components/menu";
-import Grid from "@mui/material/Grid";
+import DayPicker from "../../components/analytics/DayPicker";
+// import Grid from "@mui/material/Grid";
 const AnalysisPage = () => {
   const [value, setValue] = React.useState("1");
   const [mon, setMon] = useState([]);
@@ -353,7 +354,7 @@ const AnalysisPage = () => {
             </Box>
             <TabPanel value="1">
               {/* <Content> */}
-
+              <DayPicker />
               <StatsticsToday />
               <SelectMunu />
 
