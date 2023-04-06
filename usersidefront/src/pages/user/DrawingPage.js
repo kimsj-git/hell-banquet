@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { Canvas, DrawSubject } from "../../components/draw";
 import { LogedPageTemplate } from "../../components/common";
 import {
@@ -18,12 +18,11 @@ function DrawingPage() {
   const [isCheck, setIsCheck] = useState(1); // 0: 밥 안먹음, 1: 게임가능, 2: 이미함
   const [subjectIndex, setSubjectIndex] = useState(0);
   const timerRef = useRef(null); // 타이머 참조
-
+  const navigate = useNavigate();
   // 그리기 시작 버튼 클릭 핸들러
   const handleStartDrawing = () => {
     setIsStarted(true);
   };
-
   useEffect(() => {
     const today = new Date();
     const year = today.getFullYear();
@@ -41,16 +40,17 @@ function DrawingPage() {
           // userId: "string",
         },
         (data) => {
-          if (data) {
+          if (data === "true") {
             console.log("그림아직");
           } else {
-            console.log("이미그림");
             setIsCheck(2);
+            alert("오늘은 이미 그림을 그렸어요.");
+            navigate(-1);
           }
         },
         (err) => {
-          setIsCheck(0);
-          console.log("밥안먹음");
+          alert("밥먹고 오세요.");
+          navigate(-1);
         }
       );
     };
@@ -96,7 +96,7 @@ function DrawingPage() {
             // console.log("어사인드");
             // console.log(localStorage.subjectIndex);
           } else {
-            console.log("asdfasdf");
+            // console.log("asdfasdf");
           }
         },
         (err) => {
