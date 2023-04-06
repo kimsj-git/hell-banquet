@@ -3,7 +3,8 @@ import styled from "styled-components";
 
 import { getBoardList } from "../../api/board";
 
-import BoardListItem from "./BoardListItem";
+import { BoardListItem } from "./";
+import ArticleCreateSection from "./ArticleCreateSection";
 
 function BoardList() {
   const articleListRef = useRef(null);
@@ -25,6 +26,8 @@ function BoardList() {
     { content: "lorem", src: undefined },
     { content: "lorem", src: undefined, id: -1 },
   ]);
+
+
 
   useEffect(() => {
     const getMoreList = async () => {
@@ -85,6 +88,7 @@ function BoardList() {
 
   return (
     <>
+      <ArticleCreateSection />
       <BoardListBox ref={articleListRef}>
         {articles.map((article, index) => {
           return <BoardListItem article={article} index={index} key={index} />;
@@ -98,5 +102,22 @@ const BoardListBox = styled.div`
   // background: #EDEBE9;
   padding: 10px 0px 90px 0px;
 `;
+
+const MessageBox = styled.div`
+  background: #faf6ee;
+  padding: 5px;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+const TypoStyle = styled.p`
+  font-family: ChosunCentennial;
+  font-size: 15px;
+`
 
 export default BoardList;

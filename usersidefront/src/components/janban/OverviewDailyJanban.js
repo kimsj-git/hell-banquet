@@ -34,8 +34,6 @@ function OverviewDailyJanban() {
   }, []);
 
   useEffect(() => {
-    console.log(janbanImg);
-    console.log(JanbanImg);
   }, [janbanImg]);
 
   return (

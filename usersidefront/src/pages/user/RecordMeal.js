@@ -17,7 +17,7 @@ function RecordMeal() {
   const navigate = useNavigate();
   const [mealImages, setMealImages] = useState([undefined, undefined]);
   const [isUploaded, setIsUploaded] = useState([false, false]);
-
+  console.log(mealImages)
   const handleTakeImg = (event, target) => {
     const file = event.target?.files[0];
     if (!file) return;
@@ -35,7 +35,6 @@ function RecordMeal() {
       })
       .catch((error) => console.error(error));
   };
-  console.log(mealImages[0]);
 
   const handleUploadImg = async (event, target) => {
     event.preventDefault();
@@ -107,8 +106,11 @@ function RecordMeal() {
   useEffect(() => {}, [mealImages]);
 
   return (
-    <>
-      <LogedPageTemplate />
+      <LogedPageTemplate>
+
+      <TypoStyle style={{fontSize: 24, padding: 20}}>
+        식판 사진을 업로드
+      </TypoStyle>
       <StyledContainer style={{ marginBottom: 100, marginTop: 30 }}>
         <MealBox>
           <MealInput
@@ -136,7 +138,6 @@ function RecordMeal() {
           )}
         </MealBox>
         <MealBox>
-          {/* <PlateImg src={PlateSrc}/> */}
           <MealInput
             type='file'
             accept='image/*'
@@ -155,7 +156,7 @@ function RecordMeal() {
               <CheckCircleOutlineIcon
                 sx={{ color: green[500] }}
                 style={sytleForButton}
-                onClick={(event) => handleUploadImg(event, 0)}
+                onClick={(event) => handleUploadImg(event, 1)}
               />
               <ReplayIcon color='primary' style={sytleForRetryButton} />
             </>
@@ -163,7 +164,7 @@ function RecordMeal() {
         </MealBox>
         {isUploaded[0] !== false && isUploaded[1] !== false ? (
           <>
-            <MessageBox>정말 제출하시겠습니까?</MessageBox>
+            <TypoStyle style={{fontSize: 24, padding: 20}} >정말 제출하시겠습니까?</TypoStyle>
             <Button
               variant='contained'
               style={{ width: "40%", backgroundColor: "#950101" }}
@@ -176,9 +177,9 @@ function RecordMeal() {
         ) : (
           <></>
         )}
-        {/* <TextField type='file' accept='image/*' onChange={handleUploadImg} />, */}
       </StyledContainer>
-    </>
+      </LogedPageTemplate>
+
   );
 }
 
@@ -195,7 +196,6 @@ const sytleForButton = {
   position: "absolute",
   right: "5%",
   bottom: "5%",
-  // transform: "translate(-50%, -50%)",
   zIndex: 2,
 
   width: "60px",
@@ -207,18 +207,8 @@ const sytleForButton = {
 };
 
 const sytleForRetryButton = {
-  position: "absolute",
+  ...sytleForButton,
   left: "5%",
-  bottom: "5%",
-  // transform: "translate(-50%, -50%)",
-  zIndex: 2,
-
-  width: "60px",
-  height: "60px",
-
-  cursor: "pointer",
-  backgroundColor: "rgba(255, 255, 255, 0.8)",
-  borderRadius: "35px",
 };
 
 const StyledContainer = styled.div`
@@ -238,10 +228,6 @@ const MealBox = styled.label`
   position: relative;
   justify-content: center;
   align-items: center;
-  background-image: url(${PlateSrc});
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
 `;
 
 const MealInput = styled.input`
@@ -250,7 +236,7 @@ const MealInput = styled.input`
 
 const MealImg = styled.img`
   ${styleForSection}
-  z-index: ${(props) => (props.src === PlateSrc ? -1 : 1)};
+  z-index: 1;
   border: none;
 `;
 
@@ -258,12 +244,9 @@ const MealAlt = styled.p`
   position: absolute;
   font-size: 36px;
   font-weight: 1000;
-`;
+  z-index: ${(props) => (props.src ? -1 : 1)};
 
-// const PlateImg = styled.img`
-//   width: 600px;
-//   height: 480px;
-// `
+`;
 
 const styleForTypo = {
   fontFamily: "ChosunCentennial",
@@ -272,12 +255,6 @@ const styleForTypo = {
 
 const TypoStyle = styled.p`
   ${styleForTypo}
-`;
-
-const MessageBox = styled.p`
-  ${styleForTypo}
-  font-size: 20px;
-  padding: 20px;
 `;
 
 export default RecordMeal;

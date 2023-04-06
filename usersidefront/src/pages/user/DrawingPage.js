@@ -7,6 +7,7 @@ import {
   putDrawingGameInfo,
   getDrawingGameInfo,
 } from "../../api/leftover";
+
 import styled from "styled-components";
 import { Button } from "@mui/material";
 
@@ -128,8 +129,8 @@ function DrawingPage() {
   }, [isStarted, isFinished]);
 
   return (
-    <>
-      <LogedPageTemplate />
+      <LogedPageTemplate >
+
       <DrawSubject subjectIndex={subjectIndex} />
       <CanvasWrapper>
         <Canvas
@@ -162,7 +163,8 @@ function DrawingPage() {
           <></>
         )}
       </TimerWrapper>
-    </>
+      </LogedPageTemplate>
+
   );
 }
 

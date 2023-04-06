@@ -4,11 +4,11 @@ import { LogedPageTemplate } from "../../components/common";
 
 function BoardDetailPage() {
   return (
-    <>
-      <LogedPageTemplate />
+      <LogedPageTemplate>
+
       <ArticleDetail />
       <BoardOption />
-    </>
+      </LogedPageTemplate>
   );
 }
 

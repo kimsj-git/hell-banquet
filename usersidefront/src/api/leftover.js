@@ -7,7 +7,7 @@ api.defaults.headers["refreshToken"] = localStorage.getItem("refresh");
 
 async function getLeftover(info, success, fail) {
   const res = await api
-    .get(`/leftovers`, { params: info })
+    .get(`/leftovers/detail`, { params: info })
     .then(success)
     .catch(fail);
   return res;

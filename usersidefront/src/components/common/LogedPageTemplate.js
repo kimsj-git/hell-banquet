@@ -1,12 +1,15 @@
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { StickyFooter, StickyHeader } from "../navbar";
+import { Grid } from "@mui/material";
 
-function LogedPageTemplate() {
+import BgImg from "../../assets/images/bg_purple.jpg";
+
+function LogedPageTemplate(params) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
+  useEffect(() => { 
     if (localStorage.getItem("auth") === null) {
       localStorage.clear();
       navigate("/login");
@@ -24,10 +27,28 @@ function LogedPageTemplate() {
   }, []);
 
   return (
-    <>
+    <Grid container>
+    <Grid item sm={3} md={4}></Grid>
+    <Grid
+      item
+      xs={12}
+      sm={6}
+      md={4}
+      style={{
+        // backgroundColor: "#EDEBE9",
+        backgroundImage: `url(${BgImg})`,
+        backgroundSize: "cover",
+        minHeight: "100vh",
+        height: "auto",
+        paddingBottom: "65px",
+      }}
+    >
       <StickyHeader />
       <StickyFooter />
-    </>
+      {params?.children}
+    </Grid>
+    <Grid item sm={3} md={4}></Grid>
+  </Grid>
   );
 }
 
