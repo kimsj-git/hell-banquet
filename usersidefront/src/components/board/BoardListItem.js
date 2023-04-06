@@ -1,18 +1,38 @@
+import { useState, useEffect } from "react";
+
 import { ArticleOption, UpDelModal } from "./";
+import { getUserImg } from "../../api/janbani";
 import { LinkDecoNone } from "../common";
 
 import styled from "styled-components";
 import { Container, Grid } from "@mui/material";
+import staticJanban from "../../assets/images/staticJanban.png";
 
 function BoardListItem(params) {
   const { article } = params;
+  const [janbanImg, setJanbanImg] = useState(staticJanban);
   const makeItCenter = { display: "flex", alignItems: "center" };
-
   const handleClick = () => {
     if (!article?.detail) {
       return;
     }
   };
+
+  useEffect(() => {
+    const handleGetJanban = async () => {
+      await getUserImg(
+        { userId: article.writer },
+        (data) => {
+          return data.data;
+        },
+        (err) => console.log(err)
+      ).then((res) => {
+        setJanbanImg(res);
+      });
+    };
+    handleGetJanban();
+  }, [article]);
+
   return (
     <div style={{ margin: "25px 30px" }}>
       {article?.detail ? (
@@ -21,7 +41,10 @@ function BoardListItem(params) {
           <UpDelModal article={article} />
           <Grid container style={makeItCenter}>
             <Grid item xs={4}>
-              <JanvanFace src={article.src} alt={article?.id} />
+              <JanvanFace
+                src={janbanImg ? janbanImg : staticJanban}
+                alt={article?.id}
+              />
               <TypoWriter>{article.writer}</TypoWriter>
             </Grid>
             <Grid item xs={8}>
@@ -41,7 +64,10 @@ function BoardListItem(params) {
             <UpDelModal article={article} />
             <Grid container style={makeItCenter}>
               <Grid item xs={4} style={{ textAlign: "center" }}>
-                <JanvanFace src={article.src} alt={article?.id} />
+                <JanvanFace
+                  src={janbanImg ? janbanImg : staticJanban}
+                  alt={article?.id}
+                />
                 <TypoWriter>{article.writer}</TypoWriter>
               </Grid>
               <Grid item xs={8}>
