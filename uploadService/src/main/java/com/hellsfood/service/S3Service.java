@@ -1,7 +1,6 @@
 package com.hellsfood.service;
 
 import java.io.IOException;
-import java.util.UUID;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +24,7 @@ public class S3Service {
 	private String bucketName;
 
 	private final Function<MultipartFile, String> generateFileName =
-		file -> "images/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
+		file -> "images/" + file.getOriginalFilename();
 
 	public String uploadFileToS3(MultipartFile file) throws IOException {
 		String fileName = generateFileName.apply(file);

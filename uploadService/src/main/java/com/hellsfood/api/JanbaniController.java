@@ -2,10 +2,7 @@ package com.hellsfood.api;
 
 import java.io.IOException;
 
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,11 +54,9 @@ public class JanbaniController {
 
 	@ApiOperation(value = "고유 코드로 잔반이 이미지 조회")
 	@GetMapping
-	public ResponseEntity<?> getImage(@RequestParam String janbanCode) {
-		Resource resource = imageService.getImageByJanbanCode(janbanCode);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.IMAGE_JPEG);
-		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+	public ResponseEntity<String> getImage(@RequestParam String janbanCode) {
+		String s3Path = imageService.getImageS3PathByJanbanCode(janbanCode);
+		return new ResponseEntity<>(s3Path, HttpStatus.OK);
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)

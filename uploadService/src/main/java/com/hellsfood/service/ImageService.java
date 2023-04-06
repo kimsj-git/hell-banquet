@@ -31,13 +31,13 @@ public class ImageService {
 	public String getImageS3PathById(Long id) {
 		Image image = imageRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("해당하는 잔반이가 없습니다."));
-		return image.getFilePath();
+		return "https://leftover-bucket.s3.ap-northeast-2.amazonaws.com/" + image.getFilePath();
 	}
 
 	public String getImageS3PathByJanbanCode(String code) {
 		JanbanCode janbanCode = JanbanCode.valueOf(code);
 		Image image = imageRepository.findOneByJanbanCode(janbanCode);
-		return image.getFilePath();
+		return "https://leftover-bucket.s3.ap-northeast-2.amazonaws.com/" + image.getFilePath();
 	}
 
 }
