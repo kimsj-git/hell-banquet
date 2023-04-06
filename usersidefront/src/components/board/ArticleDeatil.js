@@ -9,7 +9,7 @@ import styled from "styled-components";
 function ArticleDetail() {
   const location = useLocation();
   const articleListRef = useRef(null);
-  const [article] = useState(location.state);
+  const [article, ] = useState(location.state);
   const [comments, setComments] = useState([
     { content: "Loading...", src: undefined, id: -1 },
     { content: "Loading...", src: undefined },
@@ -41,11 +41,8 @@ function ArticleDetail() {
       setComments(data);
     };
 
-    if (comments[0]?.id === -1) {
       getMoreComment();
-    }
   }, [comments, location, articleListRef]);
-  console.log(comments);
 
   return (
     <>
@@ -56,7 +53,7 @@ function ArticleDetail() {
         {comments.length > 0 && (
           comments.map((article, index) => {
             return (
-              <BoardListItem article={article} isChild={true} index={index} key={index} />
+              <BoardListItem article={article} comments={comments} setComments={setComments} isChild={true} index={index} key={index} />
             );
           })
         )}

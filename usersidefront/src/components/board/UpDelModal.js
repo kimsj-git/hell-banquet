@@ -1,13 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button, Modal, Box, TextField } from "@mui/material";
 
 import { MoreHoriz } from "@mui/icons-material";
 import { updateArticle } from "../../api/board";
 
 function UpDelModal(params) {
-  const navigate = useNavigate();
-  const { article } = params;
+  const { article, comments, setComments } = params;
   const [isOpen, setIsOpen] = useState(false);
   const [content, setContent] = useState(article.content);
 
@@ -16,18 +14,15 @@ function UpDelModal(params) {
     setIsOpen(!isOpen);
   };
 
-  const handleUpdate = (event) => {
+  const handleUpdate = async (event) => {
     event.preventDefault();
-    updateArticle(
+    await updateArticle(
       { ...article, content: content },
-      () => {
-        navigate(`/board/${article.id}`, {
-          state: { ...article, content: content },
-        });
-        window.location.reload();
-      },
+      () => {},
       (err) => console.log(err)
     );
+    setIsOpen(false)
+    setComments([...comments, {writer: localStorage.getItem('userId'), content: content, id: 99}])
   };
 
   const handleDelete = (event) => {
@@ -36,11 +31,9 @@ function UpDelModal(params) {
     alert('그러게 왜 지우고싶은 말을 씀?')
     setIsOpen(false)
   }
-
   const onTypingHandler = (event) => {
     setContent(event.target.value);
   };
-
   const moreButtonStyle = {
     position: "absolute",
     top: "10px",

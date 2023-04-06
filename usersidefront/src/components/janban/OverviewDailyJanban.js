@@ -54,7 +54,7 @@ function OverviewDailyJanban() {
         </Box>
         {isLoading ? <></> : (
           <TypoJanban>
-          {janbanImg ? janbanImg : "... 잔반이가 아직 자고있네요 zZ"}
+          {janbanImg ? '' : "... 잔반이가 아직 자고있네요 zZ"}
         </TypoJanban>
         )}
         {!janbanImg && (
