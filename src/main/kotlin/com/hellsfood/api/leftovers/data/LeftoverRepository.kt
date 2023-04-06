@@ -20,7 +20,7 @@ interface LeftoverRepository : JpaRepository<Leftover, Long> {
     @Query(value="select sum(l.after) as leftovers from Leftover l where l.date=:date and l.course=:course", nativeQuery = true)
     fun getAfterSumByDateAndCourse(date:LocalDate, course:Int): Long?
 
-    @Query("SELECT l FROM Leftover l WHERE l.date = :date AND l.percentage != -1.0 AND l.percentage <= 0.2")
+    @Query("SELECT l FROM Leftover l WHERE l.date = :date AND l.percentage >= 0.8")
     fun findByDateAndPercentage(date: LocalDate): List<Leftover>
 
 }
