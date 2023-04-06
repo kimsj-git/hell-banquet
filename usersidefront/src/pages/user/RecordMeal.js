@@ -116,8 +116,6 @@ function RecordMeal() {
           userId: localStorage.getItem("userId"),
         },
         (data) => {
-          console.log(data);
-
           return data.data;
         },
         (err) => console.log(err)
@@ -130,7 +128,6 @@ function RecordMeal() {
           userId: localStorage.getItem("userId"),
         },
         (data) => {
-          console.log(data);
           return data.data;
         },
         (err) => console.log(err)
