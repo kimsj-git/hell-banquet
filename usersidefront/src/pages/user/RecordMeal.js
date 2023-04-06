@@ -125,7 +125,9 @@ function RecordMeal() {
           ${ratio}만큼 잔반이 생성됐습니다! 
           ${ratio >= 20 ? "유감입니다!" : "감사합니다!"}`
         );
-        navigate("/janban");
+        console.log(ratio);
+        if (ratio >= 20) navigate("/ABCgame");
+        else navigate("/record-meal/janban");
       },
       (err) => console.log(err)
     );
@@ -177,16 +179,19 @@ function RecordMeal() {
         <TypoStyle style={{ color: "#5f5f5f", paddingBottom: 15 }}>
           입장을 위해 식사 전후 사진을 올려주세요.
         </TypoStyle>
-        <TypoStyle style={{color: "#950101", padding: 5, fontSize: 20, fontWeight: "bold"}}>
+        <TypoStyle
+          style={{
+            color: "#950101",
+            padding: 5,
+            fontSize: 20,
+            fontWeight: "bold",
+          }}
+        >
           주의사항
         </TypoStyle>
-        <TypoStyle>
-          1. 식판이 전부 보이게 찍어주세요.
-        </TypoStyle>
-        <TypoStyle>
-          2. 최종 제출 후에는 사진 수정이 불가합니다.
-        </TypoStyle>
-        <TypoStyle style={{fontWeight: "bold"}}>
+        <TypoStyle>1. 식판이 전부 보이게 찍어주세요.</TypoStyle>
+        <TypoStyle>2. 최종 제출 후에는 사진 수정이 불가합니다.</TypoStyle>
+        <TypoStyle style={{ fontWeight: "bold" }}>
           3. 잔반을 남기면 지옥에서 먹어야합니다.
         </TypoStyle>
       </MessageBox>
@@ -197,8 +202,8 @@ function RecordMeal() {
       <StyledContainer style={{ marginBottom: 100, marginTop: 30 }}>
         <MealBox>
           <MealInput
-            type="file"
-            accept="image/*"
+            type='file'
+            accept='image/*'
             onChange={(event) => handleTakeImg(event, 0)}
           />
           {isUploadingImg[0] ? (
@@ -225,14 +230,14 @@ function RecordMeal() {
                 style={sytleForButton}
                 onClick={(event) => handleUploadImg(event, 0)}
               />
-              <Replay color="primary" style={sytleForRetryButton} />
+              <Replay color='primary' style={sytleForRetryButton} />
             </>
           )}
         </MealBox>
         <MealBox>
           <MealInput
-            type="file"
-            accept="image/*"
+            type='file'
+            accept='image/*'
             onChange={(event) => handleTakeImg(event, 1)}
           />
           {isUploadingImg[1] ? (
@@ -259,7 +264,7 @@ function RecordMeal() {
                 style={sytleForButton}
                 onClick={(event) => handleUploadImg(event, 1)}
               />
-              <Replay color="primary" style={sytleForRetryButton} />
+              <Replay color='primary' style={sytleForRetryButton} />
             </>
           )}
         </MealBox>
@@ -269,9 +274,9 @@ function RecordMeal() {
               정말 제출하시겠습니까?
             </TypoStyle>
             <Button
-              variant="contained"
+              variant='contained'
               style={{ width: "40%", backgroundColor: "#950101" }}
-              size="large"
+              size='large'
               onClick={handleSubmit}
             >
               <TypoStyle>예</TypoStyle>

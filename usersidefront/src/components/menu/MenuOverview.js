@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 function MenuOverview(params) {
   const date = new Date().toISOString().split("T")[0];
-  const {onClick, target} = params
+  const { onClick, target } = params;
   const [result, setResult] = useState();
 
   useEffect(() => {

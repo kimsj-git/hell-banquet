@@ -1,14 +1,34 @@
+import { useState, useEffect } from "react";
+
 import { LinkDecoNone, LogedPageTemplate } from "../../components/common";
 import staticJanban from "../../assets/images/janban.png";
+import { getUserImg } from "../../api/janbani";
 
 import styled from "styled-components";
 import { Icon } from "@mui/material";
 import { Gesture, Create } from "@mui/icons-material";
 
 function JanbanPresentPage() {
+  const [janbanImg, setJanbanImg] = useState(false);
+
+  useEffect(() => {
+    const handleGetJanban = async () => {
+      await getUserImg(
+        { userId: localStorage.getItem("userId") },
+        (data) => {
+          // console.log(data)
+          return data.data;
+        },
+        (err) => console.log(err)
+      ).then((res) => {
+        setJanbanImg(res);
+      });
+    };
+    handleGetJanban();
+  }, []);
   return (
     <LogedPageTemplate>
-      <JanbanImg src={staticJanban} />
+      <JanbanImg src={janbanImg ? janbanImg : staticJanban} />
       <LinkDecoNone to={"/drawing"} style={{ position: "relative" }}>
         <IconBox>
           <StyledGestureIcon
