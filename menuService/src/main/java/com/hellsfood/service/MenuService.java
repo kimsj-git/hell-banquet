@@ -125,20 +125,11 @@ public class MenuService {
 		resultDto.setFeature(getStringCellValue(requestRow, 4));
 		resultDto.setMenuItems(getListFromString(getStringCellValue(requestRow, 5)));
 		resultDto.setMenuTypes(getListFromString(getStringCellValue(requestRow, 6)));
-		resultDto.setDate(parseExcelDate(String.valueOf((int)getNumericCellValue(requestRow, 7))));
-	}
-
-	public LocalDate parseExcelDate(String dateStr) {
-		long excelDate = Long.parseLong(dateStr);
-		return LocalDate.of(1900, 1, 1).plusDays(excelDate - 2);
+		resultDto.setDate(parseDate(getStringCellValue(requestRow, 7)));
 	}
 
 	private String getStringCellValue(Row row, int cellIndex) {
 		return row.getCell(cellIndex).getStringCellValue();
-	}
-
-	private double getNumericCellValue(Row row, int cellIndex) {
-		return row.getCell(cellIndex).getNumericCellValue();
 	}
 
 	private List<String> getListFromString(String string) {
