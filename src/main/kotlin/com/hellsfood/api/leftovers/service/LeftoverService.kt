@@ -151,7 +151,7 @@ class LeftoverService(
     fun isPlayableCookieGame(userId: String, today: String): Boolean {
         val leftover = getLeftoverByUserIdAndDate(userId, today)
 
-        if (!hasLeftoverAndJanbani(userId, today) && leftover.percentage >= 0.8) {   //잔반이가 없으며, percentage가 -1이 아니라면?
+        if (!hasLeftoverAndJanbani(userId, today) && leftover.percentage > -1) {   //잔반이가 없으며, percentage가 -1이 아니라면?
             return true
         }
         return false
