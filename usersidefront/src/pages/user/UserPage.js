@@ -12,6 +12,7 @@ import { Button, Container } from "@mui/material";
 
 function UserPage() {
   const navigate = useNavigate();
+  const date = new Date().toISOString().split("T")[0]
 
   const onLogoutHandler = async () => {
     await logout(
@@ -26,8 +27,8 @@ function UserPage() {
   };
 
   return (
-    <>
-      <LogedPageTemplate />
+      <LogedPageTemplate>
+
       <Container sx={styleForContainer}>
         <JanbanSection>
           <OverviewDailyJanban />
@@ -36,7 +37,7 @@ function UserPage() {
           <ProfileUserInfo />
         </UserInfoSection>
         <StatisticsSection>
-          <OverviewStatics />
+          <OverviewStatics date={date} />
         </StatisticsSection>
         <Button
           onClick={onLogoutHandler}
@@ -47,7 +48,7 @@ function UserPage() {
           로그아웃
         </Button>
       </Container>
-    </>
+      </LogedPageTemplate>
   );
 }
 

@@ -5,6 +5,7 @@ import MenuOverview from "../../components/diet/MenuOverview";
 import DailyStatistics from "../../components/statistics/DailyStatistics";
 
 function ManagerLandingPage() {
+  const date = new Date().toISOString().split("T")[0]
   return (
     <>
       <HeaderBar />
@@ -13,9 +14,9 @@ function ManagerLandingPage() {
         <Container>
           <DateSelector />
           <DailyStaticContainer>
-            <DailyStatistics date={"2023-03-24"} course={0} />
+            <DailyStatistics date={date} course={0} />
             <MenuOverview />
-            <DailyStatistics date={"2023-03-24"} course={1} />
+            <DailyStatistics date={date} course={1} />
           </DailyStaticContainer>
         </Container>
       </div>

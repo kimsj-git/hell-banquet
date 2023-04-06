@@ -1,6 +1,8 @@
-import { LinkDecoNone } from "../common";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import atlas from "../../assets/images/atlas.png";
+
+import { LinkDecoNone } from "../common";
+import WaiterSrc from "../../assets/images/waiter.png"
 
 import styled from "styled-components";
 import { Icon } from "@mui/material";
@@ -11,7 +13,6 @@ import {
   Home,
   BarChart,
 } from "@mui/icons-material";
-import { useEffect, useState } from "react";
 
 function StickyFooter() {
   const location = useLocation();
@@ -38,7 +39,6 @@ function StickyFooter() {
   }, []);
 
   return (
-    <>
       <StickyFooterNav scrollY={scrollY}>
         {navlist.map((item) => {
           const pathname = location.pathname;
@@ -65,20 +65,13 @@ function StickyFooter() {
             </LinkDecoNone>
           );
         })}
-        {/* <img
-          style={{ position: "absolute", top: "100%" }}
-          src={atlas}
-          alt='atlas'
-        /> */}
       </StickyFooterNav>
-    </>
   );
 }
 
 const StickyFooterNav = styled.footer`
-  position: absolute;
-  top: calc(100vh - 65px + ${(props) => props.scrollY}px);
-
+  position: fixed;
+  bottom: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -96,6 +89,11 @@ const StickyFooterNav = styled.footer`
   );
 
   z-index: 100;
+  @media (min-width: 600px) {
+    display: none;
+  }
 `;
+// position: absolute;
+// top: calc(100vh - 65px + ${(props) => props.scrollY}px);
 
 export default StickyFooter;

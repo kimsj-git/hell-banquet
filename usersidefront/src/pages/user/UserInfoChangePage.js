@@ -67,8 +67,8 @@ function UserInfoChangePage() {
   console.log(onTypingHandler);
 
   return (
-    <>
-      <LogedPageTemplate />
+      <LogedPageTemplate>
+
       <StyledContainer>
         <UserInfoSection>
           <DetailUserInfo isChanging={isChanging} />
@@ -93,7 +93,8 @@ function UserInfoChangePage() {
           </Button>
         </StyledContainer>
       </StyledContainer>
-    </>
+      </LogedPageTemplate>
+
   );
 }
 
