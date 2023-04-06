@@ -21,7 +21,9 @@ function RecommendAritcle() {
         return data.data;
       },
       (err) => console.log(err)
-    ).then((data) => setTodayArticle(data));
+    ).then((data) => {
+      if (data) setTodayArticle(data);
+    });
   }, [date]);
 
   if (todayArticle !== "아직 오늘 작성된 게시글이 없어요") {
