@@ -5,14 +5,13 @@ import { LinkDecoNone } from "../common";
 import { getUserImg } from "../../api/janbani";
 
 import styled from "styled-components";
-import { Button, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
 function OverviewDailyJanban() {
   const [isLoading, setIsLoading] = useState(true);
   const [janbanImg, setJanbanImg] = useState(staticJanban);
-  const [janbanCode, setJanbanCode] = useState("GRD_001");
   const date = new Date().getHours();
   // const janbanCode = "GRD_002";
   const janbanOption =
@@ -40,25 +39,22 @@ function OverviewDailyJanban() {
   useEffect(() => {}, [janbanImg]);
 
   return (
-    <OverviewBox>
-      <Container style={{ position: "relative", height: "100%" }}>
-        {isLoading ? (
-          <Box sx={{ display: "flex" }}>
-            <CircularProgress />
-          </Box>
-        ) : (
-          <JanbanImg src={janbanImg} alt="잔반이" />
-        )}
-        <LinkDecoNone
-          to={janbanOption.url}
-          style={{ position: "absolute", bottom: "10%", right: "15%" }}
-        >
-          {/* <Button variant='contained' color='warning'>
-            {janbanOption.message}
-          </Button> */}
-        </LinkDecoNone>
-      </Container>
-    </OverviewBox>
+    <LinkDecoNone to={janbanOption.url}>
+      <OverviewBox>
+        <Container style={{ position: "relative", height: "100%" }}>
+          {isLoading ? (
+            <Box sx={{ display: "flex" }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <JanbanImg
+              src={janbanImg ? janbanImg : staticJanban}
+              alt='잔반이'
+            />
+          )}
+        </Container>
+      </OverviewBox>
+    </LinkDecoNone>
   );
 }
 
