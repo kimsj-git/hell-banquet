@@ -19,6 +19,8 @@ function DayPicker(props) {
     const today = `${year}.${month}.${day} (${weekday})`;
     setDateString(date);
     setTodayString(today);
+
+    props.pickDate(date);
   }, [startDate]);
 
   const ExampleCustomInput = ({ value, onClick }) => (
