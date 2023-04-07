@@ -20,7 +20,6 @@ function OverviewDailyJanban() {
   const [isLoading, setIsLoading] = useState(true);
   const [janbanImg, setJanbanImg] = useState(staticJanban);
   const date = new Date().getHours();
-  // const janbanCode = "GRD_002";
   const janbanOption =
     date < 14
       ? { url: `/record-meal`, message: "식사하러 가기" }
@@ -31,7 +30,6 @@ function OverviewDailyJanban() {
       await getUserImg(
         { userId: localStorage.getItem("userId") },
         (data) => {
-          // console.log(data)
           return data.data;
         },
         (err) => console.log(err)
@@ -58,7 +56,7 @@ function OverviewDailyJanban() {
           <>
             <JanbanImg
               src={janbanImg ? janbanImg : staticJanban}
-              alt="잔반이"
+              alt='잔반이'
             />
             <HellLivingPoint />
           </>
@@ -74,9 +72,9 @@ function OverviewDailyJanban() {
         </TypoJanban>
       )}
       {!janbanImg && (
-        <LinkDecoNone to="/record-meal">
+        <LinkDecoNone to='/record-meal'>
           <Button
-            variant="contained"
+            variant='contained'
             style={{ backgroundColor: "#492369", margin: 10 }}
           >
             <TypoJanban style={{ fontSize: "15px" }}>
