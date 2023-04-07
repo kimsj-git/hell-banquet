@@ -107,16 +107,16 @@ function DrawingPage() {
         },
         (data) => {
           if (data === "true") {
-            console.log("그림아직");
+            // console.log("그림아직");
           } else {
             setIsCheck(2);
-            alert("오늘은 이미 그림을 그렸어요.");
-            navigate(-1);
+            // alert("오늘은 이미 그림을 그렸어요.");
+            // navigate(-1);
           }
         },
         (err) => {
-          alert("밥먹고 오세요.");
-          navigate(-1);
+          // alert("밥먹고 오세요.");
+          // navigate(-1);
         }
       );
     };
@@ -208,9 +208,9 @@ function DrawingPage() {
           <>
             {isCorrect ? (
               <Container>
-                <img src={canvasImage} alt="" />
+                <img src={canvasImage} alt='' />
                 <WhiteBackground>
-                  <img src={stamp} alt="" />
+                  <img src={stamp} alt='' />
                 </WhiteBackground>
                 <StartButton>
                   <div
@@ -225,9 +225,9 @@ function DrawingPage() {
 
                   <br />
                   <Button
-                    variant="contained"
+                    variant='contained'
                     onClick={BackToMain}
-                    color="secondary"
+                    color='secondary'
                   >
                     돌아가기
                   </Button>
@@ -235,9 +235,9 @@ function DrawingPage() {
               </Container>
             ) : (
               <Container>
-                <img src={canvasImage} alt="" />
+                <img src={canvasImage} alt='' />
                 <WhiteBackground>
-                  <img src={ddang} alt="" />
+                  <img src={ddang} alt='' />
                 </WhiteBackground>
 
                 <StartButton>
@@ -246,9 +246,9 @@ function DrawingPage() {
                   </div>
                   <br />
                   <Button
-                    variant="contained"
+                    variant='contained'
                     onClick={BackToMain}
-                    color="secondary"
+                    color='secondary'
                   >
                     돌아가기
                   </Button>
@@ -270,11 +270,11 @@ function DrawingPage() {
         <div>
           <Modal
             open={open}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
+            aria-labelledby='modal-modal-title'
+            aria-describedby='modal-modal-description'
           >
             <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h3">
+              <Typography id='modal-modal-title' variant='h3'>
                 <DrawSubject subjectIndex={subjectIndex} />
               </Typography>
               <div>
@@ -295,7 +295,7 @@ function DrawingPage() {
                         <></>
                       ) : (
                         <Button
-                          variant="contained"
+                          variant='contained'
                           onClick={handleStartDrawing}
                         >
                           그리기 시작

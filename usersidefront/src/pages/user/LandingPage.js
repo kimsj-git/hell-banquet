@@ -19,6 +19,9 @@ function LandingPage() {
         </JanvanSection>
         {hour < 14 ? (
           <DailyMenuSection>
+            <TypoSectionTitle style={{marginBottom: "7px"}}>
+              오늘의 <span style={{ color: "#950101" }}>점심</span> 메뉴
+            </TypoSectionTitle>
             <MenuOverview />
           </DailyMenuSection>
         ) : (
