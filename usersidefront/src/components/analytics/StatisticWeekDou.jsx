@@ -9,7 +9,7 @@ const StatisticWeekDou = (props) => {
   // const date = "2023-04-04";
   // const userId = "manager";
   // const [info, setInfo] = useState([10, 10]);
-
+  const { mon, tue, wes, thu, fri } = props;
   ChartJS.register(ArcElement, Tooltip, Legend);
 
   // useEffect(() => {
@@ -26,7 +26,10 @@ const StatisticWeekDou = (props) => {
     labels: ["배식량", "잔반량"],
     datasets: [
       {
-        data: [props.weekBefore, props.weekAfter],
+        data: [
+          mon[0] + tue[0] + wes[0] + thu[0] + fri[0],
+          mon[1] + tue[1] + wes[1] + thu[1] + fri[1],
+          ],
         // backgroundColor: ["#078767", "#FF0000"],
         backgroundColor: ["#93329E", "#440A67"],
       },
