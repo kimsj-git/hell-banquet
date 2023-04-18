@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import RoadSingleBox from "./RoadSingleBox";
 import styled from "styled-components";
 
 interface Problem {
@@ -7,7 +8,8 @@ interface Problem {
   answer: number;
 }
 
-interface DestinationProps {
+interface RoadSingleBoxProps {
+  rowValue: number;
   attribute: number;
   xIndex: number;
   yIndex: number;
@@ -45,6 +47,7 @@ const GameBoard: React.FC = () => {
     } else if (selectedSection === 4) {
       return [0, selectedNumber];
     }
+    return [0, 0];
   };
 
   const generateProblem = (): void => {
@@ -103,37 +106,14 @@ const GameBoard: React.FC = () => {
           return (
             <RowFlexBox key={yIndex}>
               {item.map((rowValue, xIndex) => {
-                if (rowValue === 0 || rowValue === 4 || rowValue === 5) {
-                  return (
-                    <EmptyBox attribute={rowValue} key={xIndex}>
-                      <LeftTopDiagonal
-                        attribute={rowValue}
-                        xIndex={xIndex}
-                        yIndex={yIndex}
-                        onClick={(event: MouseEvent) =>
-                          onClickHandler(event, xIndex, yIndex, 4)
-                        }
-                      />
-                      <RightTopDiagonal
-                        attribute={rowValue}
-                        xIndex={xIndex}
-                        yIndex={yIndex}
-                        onClick={(event: MouseEvent) =>
-                          onClickHandler(event, xIndex, yIndex, 5)
-                        }
-                      />
-                    </EmptyBox>
-                  );
-                } else {
-                  return (
-                    <EmptyBox
-                      attribute={rowValue}
-                      xIndex={xIndex}
-                      yIndex={yIndex}
-                      key={xIndex}
-                    />
-                  );
-                }
+                return (
+                  <RoadSingleBox
+                    rowValue={rowValue}
+                    xIndex={xIndex}
+                    yIndex={yIndex}
+                    onClickHandler={onClickHandler}
+                  />
+                );
               })}
             </RowFlexBox>
           );
@@ -145,82 +125,6 @@ const GameBoard: React.FC = () => {
     </RowFlexBox>
   );
 };
-
-// function painterFunc(params:number) {
-//     if (params === 1) return "red";
-//     else if (params === 2) return "blue";
-//     else if (params === 3) return "gray";
-//     else if (params === -1) return "white";
-//     else return "black";
-// }
-
-const EmptyBox = styled.div`
-  position: relative;
-  width: 100px;
-  height: 100px;
-
-  background: ${(props: DestinationProps) => {
-    const { attribute } = props;
-    if (attribute === 1) return "red";
-    else if (attribute === 2) return "blue";
-    else if (attribute === 3) return "gray";
-  }};
-
-  border: solid 1px
-    ${(props: DestinationProps) => {
-      const { attribute } = props;
-      if (attribute === 1) return "red";
-      else if (attribute === 2) return "blue";
-      else if (attribute === 3) return "gray";
-      else if (attribute === -1) return "white";
-      else return "black";
-    }};
-`;
-
-const styleForDiagonal = `
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    height: 10px;
-    background: black;
-    `;
-
-const LeftTopDiagonal = styled.div`
-  ${styleForDiagonal}
-  transform: rotate(45deg);
-  background: ${(props: DestinationProps) => {
-    const { attribute } = props;
-    if (attribute === 4) return "green";
-    else if (attribute === 5) return "white";
-    else return "black";
-  }};
-
-  z-index: ${(props: DestinationProps) => {
-    const { attribute } = props;
-    if (attribute === 4) return 1;
-    else return 0;
-  }};
-`;
-
-const RightTopDiagonal = styled.div`
-  ${styleForDiagonal}
-  transform: rotate(-45deg);
-  background: ${(props: DestinationProps) => {
-    const { attribute } = props;
-    if (attribute === 5) return "green";
-    else if (attribute === 4) return "white";
-    else return "black";
-  }};
-
-  z-index: ${(props: DestinationProps) => {
-    const { attribute } = props;
-    if (attribute === 5) return 1;
-    else return 0;
-  }};
-`;
 
 const RowFlexBox = styled.div`
   display: flex;
